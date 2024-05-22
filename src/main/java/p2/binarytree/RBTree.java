@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T, RBNode<T>> {
 
-    protected final RBNode<T> sentinel = new RBNode<>(Color.BLACK, null);
+    protected final RBNode<T> sentinel = new RBNode<>(null, Color.BLACK);
 
     public RBTree() {
         sentinel.setParent(sentinel);
@@ -123,17 +123,8 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     }
 
     @Override
-    public Node<T> findSmallest() {
-        RBNode<T> x = root;
-        while (x.hasLeft()) {
-            x = x.getLeft();
-        }
-        return x;
-    }
-
-    @Override
     protected RBNode<T> createNode(T key) {
-        return new RBNode<>(Color.RED, key);
+        return new RBNode<>(key, Color.RED);
     }
 
     public void join(RBTree<T> other, T joinKey) {
@@ -141,25 +132,38 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         int leftBH = blackHeight();
         int rightBH = other.blackHeight();
 
+        int minBH = Math.min(leftBH, rightBH);
+        boolean useLeftRoot = leftBH <= rightBH;
+
+        RBNode<T> newNode = new RBNode<>(joinKey, Color.RED);
+
+        RBNode<T> leftNode = findBlackNodeWithBlackHeight(minBH, leftBH, false);
+        RBNode<T> rightNode =other.findBlackNodeWithBlackHeight(minBH, rightBH, true);
+
+        newNode.setLeft(leftNode);
+        newNode.setRight(rightNode);
+
         if (leftBH == rightBH) {
+            root = newNode;
+            newNode.setParent(sentinel);
+        } else {
+            RBNode<T> parent = useLeftRoot ? rightNode.getParent() : leftNode.getParent();
 
-            RBNode<T> newRoot = new RBNode<>(Color.BLACK, joinKey);
+            newNode.setParent(parent);
 
-            newRoot.setLeft(root);
-            newRoot.setRight(other.root);
+            if (parent.getLeft() == leftNode || parent.getLeft() == rightNode) parent.setLeft(newNode);
+            else parent.setRight(newNode);
 
-            root.setParent(newRoot);
-            other.root.setParent(newRoot);
-
-            root = newRoot;
-
-            return;
+            if (useLeftRoot) {
+                root = other.root;
+                root.setParent(sentinel);
+            }
         }
 
-        RBNode<T> rightNode = other.findSmallestBlackNodeWithBlackHeight(leftBH, rightBH);
+        leftNode.setParent(newNode);
+        rightNode.setParent(newNode);
 
-        RBNode<T> newNode = new RBNode<>(Color.RED, joinKey);
-
+        fixColorsAfterInsertion(newNode);
     }
 
     int blackHeight() {
@@ -172,7 +176,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         return blackHeight(node.getLeft()) + (node.isBlack() ? 1 : 0);
     }
 
-    private RBNode<T> findSmallestBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight) {
+    private RBNode<T> findBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight, boolean smallest) {
 
         int currentBlackHeight = totalBlackHeight;
         RBNode<T> currentNode = root;
@@ -181,8 +185,13 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
 
             if (currentNode.isBlack()) currentBlackHeight--;
 
-            if (currentNode.hasLeft()) currentNode = currentNode.getLeft();
-            else currentNode = currentNode.getRight();
+            if (smallest) {
+                if (currentNode.hasLeft()) currentNode = currentNode.getLeft();
+                else currentNode = currentNode.getRight();
+            } else {
+                if (currentNode.hasRight()) currentNode = currentNode.getRight();
+                else currentNode = currentNode.getLeft();
+            }
         }
 
         return currentNode;
@@ -207,5 +216,18 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         }
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        if (root == null) {
+            sb.append("[]");
+        } else {
+            root.buildString(sb);
+        }
+
+        return sb.toString();
+    }
 
 }
