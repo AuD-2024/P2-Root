@@ -13,6 +13,8 @@ public class ControlPane extends HBox {
 
     private final Button nextStepButton = new Button("Next Step");
     private final Button centerButton = new Button("Center Graph");
+    private final Button zoomInButton = new Button("Zoom In");
+    private final Button zoomOutButton = new Button("Zoom Out");
 
     private GraphPane<?, ?> graphPane;
 
@@ -35,7 +37,7 @@ public class ControlPane extends HBox {
 
         setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
 
-        getChildren().addAll(nextStepButton, centerButton);
+        getChildren().addAll(nextStepButton, centerButton, zoomInButton, zoomOutButton);
 
         nextStepButton.setOnAction(event -> {
             synchronized (animation.getSyncObject()) {
@@ -45,6 +47,10 @@ public class ControlPane extends HBox {
         });
 
         centerButton.setOnAction(event -> this.graphPane.center());
+
+        zoomInButton.setOnAction(event -> graphPane.zoomIn());
+
+        zoomOutButton.setOnAction(event -> graphPane.zoomOut());
     }
 
     public void disableNextStepButton() {

@@ -389,6 +389,22 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         alreadyCentered = true;
     }
 
+    /**
+     * Increases the zoom of the current graphPane, i.e. the size of the covered area is decreased.
+     */
+    public void zoomIn() {
+        zoom(getWidth() / 2.0, getHeight() / 2.0, SCALE_IN);
+    }
+
+    /**
+     * Decreases the zoom of the current graphPane, i.e. the size of the covered area is increased.
+     */
+    public void zoomOut() {
+        zoom(getWidth() / 2.0, getHeight() / 2.0, SCALE_OUT);
+    }
+
+
+
     // --- Private Methods --- //
 
     private void initListeners() {
@@ -412,18 +428,8 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
             if (event.getDeltaY() == 0) {
                 return;
             }
-            double scale = event.getDeltaY() > 0 ? SCALE_IN : SCALE_OUT;
 
-            if (((getTransformScaleX() < MIN_SCALE || getTransformScaleY() < MIN_SCALE) && scale < 1)
-                || ((getTransformScaleX() > MAX_SCALE || getTransformScaleY() > MAX_SCALE) && scale > 1)) {
-                return;
-            }
-
-            Point2D point = inverseTransform(event.getX(), event.getY());
-            transformation.appendScale(scale, scale, point.getX(), point.getY());
-
-            redrawMap();
-            redrawGrid();
+            zoom(event.getX(), event.getY(), event.getDeltaY() > 0 ? SCALE_IN : SCALE_OUT);
         });
 
         setOnMouseMoved(event -> {
@@ -457,6 +463,19 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
 
             drawPositionText();
         });
+    }
+
+    private void zoom(double x, double y, double scale) {
+        if (((getTransformScaleX() < MIN_SCALE || getTransformScaleY() < MIN_SCALE) && scale < 1)
+            || ((getTransformScaleX() > MAX_SCALE || getTransformScaleY() > MAX_SCALE) && scale > 1)) {
+            return;
+        }
+
+        Point2D point = inverseTransform(x, y);
+        transformation.appendScale(scale, scale, point.getX(), point.getY());
+
+        redrawMap();
+        redrawGrid();
     }
 
     private Line drawEdge(N source, N target) {

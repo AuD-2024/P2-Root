@@ -34,7 +34,7 @@ public class Main {
         ac.autoComplete("bat", 30).forEach(System.out::println);
 
 
-        //Application.launch(MyApplication.class, args);
+        Application.launch(MyApplication.class, args);
 
     }
 }
