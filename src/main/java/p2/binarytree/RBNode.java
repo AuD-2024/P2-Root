@@ -5,10 +5,11 @@ public class RBNode<T extends Comparable<T>> extends BinaryNode<T, RBNode<T>> {
 
     private Color color;
 
-    public RBNode(Color color, T key) {
+    public RBNode(T key, Color color) {
         super(key);
         this.color = color;
     }
+
 
     //--- methods for color management ---//
 
@@ -18,15 +19,30 @@ public class RBNode<T extends Comparable<T>> extends BinaryNode<T, RBNode<T>> {
     }
 
     public boolean isRed() {
-        return color.isRed();
+        return color == Color.RED;
     }
 
     public boolean isBlack() {
-        return color.isBlack();
+        return color == Color.BLACK;
     }
 
     protected void setColor(Color color) {
         this.color = color;
     }
 
+    protected void buildString(StringBuilder builder) {
+        builder.append("[");
+
+        if (getLeft() != null) getLeft().buildString(builder);
+
+        builder.append(",")
+            .append(getKey())
+            .append(",")
+            .append(color == Color.RED ? "R" : color == Color.BLACK ? "B": "null")
+            .append(",");
+
+        if (getRight() != null) getRight().buildString(builder);
+
+        builder.append("]");
+    }
 }

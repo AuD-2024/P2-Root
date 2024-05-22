@@ -34,7 +34,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
 
     @Override
     protected RBNode<T> createNode(T key) {
-        return new AnimatedRBNode(Color.RED, key);
+        return new AnimatedRBNode(key, Color.RED);
     }
 
     @Override
@@ -64,8 +64,8 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
 
     public class AnimatedRBNode extends RBNode<T> implements Animation {
 
-        public AnimatedRBNode(Color color, T key) {
-            super(color, key);
+        public AnimatedRBNode(T key, Color color) {
+            super(key, color);
         }
 
         @Override
@@ -145,7 +145,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
 
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setColor(%s)".formatted(getKey(), color));
-                    javafx.scene.paint.Color fxColor = color.isRed() ? javafx.scene.paint.Color.RED : javafx.scene.paint.Color.BLACK;
+                    javafx.scene.paint.Color fxColor = color == Color.RED ? javafx.scene.paint.Color.RED : javafx.scene.paint.Color.BLACK; //TODO how to handle null color?
                     animationScene.getGraphPane().setNodeFillColor(this, fxColor);
                     animationScene.getGraphPane().setNodeStrokeColor(this, fxColor);
                 });

@@ -1,6 +1,5 @@
 package p2.binarytree;
 
-import p2.Node;
 import p2.SearchTree;
 
 import java.util.List;
@@ -53,10 +52,6 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
 
     }
 
-//    private void transplant(N oldNode, N newNode) {
-//        if ()
-//    }
-
     protected void inOrder(N node, List<T> result, int max) {
         if (node.hasLeft() && result.size() < max) {
             inOrder(node.getLeft(), result, max);
@@ -70,14 +65,18 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
     }
 
     @Override
-    public Node<T> findSmallest() {
-        return null;
+    public N findSmallest() {
+        N x = root;
+        while (x.hasLeft()) {
+            x = x.getLeft();
+        }
+        return x;
     }
 
     public N getRoot() {
         return root;
     }
 
-    protected abstract N createNode(T key);
+    protected abstract N createNode(T key); //TODO braucht man die noch?
 
 }
