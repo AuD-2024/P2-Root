@@ -136,6 +136,58 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         return new RBNode<>(Color.RED, key);
     }
 
+    public void join(RBTree<T> other, T joinKey) {
+
+        int leftBH = blackHeight();
+        int rightBH = other.blackHeight();
+
+        if (leftBH == rightBH) {
+
+            RBNode<T> newRoot = new RBNode<>(Color.BLACK, joinKey);
+
+            newRoot.setLeft(root);
+            newRoot.setRight(other.root);
+
+            root.setParent(newRoot);
+            other.root.setParent(newRoot);
+
+            root = newRoot;
+
+            return;
+        }
+
+        RBNode<T> rightNode = other.findSmallestBlackNodeWithBlackHeight(leftBH, rightBH);
+
+        RBNode<T> newNode = new RBNode<>(Color.RED, joinKey);
+
+    }
+
+    int blackHeight() {
+        return blackHeight(root);
+    }
+
+    private int blackHeight(RBNode<T> node) {
+        if (node == null) return 0;
+
+        return blackHeight(node.getLeft()) + (node.isBlack() ? 1 : 0);
+    }
+
+    private RBNode<T> findSmallestBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight) {
+
+        int currentBlackHeight = totalBlackHeight;
+        RBNode<T> currentNode = root;
+
+        while (currentNode.isRed() || currentBlackHeight > targetBlackHeight) {
+
+            if (currentNode.isBlack()) currentBlackHeight--;
+
+            if (currentNode.hasLeft()) currentNode = currentNode.getLeft();
+            else currentNode = currentNode.getRight();
+        }
+
+        return currentNode;
+    }
+
     List<T> findNext(RBNode<T> node, int max) {
         List<T> result = new ArrayList<>();
         findNext(node, null, max, result);
