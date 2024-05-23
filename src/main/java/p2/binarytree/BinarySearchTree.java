@@ -5,6 +5,13 @@ import p2.Node;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * An implementation of a binary search tree.
+ *
+ * @param <T> The type of the keys in the tree.
+ *
+ * @see AbstractBinarySearchTree
+ */
 public class BinarySearchTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T, BSTNode<T>> {
 
     @Override

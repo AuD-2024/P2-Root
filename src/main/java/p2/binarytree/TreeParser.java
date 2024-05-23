@@ -6,20 +6,53 @@ import p2.SearchTree;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+/**
+ * Utility class for parsing strings that represent either red-black tree or a binary search tree.
+ */
 public class TreeParser {
 
+    /**
+     * Parses a red-black tree from a string.
+     *
+     * @param input The string representation of the tree.
+     *
+     * @return The parsed red-black tree.
+     */
     public static SearchTree<Integer> parseRBTree(String input) {
         return parseRBTree(input, RBNode::new);
     }
 
+    /**
+     * Parses a red-black tree from a string.
+     *
+     * @param input The string representation of the tree.
+     * @param nodeFactory A factory for creating the nodes of the tree.
+     *
+     * @return The parsed red-black tree.
+     */
     public static SearchTree<Integer> parseRBTree(String input, BiFunction<Integer, Color, ? extends RBNode<Integer>> nodeFactory) {
         return parse(input, nodeFactory, true);
     }
 
+    /**
+     * Parses a binary search tree from a string.
+     *
+     * @param input The string representation of the tree.
+     *
+     * @return The parsed binary search tree.
+     */
     public static SearchTree<Integer> parseBST(String input) {
         return parseBST(input, BSTNode::new);
     }
 
+    /**
+     * Parses a binary search tree from a string.
+     *
+     * @param input The string representation of the tree.
+     * @param nodeFactory A factory for creating the nodes of the tree.
+     *
+     * @return The parsed binary search tree.
+     */
     public static SearchTree<Integer> parseBST(String input, Function<Integer, ? extends BSTNode<Integer>> nodeFactory) {
         return parse(input, (value, color) -> nodeFactory.apply(value), false);
     }

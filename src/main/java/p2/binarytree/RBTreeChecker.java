@@ -1,7 +1,15 @@
 package p2.binarytree;
 
+/**
+ * A class for checking the rules of a red-black tree.
+ */
 public class RBTreeChecker {
 
+    /**
+     * Checks if the given tree satisfies all the rules of a red-black tree.
+     *
+     * @param rbTree the tree to check.
+     */
     public static void checkAllRules(RBTree<?> rbTree) {
         checkRule1(rbTree);
         checkRule2(rbTree);
@@ -9,6 +17,13 @@ public class RBTreeChecker {
         checkRule4(rbTree);
     }
 
+    /**
+     * Checks if the given tree satisfies the first rule of black tree.
+     * <p>
+     * The first rule of a red-black tree states that every node is either red or black, i.e. its color is not {@code null}.
+     *
+     * @param rbTree the tree to check.
+     */
     public static void checkRule1(RBTree<?> rbTree) {
         if (rbTree.getRoot() != null) checkRule1(rbTree.getRoot());
     }
@@ -21,11 +36,25 @@ public class RBTreeChecker {
         if (node.hasRight()) checkRule1(node.getRight());
     }
 
+    /**
+     * Checks if the given tree satisfies the second rule of black tree.
+     * <p>
+     * The second rule of a red-black tree states that the root of the tree is black.
+     *
+     * @param rbTree the tree to check.
+     */
     public static void checkRule2(RBTree<?> rbTree) {
         if (rbTree.getRoot() != null && rbTree.getRoot().isRed())
             throw new RBTreeException("The root of the tree is red!");
     }
 
+    /**
+     * Checks if the given tree satisfies the third rule of black tree.
+     * <p>
+     * The third rule of a red-black tree states that no red node has a red child.
+     *
+     * @param rbTree the tree to check.
+     */
     public static void checkRule3(RBTree<?> rbTree) {
         if (rbTree.getRoot() != null) checkRule3(rbTree.getRoot());
     }
@@ -38,6 +67,13 @@ public class RBTreeChecker {
         if (node.hasRight()) checkRule3(node.getRight());
     }
 
+    /**
+     * Checks if the given tree satisfies the fourth rule of black tree.
+     * <p>
+     * The fourth rule of a red-black tree states that all paths from a node to its leaves contain the same number of black nodes.
+     *
+     * @param rbTree the tree to check.
+     */
     public static void checkRule4(RBTree<?> rbTree) {
         if (rbTree.getRoot() != null) checkRule4(rbTree.getRoot());
     }
