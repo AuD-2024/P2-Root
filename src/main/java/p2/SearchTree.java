@@ -14,8 +14,6 @@ public interface SearchTree<T extends Comparable<T>> {
 
     void insert(T value);
 
-    void delete(T value);
-
     default List<T> inOrder() {
         List<T> result = new ArrayList<>();
         inOrder(findSmallest(), result, Integer.MAX_VALUE, t -> true);

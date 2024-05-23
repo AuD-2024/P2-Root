@@ -111,11 +111,6 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     }
 
     @Override
-    public void delete(T value) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @Override
     public void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
         if (node instanceof RBNode<T> rbNode) {
             super.inOrder(rbNode, result, max, predicate);

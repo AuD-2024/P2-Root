@@ -48,11 +48,6 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
         }
     }
 
-    @Override
-    public void delete(T value) {
-
-    }
-
     protected void inOrder(N node, List<T> result, int max, Predicate<T> predicate) {
         if (node.hasLeft() && result.size() < max) {
             inOrder(node.getLeft(), result, max, predicate);
