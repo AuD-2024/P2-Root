@@ -4,6 +4,7 @@ import p2.Node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T, RBNode<T>> {
 
@@ -17,7 +18,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
 
     @Override
     public void insert(T value) {
-        RBNode<T> z = createNode(value);
+        RBNode<T> z = new RBNode<>(value, Color.RED);
         insert(z, sentinel);
         fixColorsAfterInsertion(z);
     }
@@ -115,16 +116,11 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     }
 
     @Override
-    public void inOrder(Node<T> node, List<T> result, int max) {
+    public void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
         if (node instanceof RBNode<T> rbNode) {
-            super.inOrder(rbNode, result, max);
+            super.inOrder(rbNode, result, max, predicate);
         }
         throw new IllegalArgumentException("Node must be of type RBNode");
-    }
-
-    @Override
-    protected RBNode<T> createNode(T key) {
-        return new RBNode<>(key, Color.RED);
     }
 
     public void join(RBTree<T> other, T joinKey) {
@@ -138,7 +134,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         RBNode<T> newNode = new RBNode<>(joinKey, Color.RED);
 
         RBNode<T> leftNode = findBlackNodeWithBlackHeight(minBH, leftBH, false);
-        RBNode<T> rightNode =other.findBlackNodeWithBlackHeight(minBH, rightBH, true);
+        RBNode<T> rightNode = other.findBlackNodeWithBlackHeight(minBH, rightBH, true);
 
         newNode.setLeft(leftNode);
         newNode.setRight(rightNode);
@@ -176,7 +172,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         return blackHeight(node.getLeft()) + (node.isBlack() ? 1 : 0);
     }
 
-    private RBNode<T> findBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight, boolean smallest) {
+    RBNode<T> findBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight, boolean smallest) {
 
         int currentBlackHeight = totalBlackHeight;
         RBNode<T> currentNode = root;
@@ -197,24 +193,14 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         return currentNode;
     }
 
-    List<T> findNext(RBNode<T> node, int max) {
-        List<T> result = new ArrayList<>();
-        findNext(node, null, max, result);
-        return result;
+    @Override
+    public void findNext(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
+        if (node instanceof RBNode<T> rbNode) {
+            super.findNext(rbNode, result, max, predicate);
+        }
+        throw new IllegalArgumentException("Node must be of type RBNode");
     }
 
-    private void findNext(RBNode<T> node, RBNode<T> prev, int max, List<T> result) {
-
-        if ((prev == null || node.getRight() != prev) && result.size() < max) result.add(node.getKey());
-
-        if (node.hasRight() && prev != node.getRight() && result.size() < max) {
-            inOrder(node.getRight(), result, max);
-        }
-
-        if (node.getParent() != sentinel && result.size() < max) {
-            findNext(node.getParent(), node, max, result);
-        }
-    }
 
     @Override
     public String toString() {

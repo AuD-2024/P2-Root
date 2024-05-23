@@ -2,11 +2,14 @@ package p2;
 
 import javafx.application.Application;
 import p2.binarytree.AutoComplete;
+import p2.binarytree.RBTree;
+import p2.binarytree.RBTreeChecker;
 import p2.gui.MyApplication;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,10 +34,12 @@ public class Main {
             e.printStackTrace();
         }
 
-        ac.autoComplete("bat", 30).forEach(System.out::println);
+        List<String> result = ac.autoComplete("batch", 30);
 
+        for (int i = 0; i < result.size(); i++) {
+            System.out.printf("%d: %s\n", i + 1, result.get(i));
+        }
 
         Application.launch(MyApplication.class, args);
-
     }
 }

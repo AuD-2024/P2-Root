@@ -1,11 +1,14 @@
 package p2.binarytree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AutoComplete extends RBTree<String> {
 
     public List<String> autoComplete(String prefix, int max) {
-        return findNext(prefixSearch(prefix), max);
+        List<String> result = new ArrayList<>();
+        findNext(prefixSearch(prefix), result, max, str -> str.startsWith(prefix));
+        return result;
     }
 
     private RBNode<String> prefixSearch(String value) {
