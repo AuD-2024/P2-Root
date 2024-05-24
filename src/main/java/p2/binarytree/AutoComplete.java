@@ -14,35 +14,39 @@ public class AutoComplete extends RBTree<String> {
     /**
      * Returns a list of suggestions to complete the given prefix string.
      * <p>
-     * It returns at most {@code max} suggestions.
+     * It returns at most {@code max} suggestions. All returned suggestions start with the given prefix.
      *
      * @param prefix the prefix to complete.
-     * @param max the maximum number of suggestions to return.
-     *
+     * @param max    the maximum number of suggestions to return.
      * @return a list of suggestions to complete the given prefix string.
      */
     public List<String> autoComplete(String prefix, int max) {
         List<String> result = new ArrayList<>();
-        findNext(prefixSearch(prefix), result, max, str -> str.startsWith(prefix));
+
+        RBNode<String> prefixNode = prefixSearch(prefix);
+
+        if (prefixNode == null) return List.of();
+
+        findNext(prefixNode, result, max, str -> str.startsWith(prefix));
         return result;
     }
 
     /**
-     * Finds the smallest node in the tree that starts with the given prefix.
+     * Finds the smallest node in the tree that starts with the given prefix or {@code null} if no such node exists.
      *
-     * @param value the prefix to search for.
+     * @param prefix the prefix to search for.
      * @return the smallest node in the tree that starts with the given prefix.
      */
-    public RBNode<String> prefixSearch(String value) {
+    public RBNode<String> prefixSearch(String prefix) {
 
         RBNode<String> x = root;
         RBNode<String> result = null;
 
         while (x != null) {
-            if (x.getKey().startsWith(value)) {
+            if (x.getKey().startsWith(prefix)) {
                 result = x;
                 x = x.getLeft();
-            } else if (x.getKey().compareTo(value) < 0) {
+            } else if (x.getKey().compareTo(prefix) < 0) {
                 x = x.getRight();
             } else {
                 x = x.getLeft();

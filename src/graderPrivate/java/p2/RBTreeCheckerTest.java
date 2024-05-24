@@ -40,7 +40,7 @@ public class RBTreeCheckerTest extends P2_TestBase {
 
     private void testRule(JsonParameterSet params, int rule, Consumer<RBTree<Integer>> checkRule) {
         RBTree<Integer> tree = params.get("RBTree");
-        boolean valid = params.get("valid");
+        boolean valid = params.getBoolean("valid");
 
         Context context = contextBuilder()
             .subject("RBTreeChecker#checkRule" + rule)

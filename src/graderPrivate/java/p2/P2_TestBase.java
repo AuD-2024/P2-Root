@@ -17,7 +17,7 @@ public abstract class P2_TestBase {
     public static final Map<String, Function<JsonNode, ?>> customConverters = new DefaultConvertersMap(Map.ofEntries(
         Map.entry("RBTree", JSONConverters::toIntegerRBTree),
         Map.entry("BinarySearchTree", JSONConverters::toIntegerBinarySearchTree),
-        Map.entry("valid", JsonNode::asBoolean)
+        Map.entry("autocomplete", JSONConverters::toAutoComplete)
     ));
 
     public void checkVerify(Runnable verifier, Context context, String msg) {

@@ -38,6 +38,14 @@ public class Main {
 //            System.out.printf("%d: %s\n", i + 1, result.get(i));
 //        }
 
-        Application.launch(MyApplication.class, args);
+        AutoComplete autoComplete = new AutoComplete();
+
+        for (int i = 'A'; i <= 'Z'; i++) {
+            autoComplete.insert(Character.toString(i) + Character.toString(i));
+        }
+
+        System.out.println(autoComplete);
+
+        //Application.launch(MyApplication.class, args);
     }
 }
