@@ -27,7 +27,7 @@ import static p2.gui.GraphStyle.*;
  *
  * @param <N> the type of the nodes in the graph
  */
-public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> extends Pane {
+public class GraphPane extends Pane {
 
     private static final double SCALE_IN = 1.1;
     private static final double SCALE_OUT = 1 / SCALE_IN;
@@ -39,11 +39,11 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
 
     private final Text positionText = new Text();
 
-    private final Map<N, LabeledNode> nodes = new HashMap<>();
-    private final Map<N, Location> nodeLocations = new HashMap<>();
+    private final Map<BinaryNode<?, ?>, LabeledNode> nodes = new HashMap<>();
+    private final Map<BinaryNode<?, ?>, Location> nodeLocations = new HashMap<>();
 
-    private final Map<Edge<T, N>, Line> edges = new HashMap<>();
-    private final Map<N, Map<N, Edge<T, N>>> nodesToEdge = new HashMap<>();
+    private final Map<Edge, Line> edges = new HashMap<>();
+    private final Map<BinaryNode<?, ?>, Map<BinaryNode<?, ?>, Edge>> nodesToEdge = new HashMap<>();
 
     private final List<Line> grid = new ArrayList<>();
 
@@ -56,7 +56,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         this(null);
     }
 
-    public GraphPane(N root) {
+    public GraphPane(BinaryNode<?, ?> root) {
         // avoid division by zero when scale = 1
         transformation.appendScale(MIN_SCALE, MIN_SCALE);
 
@@ -69,9 +69,9 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         center();
     }
 
-    public void setTree(N root) {
+    public void setTree(BinaryNode<?, ?> root) {
         clear();
-        Map<BinaryNode<T, N>, Double> xOffsets = new HashMap<>();
+        Map<BinaryNode<?, ?>, Double> xOffsets = new HashMap<>();
         calculateXOffsets(root, xOffsets, 0);
 
         addTree(root, 0, xOffsets);
@@ -84,7 +84,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         redrawMap();
     }
 
-    private void addTree(N root, int depth, Map<BinaryNode<T, N>, Double> xOffsets) {
+    private void addTree(BinaryNode<?, ?> root, int depth, Map<BinaryNode<?, ?>, Double> xOffsets) {
         if (root == null) {
             return;
         }
@@ -108,9 +108,9 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
     /**
      * Adds an {@linkplain Edge edge} to this {@link GraphPane} and displays it.
      */
-    public void addEdge(N source, N target) {
+    public void addEdge(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
 
-        Edge<T, N> edge = new Edge<>(source, target);
+        Edge edge = new Edge(source, target);
 
         edges.put(edge, drawEdge(source, target));
         nodesToEdge.computeIfAbsent(source, k -> new HashMap<>()).put(target, edge);
@@ -121,7 +121,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      * The {@linkplain Edge edge} will not be displayed after anymore calling this method.
      * If the given {@linkplain Edge edge} is not part of this {@linkplain GraphPane} the method does nothing.
      */
-    public void removeEdge(N source, N target) {
+    public void removeEdge(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
         Line line = edges.remove(getEdge(source, target));
         nodesToEdge.get(source).remove(target);
 
@@ -136,7 +136,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      * @param color The new color.
      * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
      */
-    public void setEdgeColor(N source, N target, Color color) {
+    public void setEdgeColor(BinaryNode<?, ?> source, BinaryNode<?, ?> target, Color color) {
         getEdgeLine(source, target).setStroke(color);
     }
 
@@ -148,7 +148,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      * @param gapLength  The length of the gaps between the dashes.
      * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
      */
-    public void setEdgeDash(N source, N target, boolean dash, double dashLength, double gapLength) {
+    public void setEdgeDash(BinaryNode<?, ?> source, BinaryNode<?, ?> target, boolean dash, double dashLength, double gapLength) {
         Line line = getEdgeLine(source, target);
 
         line.getStrokeDashArray().clear();
@@ -163,7 +163,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      *
      * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
      */
-    public void resetEdgeColor(N source, N target) {
+    public void resetEdgeColor(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
         setEdgeColor(source, target, DEFAULT_EDGE_COLOR);
     }
 
@@ -171,7 +171,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      * Updates the position of all {@linkplain Edge edges} on this {@link GraphPane}.
      */
     public void redrawEdges() {
-        for (Edge<T, N> edge : edges.keySet()) {
+        for (Edge edge : edges.keySet()) {
             redrawEdge(edge);
         }
     }
@@ -181,11 +181,11 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      *
      * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
      */
-    public void redrawEdge(N source, N target) {
+    public void redrawEdge(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
         redrawEdge(getEdge(source, target));
     }
 
-    private void redrawEdge(Edge<T, N> edge) {
+    private void redrawEdge(Edge edge) {
         Point2D transformedPointA = transform(getLocation(edge.source()));
         Point2D transformedPointB = transform(getLocation(edge.target()));
 
@@ -205,7 +205,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      *
      * @param node The node to display.
      */
-    public void addNode(N node, Location location) {
+    public void addNode(BinaryNode<?, ?> node, Location location) {
         nodeLocations.put(node, location);
         nodes.put(node, drawNode(node));
     }
@@ -218,7 +218,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      *
      * @param node The node to remove.
      */
-    public void removeNode(N node) {
+    public void removeNode(BinaryNode<?, ?> node) {
         LabeledNode labeledNode = nodes.remove(node);
         nodeLocations.remove(node);
         nodesToEdge.remove(node);
@@ -229,13 +229,13 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
     }
 
     /**
-     * Updates the color used to draw the circumference of given {@linkplain N node}.
+     * Updates the color used to draw the circumference of given node.
      *
-     * @param node  The {@linkplain N node} to update.
+     * @param node  The node to update.
      * @param color The new color.
-     * @throws IllegalArgumentException If the given {@linkplain N node} is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given node is not part of this {@link GraphPane}.
      */
-    public void setNodeStrokeColor(N node, Color color) {
+    public void setNodeStrokeColor(BinaryNode<?, ?> node, Color color) {
         LabeledNode labeledNode = nodes.get(node);
 
         if (labeledNode == null) {
@@ -246,13 +246,13 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
     }
 
     /**
-     * Updates the color used to fill the given {@linkplain N node}.
+     * Updates the color used to fill the given N.
      *
-     * @param node  The {@linkplain N node} to update.
+     * @param node  The N to update.
      * @param color The new color.
-     * @throws IllegalArgumentException If the given {@linkplain N node} is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given N is not part of this {@link GraphPane}.
      */
-    public void setNodeFillColor(N node, Color color) {
+    public void setNodeFillColor(BinaryNode<?, ?> node, Color color) {
         LabeledNode labeledNode = nodes.get(node);
 
         if (labeledNode == null) {
@@ -263,12 +263,12 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
     }
 
     /**
-     * Resets the color used to draw the given {@linkplain N node} to the default color ({@link GraphStyle#DEFAULT_NODE_COLOR}).
+     * Resets the color used to draw the given N to the default color ({@link GraphStyle#DEFAULT_NODE_COLOR}).
      *
-     * @param node The {@linkplain N node} to update.
-     * @throws IllegalArgumentException If the given {@linkplain N node} is not part of this {@link GraphPane}.
+     * @param node The N to update.
+     * @throws IllegalArgumentException If the given N is not part of this {@link GraphPane}.
      */
-    public void resetNodeColor(N node) {
+    public void resetNodeColor(BinaryNode<?, ?> node) {
         setNodeStrokeColor(node, DEFAULT_NODE_COLOR);
     }
 
@@ -276,7 +276,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      * Updates the position of all nodes on this {@link GraphPane}.
      */
     public void redrawNodes() {
-        for (N node : nodes.keySet()) {
+        for (BinaryNode<?, ?> node : nodes.keySet()) {
             redrawNode(node);
         }
     }
@@ -287,7 +287,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
      * @param node The node to update.
      * @throws IllegalArgumentException If the given node is not part of this {@link GraphPane}.
      */
-    public void redrawNode(N node) {
+    public void redrawNode(BinaryNode<?, ?> node) {
         if (!nodes.containsKey(node)) {
             throw new IllegalArgumentException("The given node is not part of this GraphPane");
         }
@@ -478,7 +478,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         redrawGrid();
     }
 
-    private Line drawEdge(N source, N target) {
+    private Line drawEdge(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
         Location a = getLocation(source);
         Location b = getLocation(target);
 
@@ -495,7 +495,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         return line;
     }
 
-    private LabeledNode drawNode(N node) {
+    private LabeledNode drawNode(BinaryNode<?, ?> node) {
         Point2D transformedPoint = transform(getLocation(node));
 
         Ellipse ellipse = new Ellipse(transformedPoint.getX(), transformedPoint.getY(), NODE_DIAMETER, NODE_DIAMETER);
@@ -556,11 +556,11 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         return strokeWidth;
     }
 
-    private Edge<T, N> getEdge(N source, N target) {
+    private Edge getEdge(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
         return nodesToEdge.get(source).get(target);
     }
 
-    private Line getEdgeLine(N source, N target) {
+    private Line getEdgeLine(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
         Line line = edges.get(getEdge(source, target));
 
         if (line == null) {
@@ -569,7 +569,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         return line;
     }
 
-    private Location getLocation(N node) {
+    private Location getLocation(BinaryNode<?, ?> node) {
         return nodeLocations.getOrDefault(node, Location.ORIGIN);
     }
 
@@ -585,7 +585,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         return new Point2D(location.x(), location.y());
     }
 
-    private Point2D midPoint(N node) {
+    private Point2D midPoint(BinaryNode<?, ?> node) {
         return midPoint(getLocation(node));
     }
 
@@ -647,7 +647,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         return transformation.getTy();
     }
 
-    private double calculateXOffsets(BinaryNode<T, N> root, Map<BinaryNode<T, N>, Double> xOffsets, double currentOffset) {
+    private double calculateXOffsets(BinaryNode<?, ?> root, Map<BinaryNode<?, ?>, Double> xOffsets, double currentOffset) {
 
         if (root == null) {
             return currentOffset;
@@ -678,7 +678,7 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
         return rightMaxOffset;
     }
 
-    private record Edge<T extends Comparable<T>, N extends BinaryNode<T, N>>(N source, N target) {
+    private record Edge(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
 
     }
 
@@ -726,5 +726,23 @@ public class GraphPane<T extends Comparable<T>, N extends BinaryNode<T, N>> exte
             return Objects.hash(ellipse, text);
         }
 
+    }
+
+    /**
+     * A data class for storing a location in a 2D plane.
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     */
+    private record Location(double x, double y) {
+
+        public static final Location ORIGIN = new Location(0, 0);
+
+        Location add(int x, int y) {
+            return new Location(this.x + x, this.y + y);
+        }
+
+        Location subtract(int x, int y) {
+            return new Location(this.x - x, this.y - y);
+        }
     }
 }

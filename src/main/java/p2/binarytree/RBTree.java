@@ -37,7 +37,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
 
     @Override
     public void insert(T value) {
-        RBNode<T> z = new RBNode<>(value, Color.RED);
+        RBNode<T> z = createNode(value);
         insert(z, sentinel);
         fixColorsAfterInsertion(z);
     }
@@ -180,7 +180,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         int minBH = Math.min(leftBH, rightBH);
         boolean useLeftRoot = leftBH <= rightBH;
 
-        RBNode<T> newNode = new RBNode<>(joinKey, Color.RED);
+        RBNode<T> newNode = createNode(joinKey);
 
         RBNode<T> leftNode = findBlackNodeWithBlackHeight(minBH, leftBH, false);
         RBNode<T> rightNode = other.findBlackNodeWithBlackHeight(minBH, rightBH, true);
@@ -267,19 +267,8 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         throw new IllegalArgumentException("Node must be of type RBNode");
     }
 
-
     @Override
-    public String toString() {
-
-        StringBuilder sb = new StringBuilder();
-
-        if (root == null) {
-            sb.append("[]");
-        } else {
-            root.buildString(sb);
-        }
-
-        return sb.toString();
+    protected RBNode<T> createNode(T key) {
+        return new RBNode<>(key, Color.RED);
     }
-
 }

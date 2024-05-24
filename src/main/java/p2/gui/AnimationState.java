@@ -25,4 +25,9 @@ public class AnimationState {
     public void setStackTrace(StackTraceElement[] stackTrace) {
         this.stackTrace.setAll(stackTrace);
     }
+
+    public void clear() {
+        operation.set("<no operation>");
+        stackTrace.clear();
+    }
 }

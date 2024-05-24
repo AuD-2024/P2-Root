@@ -72,7 +72,7 @@ public class RBNode<T extends Comparable<T>> extends BinaryNode<T, RBNode<T>> {
      * Creates a string representation of the node and its children and appends it to the given builder.
      * It has the format {@code [left,key,color,right]}, where {@code left} and {@code right} are the string
      * representations of the left and right children, respectively. If a child is {@code null}, it is represented
-     * by {@code "null"}. The color is represented by {@code "R"} for red, {@code "B"} for black and {@code "null"}
+     * by an empty string. The color is represented by {@code "R"} for red, {@code "B"} for black and {@code "null"}
      * for {@code null}.
      *
      * @param builder the builder to append the string representation to.

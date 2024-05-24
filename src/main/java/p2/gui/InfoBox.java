@@ -17,14 +17,10 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
-public class InfoBox<S extends AnimationState> extends VBox {
+public class InfoBox extends VBox {
 
-    protected final S state;
-
-    public InfoBox(S state) {
+    public InfoBox(AnimationState state) {
         super(5);
-
-        this.state = state;
 
         setPadding(new Insets(5));
         //setPrefWidth(100);
@@ -34,9 +30,6 @@ public class InfoBox<S extends AnimationState> extends VBox {
             createStackTraceTableView(state.getStackTrace()),
             createOperationLabel(state.getOperation())
         );
-    }
-
-    public void update() {
     }
 
     private Label createOperationLabel(StringProperty operation) {

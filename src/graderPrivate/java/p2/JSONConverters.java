@@ -8,7 +8,7 @@ import p2.binarytree.TreeParser;
 public class JSONConverters {
 
     public static RBTree<Integer> toRBTree(JsonNode node)  {
-        return (RBTree<Integer>) TreeParser.parseRBTree(node.asText(), TestRBNode::new);
+        return (RBTree<Integer>) TreeParser.parseRBTree(node.asText()); //TODO create test RB tree
     }
 
     public static BinarySearchTree<Integer> toBinarySearchTree(JsonNode node) {

@@ -16,7 +16,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractBinarySea
 
     @Override
     public void insert(T value) {
-        insert(new BSTNode<>(value), null);
+        insert(createNode(value), null);
     }
 
     @Override
@@ -35,4 +35,8 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractBinarySea
         throw new IllegalArgumentException("Node must be of type BSTNode");
     }
 
+    @Override
+    protected BSTNode<T> createNode(T key) {
+        return new BSTNode<>(key);
+    }
 }

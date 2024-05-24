@@ -1,35 +1,48 @@
-package p2.gui.rb;
+package p2.gui;
 
 import javafx.application.Platform;
 import p2.binarytree.Color;
 import p2.binarytree.RBNode;
 import p2.binarytree.RBTree;
-import p2.gui.Animation;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements Animation {
+public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements BinaryTreeAnimation {
 
-    protected final Object syncObject = new Object();
+    private final Object syncObject = new Object();
 
-    private RBTreeAnimationScene<T> animationScene;
-
-    private RBTreeAnimationState state;
+    private BinaryTreeAnimationScene animationScene;
 
     public boolean animate = false;
 
     private final Consumer<RBTree<T>> toAnimate;
+    private final Consumer<RBTree<T>> beforeAnimation;
 
     public RBTreeAnimation(Consumer<RBTree<T>> beforeAnimation, Consumer<RBTree<T>> toAnimate) {
         this.toAnimate = toAnimate;
-        runWithoutAnimation(() -> beforeAnimation.accept(this));
-        animate = false;
+        this.beforeAnimation = beforeAnimation;
     }
 
-    public void init(RBTreeAnimationScene<T> animationScene, RBTreeAnimationState state) {
+    public RBTreeAnimation() {
+        this(tree -> {}, tree -> {});
+    }
+
+    @Override
+    public void init(BinaryTreeAnimationScene animationScene) {
         this.animationScene = animationScene;
-        this.state = state;
+        beforeAnimation.accept(this);
+    }
+
+    @Override
+    protected void insert(RBNode<T> node, RBNode<T> initialPX) {
+        animationScene.getAnimationState().setOperation("Insert(" + node.getKey() + ")");
+        super.insert(node, initialPX);
+    }
+
+    @Override
+    protected RBNode<T> createNode(T key) {
+        return new AnimatedRBNode(key, Color.RED);
     }
 
     @Override
@@ -44,11 +57,11 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
     }
 
     private void updateState(StackTraceElement[] stackTrace, String operation) {
-        state.setStackTrace(Arrays.stream(stackTrace)
+        animationScene.getAnimationState().setStackTrace(Arrays.stream(stackTrace)
             .filter(e -> e.getClassName().startsWith("p2"))
                 .filter(e -> !e.getClassName().contains(this.getClass().getSimpleName()))
             .toArray(StackTraceElement[]::new));
-        state.setOperation(operation);
+        animationScene.getAnimationState().setOperation(operation);
     }
 
     private void runWithoutAnimation(Runnable runnable) {
@@ -57,7 +70,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
         animate = true;
     }
 
-    public class AnimatedRBNode extends RBNode<T> implements Animation {
+    public class AnimatedRBNode extends RBNode<T> {
 
         public AnimatedRBNode(T key, Color color) {
             super(key, color);
@@ -90,7 +103,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setLeft(%s)".formatted(getKey(), left.getKey()));
                     runWithoutAnimation(() ->
-                        animationScene.getGraphPane().setTree(RBTreeAnimation.this.getRoot()));
+                        animationScene.getGraphPane().setTree(getRoot()));
                     animationScene.refresh(this, left);
                 });
                 waitUntilNextStep();
@@ -124,7 +137,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setRight(%s)".formatted(getKey(), right.getKey()));
                     runWithoutAnimation(() ->
-                        animationScene.getGraphPane().setTree(RBTreeAnimation.this.getRoot()));
+                        animationScene.getGraphPane().setTree(getRoot()));
                     animationScene.refresh(this, right);
                 });
                 waitUntilNextStep();
@@ -146,15 +159,6 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
                 });
                 waitUntilNextStep();
             }
-        }
-
-        @Override
-        public void start() {
-        }
-
-        @Override
-        public Object getSyncObject() {
-            return syncObject;
         }
 
     }

@@ -158,4 +158,24 @@ public abstract class BinaryNode<T extends Comparable<T>, N extends BinaryNode<T
             "key=" + key +
             '}';
     }
+
+    /**
+     * Creates a string representation of the node and its children and appends it to the given builder.
+     * It has the format {@code [left,key,right]}, where {@code left} and {@code right} are the string
+     * representations of the left and right children, respectively. If a child is {@code null}, it is represented
+     * by an empty string. Additional information can be appended by overriding this method.
+     *
+     * @param builder the builder to append the string representation to.
+     */
+    protected void buildString(StringBuilder builder) {
+        builder.append("[");
+
+        if (getLeft() != null) getLeft().buildString(builder);
+
+        builder.append(",").append(getKey()).append(",");
+
+        if (getRight() != null) getRight().buildString(builder);
+
+        builder.append("]");
+    }
 }

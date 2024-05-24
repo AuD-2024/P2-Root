@@ -1,10 +1,6 @@
 package p2.binarytree;
 
-import p2.Node;
-import p2.SearchTree;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Utility class for parsing strings that represent either red-black tree or a binary search tree.
@@ -18,8 +14,8 @@ public class TreeParser {
      *
      * @return The parsed red-black tree.
      */
-    public static SearchTree<Integer> parseRBTree(String input) {
-        return parseRBTree(input, RBNode::new);
+    public static RBTree<Integer> parseRBTree(String input) {
+        return parseRBTree(input, RBTree::new);
     }
 
     /**
@@ -30,8 +26,8 @@ public class TreeParser {
      *
      * @return The parsed red-black tree.
      */
-    public static SearchTree<Integer> parseRBTree(String input, BiFunction<Integer, Color, ? extends RBNode<Integer>> nodeFactory) {
-        return parse(input, nodeFactory, true);
+    public static <T extends RBTree<Integer>> T parseRBTree(String input, Supplier<T> treeFactory) {
+        return parse(input, treeFactory, true);
     }
 
     /**
@@ -41,8 +37,8 @@ public class TreeParser {
      *
      * @return The parsed binary search tree.
      */
-    public static SearchTree<Integer> parseBST(String input) {
-        return parseBST(input, BSTNode::new);
+    public static BinarySearchTree<Integer> parseBST(String input) {
+        return parseBST(input, BinarySearchTree::new);
     }
 
     /**
@@ -53,31 +49,30 @@ public class TreeParser {
      *
      * @return The parsed binary search tree.
      */
-    public static SearchTree<Integer> parseBST(String input, Function<Integer, ? extends BSTNode<Integer>> nodeFactory) {
-        return parse(input, (value, color) -> nodeFactory.apply(value), false);
+    public static <T extends BinarySearchTree<Integer>> T parseBST(String input, Supplier<T> treeFactory) {
+        return parse(input, treeFactory, false);
     }
 
-    private static <N extends BinaryNode<Integer, N>> SearchTree<Integer> parse(String input, BiFunction<Integer, Color, ? extends N> nodeFactory, boolean rb) {
+    private static <N extends BinaryNode<Integer, N>, T extends AbstractBinarySearchTree<Integer, N>> T parse(String input, Supplier<T> treeFactory, boolean rb) {
 
         StringReader reader = new StringReader(input);
 
-        Node<Integer> node = null;
+        N node = null;
 
-        if (!input.equals("[]")) node = parseNode(reader, nodeFactory, rb);
+        T tree = treeFactory.get();
+
+        if (!input.equals("[]")) node = parseNode(reader, tree, rb);
+
+        tree.root = node;
 
         if (rb) {
-            RBTree<Integer> tree = new RBTree<>();
-            tree.root = (RBNode<Integer>) node;
-            if (tree.root != null) tree.root.setParent(tree.sentinel);
-            return tree;
-        } else {
-            BinarySearchTree<Integer> tree = new BinarySearchTree<>();
-            tree.root = (BSTNode<Integer>) node;
-            return tree;
+            if (tree.root != null) tree.root.setParent((N) ((RBTree<Integer>) tree).sentinel);
         }
+
+        return tree;
     }
 
-    private static <N extends BinaryNode<Integer, N>> N parseNode(StringReader reader, BiFunction<Integer, Color, ? extends N> nodeFactory, boolean rbNode) {
+    private static <N extends BinaryNode<Integer, N>> N parseNode(StringReader reader, AbstractBinarySearchTree<Integer, N> tree, boolean rbNode) {
         reader.accept('[');
 
         N left = null;
@@ -85,7 +80,7 @@ public class TreeParser {
         Color color = null;
 
         //left
-        if (reader.peek() == '[') left = parseNode(reader, nodeFactory, rbNode);
+        if (reader.peek() == '[') left = parseNode(reader, tree, rbNode);
         reader.accept(',');
 
         //value
@@ -107,11 +102,13 @@ public class TreeParser {
         }
 
         //right
-        if (reader.peek() == '[') right = parseNode(reader, nodeFactory, rbNode);
+        if (reader.peek() == '[') right = parseNode(reader, tree, rbNode);
 
         reader.accept(']');
 
-        N node = nodeFactory.apply(value, color);
+        N node = tree.createNode(value);
+
+        if (rbNode) ((RBNode<Integer>) node).setColor(color);
 
         node.setLeft(left);
         node.setRight(right);

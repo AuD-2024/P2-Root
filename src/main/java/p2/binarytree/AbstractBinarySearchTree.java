@@ -153,4 +153,20 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
         return root;
     }
 
+    protected abstract N createNode(T key);
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        if (root == null) {
+            sb.append("[]");
+        } else {
+            root.buildString(sb);
+        }
+
+        return sb.toString();
+    }
+
 }
