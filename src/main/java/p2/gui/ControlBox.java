@@ -44,8 +44,21 @@ public class ControlBox extends HBox {
         centerButton.setOnAction(event -> animationScene.getGraphPane().center());
         zoomInButton.setOnAction(event -> animationScene.getGraphPane().zoomIn());
         zoomOutButton.setOnAction(event -> animationScene.getGraphPane().zoomOut());
-        loadRBTreeButton.setOnAction(event -> loadTree(animationScene, str -> TreeParser.parseRBTree(str, RBTreeAnimation::new)));
-        loadBSTButton.setOnAction(event -> loadTree(animationScene, str -> TreeParser.parseBST(str, BinarySearchTreeAnimation::new)));
+
+        //TODO make it not so ugly
+        loadRBTreeButton.setOnAction(event -> loadTree(animationScene, str -> {
+            if (str.chars().anyMatch(Character::isDigit)) {
+                return TreeParser.parseRBTree(str, Integer::parseInt, () -> new RBTreeAnimation<Integer>());
+            }
+            return TreeParser.parseRBTree(str, Function.identity(), RBTreeAnimation::new);
+        }));
+
+        loadBSTButton.setOnAction(event -> loadTree(animationScene, str -> {
+            if (str.chars().anyMatch(Character::isDigit)) {
+                return TreeParser.parseBST(str, Integer::parseInt, () -> new BinarySearchTreeAnimation<Integer>());
+            }
+            return TreeParser.parseBST(str, Function.identity(), BinarySearchTreeAnimation::new);
+        }));
 
     }
 

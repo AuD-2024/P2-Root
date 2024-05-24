@@ -1,5 +1,6 @@
 package p2.binarytree;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -11,57 +12,73 @@ public class TreeParser {
      * Parses a red-black tree from a string.
      *
      * @param input The string representation of the tree.
+     * @param keyParser The function used to convert the string representation of the key to its actual value.
      *
      * @return The parsed red-black tree.
      */
-    public static RBTree<Integer> parseRBTree(String input) {
-        return parseRBTree(input, RBTree::new);
+    public static <T extends Comparable<T>> RBTree<T> parseRBTree(String input, Function<String, T> keyParser) {
+        return parseRBTree(input, keyParser, RBTree::new);
     }
 
     /**
      * Parses a red-black tree from a string.
      *
      * @param input The string representation of the tree.
-     * @param nodeFactory A factory for creating the nodes of the tree.
+     * @param keyParser The function used to convert the string representation of the key to its actual value.
+     * @param treeFactory A factory for creating the tree.
      *
      * @return The parsed red-black tree.
      */
-    public static <T extends RBTree<Integer>> T parseRBTree(String input, Supplier<T> treeFactory) {
-        return parse(input, treeFactory, true);
+    public static <T extends Comparable<T>, TR extends RBTree<T>> TR parseRBTree(
+        String input,
+        Function<String, T> keyParser,
+        Supplier<TR> treeFactory) {
+        return parse(input, keyParser, treeFactory, true);
     }
 
     /**
      * Parses a binary search tree from a string.
      *
      * @param input The string representation of the tree.
+     * @param keyParser The function used to convert the string representation of the key to its actual value.
      *
      * @return The parsed binary search tree.
      */
-    public static BinarySearchTree<Integer> parseBST(String input) {
-        return parseBST(input, BinarySearchTree::new);
+    public static <T extends Comparable<T>> BinarySearchTree<T> parseBST(String input, Function<String, T> keyParser) {
+        return parseBST(input, keyParser, BinarySearchTree::new);
     }
 
     /**
      * Parses a binary search tree from a string.
      *
      * @param input The string representation of the tree.
-     * @param nodeFactory A factory for creating the nodes of the tree.
+     * @param keyParser The function used to convert the string representation of the key to its actual value.
+     * @param treeFactory A factory for creating the tree.
      *
      * @return The parsed binary search tree.
      */
-    public static <T extends BinarySearchTree<Integer>> T parseBST(String input, Supplier<T> treeFactory) {
-        return parse(input, treeFactory, false);
+    public static <T extends Comparable<T>, TR extends BinarySearchTree<T>> TR parseBST(
+        String input,
+        Function<String, T> keyParser,
+        Supplier<TR> treeFactory) {
+        return parse(input, keyParser, treeFactory, false);
     }
 
-    private static <N extends AbstractBinaryNode<Integer, N>, T extends AbstractBinarySearchTree<Integer, N>> T parse(String input, Supplier<T> treeFactory, boolean rb) {
+    private static <T extends Comparable<T>,
+        N extends AbstractBinaryNode<T, N>,
+        TR extends AbstractBinarySearchTree<T, N>> TR parse(
+            String input,
+            Function<String, T> keyParser,
+            Supplier<TR> treeFactory,
+            boolean rb) {
 
         StringReader reader = new StringReader(input);
 
         N node = null;
 
-        T tree = treeFactory.get();
+        TR tree = treeFactory.get();
 
-        if (!input.equals("[]")) node = parseNode(reader, tree, rb);
+        if (!input.equals("[]")) node = parseNode(reader, keyParser, tree, rb);
 
         tree.root = node;
 
@@ -72,7 +89,12 @@ public class TreeParser {
         return tree;
     }
 
-    private static <N extends AbstractBinaryNode<Integer, N>> N parseNode(StringReader reader, AbstractBinarySearchTree<Integer, N> tree, boolean rbNode) {
+    private static <T extends Comparable<T>, N extends AbstractBinaryNode<T, N>> N parseNode(
+        StringReader reader,
+        Function<String, T> keyParser,
+        AbstractBinarySearchTree<T, N> tree,
+        boolean rbNode) {
+
         reader.accept('[');
 
         N left = null;
@@ -80,11 +102,11 @@ public class TreeParser {
         Color color = null;
 
         //left
-        if (reader.peek() == '[') left = parseNode(reader, tree, rbNode);
+        if (reader.peek() == '[') left = parseNode(reader, keyParser, tree, rbNode);
         reader.accept(',');
 
         //value
-        int value = Integer.parseInt(reader.readUntil(','));
+        T value = keyParser.apply(reader.readUntil(','));
         reader.accept(',');
 
         //color
@@ -102,7 +124,7 @@ public class TreeParser {
         }
 
         //right
-        if (reader.peek() == '[') right = parseNode(reader, tree, rbNode);
+        if (reader.peek() == '[') right = parseNode(reader, keyParser, tree, rbNode);
 
         reader.accept(']');
 
