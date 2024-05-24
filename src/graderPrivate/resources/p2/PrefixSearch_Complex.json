@@ -1,0 +1,42 @@
+[
+  {
+    "autocomplete": "[]",
+    "prefix": "A",
+    "expectedKey": null
+  },
+  {
+    "autocomplete": "[[,AA,R,],AB,B,[,BB,R,]]",
+    "prefix": "A",
+    "expectedKey": "AA"
+  },
+  {
+    "autocomplete": "[[,AA,R,],AB,B,[,AC,R,]]",
+    "prefix": "A",
+    "expectedKey": "AA"
+  },
+  {
+    "autocomplete": "[[,AA,R,],BA,B,[,BB,R,]]",
+    "prefix": "B",
+    "expectedKey": "BA"
+  },
+  {
+    "autocomplete": "[[[[,AA,B,],AB,B,[,AC,B,]],AD,B,[[,AE,B,],AF,B,[,AG,B,]]],AH,B,[[[[,BA,B,],BB,B,[,BC,B,]],BD,B,[[,BE,B,],BF,B,[,BG,B,]]],BH,R,[[[,CA,B,],CB,B,[,CC,B,]],CD,B,[[[,CE,B,],CF,B,[,CG,B,]],CH,R,[[[,DA,B,],DB,R,[,DC,B,]],DD,B,[[,DE,B,],DF,R,[,DG,B,[,DH,R,]]]]]]]]",
+    "prefix": "A",
+    "expectedKey": "AA"
+  },
+  {
+    "autocomplete": "[[[[,AA,B,],AB,B,[,AC,B,]],AD,B,[[,AE,B,],AF,B,[,AG,B,]]],AH,B,[[[[,BA,B,],BB,B,[,BC,B,]],BD,B,[[,BE,B,],BF,B,[,BG,B,]]],BH,R,[[[,CA,B,],CB,B,[,CC,B,]],CD,B,[[[,CE,B,],CF,B,[,CG,B,]],CH,R,[[[,DA,B,],DB,R,[,DC,B,]],DD,B,[[,DE,B,],DF,R,[,DG,B,[,DH,R,]]]]]]]]",
+    "prefix": "B",
+    "expectedKey": "BA"
+  },
+  {
+    "autocomplete": "[[[[,AA,B,],AB,B,[,AC,B,]],AD,B,[[,AE,B,],AF,B,[,AG,B,]]],AH,B,[[[[,BA,B,],BB,B,[,BC,B,]],BD,B,[[,BE,B,],BF,B,[,BG,B,]]],BH,R,[[[,CA,B,],CB,B,[,CC,B,]],CD,B,[[[,CE,B,],CF,B,[,CG,B,]],CH,R,[[[,DA,B,],DB,R,[,DC,B,]],DD,B,[[,DE,B,],DF,R,[,DG,B,[,DH,R,]]]]]]]]",
+    "prefix": "C",
+    "expectedKey": "CA"
+  },
+  {
+    "autocomplete": "[[[[,AA,B,],AB,B,[,AC,B,]],AD,B,[[,AE,B,],AF,B,[,AG,B,]]],AH,B,[[[[,BA,B,],BB,B,[,BC,B,]],BD,B,[[,BE,B,],BF,B,[,BG,B,]]],BH,R,[[[,CA,B,],CB,B,[,CC,B,]],CD,B,[[[,CE,B,],CF,B,[,CG,B,]],CH,R,[[[,DA,B,],DB,R,[,DC,B,]],DD,B,[[,DE,B,],DF,R,[,DG,B,[,DH,R,]]]]]]]]",
+    "prefix": "D",
+    "expectedKey": "DA"
+  }
+]

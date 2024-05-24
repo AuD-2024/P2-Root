@@ -13,8 +13,14 @@ public class PrefixSearchTest extends P2_TestBase {
 
 
     @ParameterizedTest
-    @JsonParameterSetTest(value = "PrefixSearchOneNodeTest.json", customConverters = "customConverters")
-    public void testPrefixSearchOneNode(JsonParameterSet params) {
+    @JsonParameterSetTest(value = "PrefixSearch_Simple.json", customConverters = "customConverters")
+    public void testPrefixSimple(JsonParameterSet params) {
+        testPrefixSearch(params);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "PrefixSearch_Complex.json", customConverters = "customConverters")
+    public void testPrefixComplex(JsonParameterSet params) {
         testPrefixSearch(params);
     }
 
@@ -33,10 +39,16 @@ public class PrefixSearchTest extends P2_TestBase {
         RBNode<String> actual = callObject(() -> autoComplete.prefixSearch(prefix), context.build(),
             result -> "prefixSearch should not throw an exception");
 
-        context.add("actual key", actual.getKey());
+        context.add("actual key", actual == null ? "null" : actual.getKey());
 
-        assertEquals(expectedKey, actual.getKey(), context.build(),
-            result -> "The method prefixSearch did not return a node with the correct key");
+        if (expectedKey == null) {
+            assertNull(actual, context.build(), result -> "The method prefixSearch should return null");
+        } else {
+            assertNotNull(actual, context.build(), result -> "The method prefixSearch should not return null");
+
+            assertEquals(expectedKey, actual.getKey(), context.build(),
+                result -> "The method prefixSearch did not return a node with the correct key");
+        }
     }
 
 }
