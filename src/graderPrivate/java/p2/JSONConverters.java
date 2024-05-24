@@ -7,11 +7,11 @@ import p2.binarytree.TreeParser;
 
 public class JSONConverters {
 
-    public static RBTree<Integer> toRBTree(JsonNode node)  {
-        return (RBTree<Integer>) TreeParser.parseRBTree(node.asText()); //TODO create test RB tree
+    public static TestRBTree<Integer> toRBTree(JsonNode node)  {
+        return TreeParser.parseRBTree(node.asText(), TestRBTree::new);
     }
 
     public static BinarySearchTree<Integer> toBinarySearchTree(JsonNode node) {
-        return (BinarySearchTree<Integer>) TreeParser.parseBST(node.asText());
+        return TreeParser.parseBST(node.asText());
     }
 }
