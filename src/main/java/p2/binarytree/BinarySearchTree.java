@@ -23,8 +23,10 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractBinarySea
     public void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
         if (node instanceof BSTNode<T> bstNode) {
             super.inOrder(bstNode, result, max, predicate);
+            return;
         }
-        throw new IllegalArgumentException("Node must be of type BSTNode");
+
+        if (node != null) throw new IllegalArgumentException("Node must be of type BSTNode");
     }
 
     @Override

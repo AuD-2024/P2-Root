@@ -16,12 +16,13 @@ import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 public abstract class P2_TestBase {
 
     @SuppressWarnings("unused")
-    public static final Map<String, Function<JsonNode, ?>> customConverters = new DefaultConvertersMap(Map.ofEntries(
+    public static final Map<String, Function<JsonNode, ?>> customConverters = Map.ofEntries(
         Map.entry("RBTree", JSONConverters::toIntegerRBTree),
         Map.entry("bst", JSONConverters::toIntegerBinarySearchTree),
         Map.entry("expectedBST", JSONConverters::toIntegerBinarySearchTree),
-        Map.entry("autocomplete", JSONConverters::toAutoComplete)
-    ));
+        Map.entry("autocomplete", JSONConverters::toAutoComplete),
+        Map.entry("expectedList", JSONConverters::toIntegerList)
+    );
 
     public void checkVerify(Runnable verifier, Context context, String msg) {
         try {
@@ -31,6 +32,30 @@ public abstract class P2_TestBase {
         } catch (Exception e) {
             fail(context, result -> "Unexpected Exception:\n" + e.getMessage());
         }
+    }
+
+    public void assertTreeUnchanged(RBTree<?> expected, RBTree<?> actual, Context context) throws ReflectiveOperationException {
+        if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), getSentinel(actual), context);
+    }
+
+    public void assertTreeUnchanged(BinarySearchTree<?> expected, BinarySearchTree<?> actual, Context context) {
+        if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), null, context);
+    }
+
+    public void assertNodeUnchanged(BinaryNode<?> expected, BinaryNode<?> actual, BinaryNode<?> parent, Context context) {
+
+        assertNotNull(actual, context, result -> "The tree should not change. The node with key %s should not be null".formatted(expected.getKey()));
+
+        assertEquals(expected.getKey(), actual.getKey(), context, result -> "The tree should not change. The key of the node with key %s is not correct".formatted(expected.getKey()));
+
+        if (expected.getLeft() != null) assertNodeUnchanged(expected.getLeft(), actual.getLeft(), actual, context);
+        else assertNull(actual.getLeft(), context, result -> "The tree should not change. The left child of the node with key %s should be null".formatted(expected.getKey()));
+
+        if (expected.getRight() != null) assertNodeUnchanged(expected.getRight(), actual.getRight(), actual, context);
+        else assertNull(actual.getRight(), context, result -> "The tree should not change. The right child of the node with key %s should be null".formatted(expected.getKey()));
+
+        assertSame(parent, actual.getParent(), context, result -> "The tree should not change. The parent of the node with key %s should be the node with key %s".formatted(expected.getKey(), parent.getKey()));
+
     }
 
     public void assertTreeEquals(AbstractBinarySearchTree<?, ?> expected, AbstractBinarySearchTree<?, ?> actual, Context context) throws ReflectiveOperationException {
@@ -111,18 +136,6 @@ public abstract class P2_TestBase {
         Field sentinelField = RBTree.class.getDeclaredField("sentinel");
         sentinelField.setAccessible(true);
         return (BinaryNode<?>) sentinelField.get(rbTree);
-    }
-
-    private static class DefaultConvertersMap extends HashMap<String, Function<JsonNode, ?>> {
-
-        public DefaultConvertersMap(Map<? extends String, ? extends Function<JsonNode, ?>> m) {
-            super(m);
-        }
-
-        @Override
-        public Function<JsonNode, ?> get(Object key) {
-            return super.getOrDefault(key, JsonNode::asInt);
-        }
     }
 
 }

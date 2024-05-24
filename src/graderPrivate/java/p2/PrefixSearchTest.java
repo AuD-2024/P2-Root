@@ -14,17 +14,17 @@ public class PrefixSearchTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "PrefixSearch_Simple.json", customConverters = "customConverters")
-    public void testPrefixSimple(JsonParameterSet params) {
+    public void testPrefixSimple(JsonParameterSet params) throws ReflectiveOperationException {
         testPrefixSearch(params);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "PrefixSearch_Complex.json", customConverters = "customConverters")
-    public void testPrefixComplex(JsonParameterSet params) {
+    public void testPrefixComplex(JsonParameterSet params) throws ReflectiveOperationException {
         testPrefixSearch(params);
     }
 
-    private void testPrefixSearch(JsonParameterSet params) {
+    private void testPrefixSearch(JsonParameterSet params) throws ReflectiveOperationException {
 
         AutoComplete autoComplete = params.get("autocomplete");
         String prefix = params.getString("prefix");
@@ -49,6 +49,8 @@ public class PrefixSearchTest extends P2_TestBase {
             assertEquals(expectedKey, actual.getKey(), context.build(),
                 result -> "The method prefixSearch did not return a node with the correct key");
         }
+
+        assertTreeUnchanged(params.get("autocomplete"), autoComplete, context.build());
     }
 
 }

@@ -149,8 +149,10 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     public void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
         if (node instanceof RBNode<T> rbNode) {
             super.inOrder(rbNode, result, max, predicate);
+            return;
         }
-        throw new IllegalArgumentException("Node must be of type RBNode");
+
+        if (node != null) throw new IllegalArgumentException("Node must be of type RBNode");
     }
 
     /**

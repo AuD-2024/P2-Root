@@ -16,29 +16,29 @@ public class RBTreeCheckerTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule1.json", customConverters = "customConverters")
-    public void testRule1(JsonParameterSet params) {
+    public void testRule1(JsonParameterSet params) throws ReflectiveOperationException {
         testRule(params, 1, RBTreeChecker::checkRule1);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule2.json", customConverters = "customConverters")
-    public void testRule2(JsonParameterSet params) {
+    public void testRule2(JsonParameterSet params) throws ReflectiveOperationException {
         testRule(params, 2, RBTreeChecker::checkRule2);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule3.json", customConverters = "customConverters")
-    public void testRule3(JsonParameterSet params) {
+    public void testRule3(JsonParameterSet params) throws ReflectiveOperationException {
         testRule(params, 3, RBTreeChecker::checkRule3);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule4.json", customConverters = "customConverters")
-    public void testRule4(JsonParameterSet params) {
+    public void testRule4(JsonParameterSet params) throws ReflectiveOperationException {
         testRule(params, 4, RBTreeChecker::checkRule4);
     }
 
-    private void testRule(JsonParameterSet params, int rule, Consumer<RBTree<Integer>> checkRule) {
+    private void testRule(JsonParameterSet params, int rule, Consumer<RBTree<Integer>> checkRule) throws ReflectiveOperationException {
         RBTree<Integer> tree = params.get("RBTree");
         boolean valid = params.getBoolean("valid");
 
@@ -70,7 +70,7 @@ public class RBTreeCheckerTest extends P2_TestBase {
         }
 
         checkLinear((TestRBNode<Integer>) tree.getRoot(), context);
-
+        assertTreeUnchanged(params.get("RBTree"), tree, context);
     }
 
     private void checkLinear(TestRBNode<Integer> node, Context context) {
@@ -87,7 +87,6 @@ public class RBTreeCheckerTest extends P2_TestBase {
 
         checkLinear((TestRBNode<Integer>) node.getLeft(), context);
         checkLinear((TestRBNode<Integer>) node.getRight(), context);
-
     }
 
 }
