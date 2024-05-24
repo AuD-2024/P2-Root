@@ -5,10 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import p2.SearchTree;
-import p2.binarytree.AbstractBinarySearchTree;
-import p2.binarytree.BinaryNode;
-import p2.binarytree.BinarySearchTree;
 import p2.binarytree.TreeParser;
 
 import java.util.function.Function;

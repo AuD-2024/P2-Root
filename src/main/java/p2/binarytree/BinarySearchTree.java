@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * An implementation of a binary search tree.
+ * A simple implementation of a binary search tree.
  *
  * @param <T> The type of the keys in the tree.
  *

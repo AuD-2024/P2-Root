@@ -53,7 +53,7 @@ public class TreeParser {
         return parse(input, treeFactory, false);
     }
 
-    private static <N extends BinaryNode<Integer, N>, T extends AbstractBinarySearchTree<Integer, N>> T parse(String input, Supplier<T> treeFactory, boolean rb) {
+    private static <N extends AbstractBinaryNode<Integer, N>, T extends AbstractBinarySearchTree<Integer, N>> T parse(String input, Supplier<T> treeFactory, boolean rb) {
 
         StringReader reader = new StringReader(input);
 
@@ -72,7 +72,7 @@ public class TreeParser {
         return tree;
     }
 
-    private static <N extends BinaryNode<Integer, N>> N parseNode(StringReader reader, AbstractBinarySearchTree<Integer, N> tree, boolean rbNode) {
+    private static <N extends AbstractBinaryNode<Integer, N>> N parseNode(StringReader reader, AbstractBinarySearchTree<Integer, N> tree, boolean rbNode) {
         reader.accept('[');
 
         N left = null;

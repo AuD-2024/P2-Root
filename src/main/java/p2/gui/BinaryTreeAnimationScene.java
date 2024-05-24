@@ -3,7 +3,7 @@ package p2.gui;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import p2.Node;
+import p2.binarytree.AbstractBinaryNode;
 import p2.binarytree.BinaryNode;
 
 /**
@@ -45,7 +45,7 @@ public class BinaryTreeAnimationScene extends Scene {
         startAnimation();
     }
 
-    public void refresh(BinaryNode<?, ?> source, BinaryNode<?, ?> target) {
+    public void refresh(BinaryNode<?> source, BinaryNode<?> target) {
         graphPane.setEdgeColor(source, target, Color.GREEN);
         graphPane.setNodeStrokeColor(source, Color.GREEN);
     }

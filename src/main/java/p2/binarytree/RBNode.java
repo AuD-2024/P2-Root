@@ -2,15 +2,15 @@ package p2.binarytree;
 
 /**
  * A node in a {@link RBTree}.
- * Additionally, to the normal properties of a {@link BinaryNode}, it also has a {@link Color},
+ * Additionally, to the normal properties of a {@link AbstractBinaryNode}, it also has a {@link Color},
  * i.e. it can be red or black.
  *
  * @param <T> the type of the key in the node.
  *
  * @see RBTree
- * @see BinaryNode
+ * @see AbstractBinaryNode
  */
-public class RBNode<T extends Comparable<T>> extends BinaryNode<T, RBNode<T>> {
+public class RBNode<T extends Comparable<T>> extends AbstractBinaryNode<T, RBNode<T>> {
 
     /**
      * The color of the node.
