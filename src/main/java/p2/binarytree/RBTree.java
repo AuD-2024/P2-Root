@@ -155,6 +155,15 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         if (node != null) throw new IllegalArgumentException("Node must be of type RBNode");
     }
 
+    @Override
+    public void findNext(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
+        if (node instanceof RBNode<T> rbNode) {
+            super.findNext(rbNode, result, max, predicate);
+            return;
+        }
+        if (node != null) throw new IllegalArgumentException("Node must be of type RBNode");
+    }
+
     /**
      * Joins this red-black tree with another red-black tree by inserting a join-key.
      * <p>
@@ -259,14 +268,6 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
         }
 
         return currentNode;
-    }
-
-    @Override
-    public void findNext(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
-        if (node instanceof RBNode<T> rbNode) {
-            super.findNext(rbNode, result, max, predicate);
-        }
-        throw new IllegalArgumentException("Node must be of type RBNode");
     }
 
     @Override

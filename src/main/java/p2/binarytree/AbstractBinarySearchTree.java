@@ -134,7 +134,7 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
             inOrder(node.getRight(), result, max, predicate);
         }
 
-        if (result.size() < max) {
+        if (result.size() < max && node != root) {
             findNext(node.getParent(), node, max, result, predicate);
         }
     }
