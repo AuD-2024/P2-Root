@@ -1,12 +1,9 @@
-package p2;
+package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
-import p2.binarytree.RBTreeException;
-import p2.binarytree.RBTree;
-import p2.binarytree.RBTreeChecker;
 
 import java.util.function.Consumer;
 

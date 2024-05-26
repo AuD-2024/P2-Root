@@ -1,8 +1,9 @@
-package p2;
+package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
+import p2.SearchTree;
 
 public class InOrderTest extends TraversingTest {
 

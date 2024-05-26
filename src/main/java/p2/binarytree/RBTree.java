@@ -48,7 +48,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
      *
      * @param z The node that was inserted.
      */
-    private void fixColorsAfterInsertion(RBNode<T> z) {
+    protected void fixColorsAfterInsertion(RBNode<T> z) {
 
         while (z.getParent().isRed()) {
             if (z.getParent() == z.getParent().getParent().getLeft()) {
@@ -96,7 +96,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
      *
      * @param x The node to rotate.
      */
-    private void rotateLeft(RBNode<T> x) {
+    protected void rotateLeft(RBNode<T> x) {
 
         RBNode<T> y = x.getRight();
         x.setRight(y.getLeft());
@@ -126,7 +126,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
      *
      * @param x The node to rotate.
      */
-    private void rotateRight(RBNode<T> x) {
+    protected void rotateRight(RBNode<T> x) {
 
         RBNode<T> y = x.getLeft();
         x.setLeft(y.getRight());

@@ -1,16 +1,12 @@
-package p2;
+package p2.binarytree;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
-import p2.binarytree.*;
+import p2.SearchTree;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
@@ -58,8 +54,8 @@ public abstract class P2_TestBase {
     }
 
     //TODO funktioniert wirklich (wird wirklich neuer Baum erstellt?)
-    public void assertTreeUnchanged(RBTree<?> expected, RBTree<?> actual, Context context) throws ReflectiveOperationException {
-        if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), getSentinel(actual), context);
+    public void assertTreeUnchanged(RBTree<?> expected, RBTree<?> actual, Context context) {
+        if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), actual.sentinel, context);
     }
 
     public void assertTreeUnchanged(BinarySearchTree<?> expected, BinarySearchTree<?> actual, Context context) {
@@ -117,7 +113,7 @@ public abstract class P2_TestBase {
 
     private void assertRootParentCorrect(AbstractBinarySearchTree<?, ?> actual, Context context) throws ReflectiveOperationException {
         if (actual instanceof RBTree<?> rbTree) {
-            assertSame(getSentinel(rbTree), rbTree.getRoot().getParent(), context, result -> "The parent of the root should be the sentinel node");
+            assertSame(rbTree.sentinel, rbTree.getRoot().getParent(), context, result -> "The parent of the root should be the sentinel node");
         } else {
             assertNull(actual.getRoot().getParent(), context, result -> "The parent of the root should be null");
         }
@@ -154,36 +150,6 @@ public abstract class P2_TestBase {
         }
 
         assertSame(parent, actual.getParent(), context, result -> "The parent of the %s should be the node with key %s".formatted(nodeDescription, parent.getKey()));
-    }
-
-    public static AbstractBinaryNode<?, ?> getSentinel(RBTree<?> rbTree) throws ReflectiveOperationException {
-        Field sentinelField = RBTree.class.getDeclaredField("sentinel");
-        sentinelField.setAccessible(true);
-        return (AbstractBinaryNode<?, ?>) sentinelField.get(rbTree);
-    }
-
-    public static AbstractBinaryNode<?, ?> invokeCreateNode(AbstractBinarySearchTree<?, ?> tree, Comparable<?> key) throws ReflectiveOperationException {
-        Method createNode = AbstractBinarySearchTree.class.getDeclaredMethod("createNode", Comparable.class);
-        createNode.setAccessible(true);
-        return (AbstractBinaryNode<?, ?>) createNode.invoke(tree, key);
-    }
-
-    public static void invokeInsert(AbstractBinarySearchTree<?, ?> tree, AbstractBinaryNode<?, ?> node, AbstractBinaryNode<?, ?> initialPX) throws ReflectiveOperationException {
-        Method insert = AbstractBinarySearchTree.class.getDeclaredMethod("insert", AbstractBinaryNode.class, AbstractBinaryNode.class);
-        insert.setAccessible(true);
-        insert.invoke(tree, node, initialPX);
-    }
-
-    public static void invokeRotateLeft(RBTree<?> tree, RBNode<?> x) throws ReflectiveOperationException {
-        Method rotateLeft = RBTree.class.getDeclaredMethod("rotateLeft", RBNode.class);
-        rotateLeft.setAccessible(true);
-        rotateLeft.invoke(tree, x);
-    }
-
-    public static void invokeRotateRight(RBTree<?> tree, RBNode<?> x) throws ReflectiveOperationException {
-        Method rotateRight = RBTree.class.getDeclaredMethod("rotateRight", RBNode.class);
-        rotateRight.setAccessible(true);
-        rotateRight.invoke(tree, x);
     }
 }
 

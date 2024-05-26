@@ -1,11 +1,9 @@
-package p2;
+package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
-import p2.binarytree.AutoComplete;
-import p2.binarytree.RBNode;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 

@@ -1,7 +1,9 @@
-package p2;
+package p2.binarytree;
 
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
+import p2.Node;
+import p2.SearchTree;
 
 import java.util.ArrayList;
 import java.util.List;

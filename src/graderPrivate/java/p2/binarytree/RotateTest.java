@@ -1,10 +1,9 @@
-package p2;
+package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
-import p2.binarytree.RBTree;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.call;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.contextBuilder;
@@ -36,9 +35,9 @@ public class RotateTest extends P2_TestBase {
             .add("expected tree", expected.toString());
 
         if (rotateLeft) {
-            call(() -> invokeRotateLeft(tree, tree.search(node)), context.build(), result  -> "rotateLeft should not throw an exception");
+            call(() -> tree.rotateLeft(tree.search(node)), context.build(), result  -> "rotateLeft should not throw an exception");
         } else {
-            call(() -> invokeRotateRight(tree, tree.search(node)), context.build(), result -> "rotateRight should not throw an exception");
+            call(() -> tree.rotateRight(tree.search(node)), context.build(), result -> "rotateRight should not throw an exception");
         }
 
         context.add("actual tree", tree);

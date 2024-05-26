@@ -1,10 +1,7 @@
-package p2;
+package p2.binarytree;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.tudalgo.algoutils.tutor.general.json.JsonConverters;
-import p2.binarytree.AutoComplete;
-import p2.binarytree.BinarySearchTree;
-import p2.binarytree.TreeParser;
 
 import java.util.List;
 import java.util.function.Function;
