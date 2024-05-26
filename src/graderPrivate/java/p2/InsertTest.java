@@ -17,6 +17,12 @@ public class InsertTest extends P2_TestBase {
         testBSTInsert(params);
     }
 
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "InsertBST_Complex.json", customConverters = "customConverters")
+    public void testBSTInsertComplex(JsonParameterSet params) throws ReflectiveOperationException {
+        testBSTInsert(params);
+    }
+
     private void testBSTInsert(JsonParameterSet params) throws ReflectiveOperationException {
         BinarySearchTree<Integer> bst = params.get("bst");
         int input = params.get("input");
