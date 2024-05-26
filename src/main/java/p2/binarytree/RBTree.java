@@ -171,9 +171,9 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     /**
      * Joins this red-black tree with another red-black tree by inserting a join-key.
      * <p>
-     * The method assumes that every element in this tree is less than every element in the other tree.
-     * Additionally, it assumes that the join-key is greater than every element in this tree and less than every element
-     * in the other tree.
+     * The method assumes that both trees are non-empty and every element in this tree is less than every element in
+     * the other tree. Additionally, it assumes that the join-key is greater than every element in this tree and less
+     * than every element in the other tree.
      * <p>
      * The method modifies the tree in place, so that the other tree is merged into this tree. The other tree is
      * effectively destroyed in the process, i.e. it is not guaranteed that it is a valid red-black tree anymore.
@@ -244,16 +244,18 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     /**
      * Finds a black node with the given black height in the tree.
      * <p>
-     * Depending on the value of the {@code smallest} parameter, the method finds the smallest or largest node with the
+     * Depending on the value of the {@code findSmallest} parameter, the method finds the smallest or largest node with the
      * target black height.
+     * <p>
+     * It assumes that the tree is non-empty and that there is a node with the target black height.
      *
      * @param targetBlackHeight The target black height to find a node with.
      * @param totalBlackHeight The total black height of the tree.
-     * @param smallest Whether to find the smallest or largest node with the target black height.
+     * @param findSmallest Whether to find the smallest or largest node with the target black height.
      *
      * @return A black node with the target black height.
      */
-    public RBNode<T> findBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight, boolean smallest) {
+    public RBNode<T> findBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight, boolean findSmallest) {
 
         int currentBlackHeight = totalBlackHeight;
         RBNode<T> currentNode = root;
@@ -262,13 +264,8 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
 
             if (currentNode.isBlack()) currentBlackHeight--;
 
-            if (smallest) {
-                if (currentNode.hasLeft()) currentNode = currentNode.getLeft();
-                else currentNode = currentNode.getRight();
-            } else {
-                if (currentNode.hasRight()) currentNode = currentNode.getRight();
-                else currentNode = currentNode.getLeft();
-            }
+            if (findSmallest) currentNode = currentNode.getLeft();
+            else currentNode = currentNode.getRight();
         }
 
         return currentNode;
