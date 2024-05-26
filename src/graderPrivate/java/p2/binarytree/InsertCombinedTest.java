@@ -12,7 +12,7 @@ public class InsertCombinedTest extends P2_TestBase {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testInsertCombined() throws ReflectiveOperationException {
+    public void testInsertCombined() {
         final int value = 1;
 
         RBTree<Integer> tree = spy(new RBTree<>());
