@@ -91,6 +91,8 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
 
     /**
      * Rotates the given node to the left by making it the left child of its previous right child.
+     * <p>
+     * The method assumes that the right child of the given node is not {@code null}.
      *
      * @param x The node to rotate.
      */
@@ -119,30 +121,32 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
 
     /**
      * Rotates the given node to the right by making it the right child of its previous left child.
+     * <p>
+     * The method assumes that the left child of the given node is not {@code null}.
      *
-     * @param y The node to rotate.
+     * @param x The node to rotate.
      */
-    private void rotateRight(RBNode<T> y) {
+    private void rotateRight(RBNode<T> x) {
 
-        RBNode<T> x = y.getLeft();
-        y.setLeft(x.getRight());
+        RBNode<T> y = x.getLeft();
+        x.setLeft(y.getRight());
 
-        if (x.hasRight()) {
-            x.getRight().setParent(y);
+        if (y.hasRight()) {
+            y.getRight().setParent(x);
         }
 
-        x.setParent(y.getParent());
+        y.setParent(x.getParent());
 
-        if (y.getParent() == sentinel) {
-            root = x;
-        } else if (y == y.getParent().getRight()) {
-            y.getParent().setRight(x);
+        if (x.getParent() == sentinel) {
+            root = y;
+        } else if (x == x.getParent().getRight()) {
+            x.getParent().setRight(y);
         } else {
-            y.getParent().setLeft(x);
+            x.getParent().setLeft(y);
         }
 
-        x.setRight(y);
-        y.setParent(x);
+        y.setRight(x);
+        x.setParent(y);
     }
 
     @Override

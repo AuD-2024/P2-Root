@@ -23,6 +23,7 @@ public abstract class P2_TestBase {
         Map.entry("RBTree", JSONConverters::toIntegerRBTree),
         Map.entry("bst", JSONConverters::toIntegerBinarySearchTree),
         Map.entry("expectedBST", JSONConverters::toIntegerBinarySearchTree),
+        Map.entry("expectedRBTree", JSONConverters::toIntegerRBTree),
         Map.entry("autocomplete", JSONConverters::toAutoComplete),
         Map.entry("expectedList", JSONConverters::toIntegerList)
     );
@@ -173,6 +174,17 @@ public abstract class P2_TestBase {
         insert.invoke(tree, node, initialPX);
     }
 
+    public static void invokeRotateLeft(RBTree<?> tree, RBNode<?> x) throws ReflectiveOperationException {
+        Method rotateLeft = RBTree.class.getDeclaredMethod("rotateLeft", RBNode.class);
+        rotateLeft.setAccessible(true);
+        rotateLeft.invoke(tree, x);
+    }
+
+    public static void invokeRotateRight(RBTree<?> tree, RBNode<?> x) throws ReflectiveOperationException {
+        Method rotateRight = RBTree.class.getDeclaredMethod("rotateRight", RBNode.class);
+        rotateRight.setAccessible(true);
+        rotateRight.invoke(tree, x);
+    }
 }
 
 @FunctionalInterface

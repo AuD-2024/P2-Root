@@ -11,7 +11,6 @@ import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
 public class PrefixSearchTest extends P2_TestBase {
 
-
     @ParameterizedTest
     @JsonParameterSetTest(value = "PrefixSearch_Simple.json", customConverters = "customConverters")
     public void testPrefixSimple(JsonParameterSet params) throws ReflectiveOperationException {
