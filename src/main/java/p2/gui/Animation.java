@@ -6,7 +6,6 @@ package p2.gui;
  * The implementations of this interface are responsible for calling {@link Object#wait()} to wait for the next step and update the visualization before waiting.
  * To avoid blocking the JavaFX thread, the {@link #start()} method should be called from a new thread.
  * To continue the animation, {@code getSyncObject().notify()} should be called from the JavaFX thread.
- *
  */
 public interface Animation {
 
@@ -29,8 +28,7 @@ public interface Animation {
         synchronized (getSyncObject()) {
             try {
                 getSyncObject().wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (InterruptedException ignored) {
             }
         }
     }

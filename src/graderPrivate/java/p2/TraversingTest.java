@@ -12,22 +12,8 @@ import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertE
 
 public class TraversingTest extends P2_TestBase {
 
-    protected void testTraversing(JsonParameterSet params, TraversingMethod traversingMethod, String method) {
-
-        boolean testPerformed = false;
-
-        if (params.getRootNode().has("bst")) {
-            testTraversing(params, params.get("bst"), traversingMethod, method, "BinarySearchTree");
-            testPerformed = true;
-        }
-        if (params.getRootNode().has("RBTree")) {
-            testTraversing(params, params.get("RBTree"), traversingMethod, method, "RBTree");
-            testPerformed = true;
-        }
-
-        if (!testPerformed) {
-            throw new IllegalArgumentException("Internal error: No tree found in the parameter set");
-        }
+    protected void testTraversing(JsonParameterSet params, TraversingMethod traversingMethod, String method) throws Throwable {
+        testForBSTAndRBTree(params, (tree, className) -> testTraversing(params, tree, traversingMethod, method, className));
     }
 
     private void testTraversing(JsonParameterSet params, SearchTree<Integer> tree, TraversingMethod traversingMethod, String methodName, String className) {

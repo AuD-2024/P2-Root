@@ -46,13 +46,13 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
      * Inserts the given node into the tree.
      *
      * @param node the node to insert.
-     * @param initialPX The initial value used for the pointer to the parent node, i.e., the parent of the root node.
+     * @param initialPX The initial value used for the pointer to the parent node.
      *                  This is required for implementations that use a sentinel node. For normal trees, this value
      *                  should be {@code null}.
      */
     protected void insert(N node, N initialPX) {
         N x = root;
-        N px = initialPX; //TODO mit root.getParent() austauschen?
+        N px = initialPX;
 
         while (x != null) {
             px = x;

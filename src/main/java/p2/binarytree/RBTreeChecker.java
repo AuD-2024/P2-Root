@@ -70,7 +70,7 @@ public class RBTreeChecker {
     /**
      * Checks if the given tree satisfies the fourth rule of black tree.
      * <p>
-     * The fourth rule of a red-black tree states that all paths from a node to its leaves contain the same number of black nodes.
+     * The fourth rule of a red-black tree states that all paths from a node to a leave or half-leave contain the same number of black nodes.
      *
      * @param rbTree the tree to check.
      */

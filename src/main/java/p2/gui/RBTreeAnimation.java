@@ -35,9 +35,9 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
     }
 
     @Override
-    protected void insert(RBNode<T> node, RBNode<T> initialPX) {
-        animationScene.getAnimationState().setOperation("Insert(" + node.getKey() + ")");
-        super.insert(node, initialPX);
+    public void insert(T value) {
+        animationScene.getAnimationState().setOperation("Insert(" + value + ")");
+        super.insert(value);
     }
 
     @Override

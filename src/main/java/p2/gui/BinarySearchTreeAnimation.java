@@ -34,9 +34,9 @@ public class BinarySearchTreeAnimation<T extends Comparable<T>> extends BinarySe
     }
 
     @Override
-    protected void insert(BSTNode<T> node, BSTNode<T> initialPX) {
-        animationScene.getAnimationState().setOperation("Insert(" + node.getKey() + ")");
-        super.insert(node, initialPX);
+    public void insert(T value) {
+        animationScene.getAnimationState().setOperation("Insert(" + value + ")");
+        super.insert(value);
     }
 
     @Override

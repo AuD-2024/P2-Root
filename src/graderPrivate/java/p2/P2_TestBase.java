@@ -3,11 +3,14 @@ package p2;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
+import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import p2.binarytree.*;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
@@ -24,6 +27,25 @@ public abstract class P2_TestBase {
         Map.entry("expectedList", JSONConverters::toIntegerList)
     );
 
+    void testForBSTAndRBTree(JsonParameterSet params, ThrowingBiConsumer<SearchTree<Integer>, String> test) throws Throwable {
+
+        boolean testPerformed = false;
+
+        if (params.getRootNode().has("bst")) {
+
+            test.accept(params.get("bst"), "BinarySearchTree");
+            testPerformed = true;
+        }
+        if (params.getRootNode().has("RBTree")) {
+            test.accept(params.get("RBTree"), "RBTree");
+            testPerformed = true;
+        }
+
+        if (!testPerformed) {
+            throw new IllegalArgumentException("Internal error: No tree found in the parameter set");
+        }
+    }
+
     public void checkVerify(Runnable verifier, Context context, String msg) {
         try {
             verifier.run();
@@ -34,6 +56,7 @@ public abstract class P2_TestBase {
         }
     }
 
+    //TODO funktioniert wirklich (wird wirklich neuer Baum erstellt?)
     public void assertTreeUnchanged(RBTree<?> expected, RBTree<?> actual, Context context) throws ReflectiveOperationException {
         if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), getSentinel(actual), context);
     }
@@ -132,11 +155,29 @@ public abstract class P2_TestBase {
         assertSame(parent, actual.getParent(), context, result -> "The parent of the %s should be the node with key %s".formatted(nodeDescription, parent.getKey()));
     }
 
-    private static BinaryNode<?> getSentinel(RBTree<?> rbTree) throws ReflectiveOperationException {
+    public static AbstractBinaryNode<?, ?> getSentinel(RBTree<?> rbTree) throws ReflectiveOperationException {
         Field sentinelField = RBTree.class.getDeclaredField("sentinel");
         sentinelField.setAccessible(true);
-        return (BinaryNode<?>) sentinelField.get(rbTree);
+        return (AbstractBinaryNode<?, ?>) sentinelField.get(rbTree);
+    }
+
+    public static AbstractBinaryNode<?, ?> invokeCreateNode(AbstractBinarySearchTree<?, ?> tree, Comparable<?> key) throws ReflectiveOperationException {
+        Method createNode = AbstractBinarySearchTree.class.getDeclaredMethod("createNode", Comparable.class);
+        createNode.setAccessible(true);
+        return (AbstractBinaryNode<?, ?>) createNode.invoke(tree, key);
+    }
+
+    public static void invokeInsert(AbstractBinarySearchTree<?, ?> tree, AbstractBinaryNode<?, ?> node, AbstractBinaryNode<?, ?> initialPX) throws ReflectiveOperationException {
+        Method insert = AbstractBinarySearchTree.class.getDeclaredMethod("insert", AbstractBinaryNode.class, AbstractBinaryNode.class);
+        insert.setAccessible(true);
+        insert.invoke(tree, node, initialPX);
     }
 
 }
 
+@FunctionalInterface
+interface ThrowingBiConsumer<T, U> {
+
+    void accept(T t, U u) throws Throwable;
+
+}

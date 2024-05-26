@@ -8,13 +8,13 @@ public class InOrderTest extends TraversingTest {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "InOrder_Simple.json", customConverters = "customConverters")
-    public void testInOrderSimple(JsonParameterSet params) {
+    public void testInOrderSimple(JsonParameterSet params) throws Throwable {
         testTraversing(params, SearchTree::inOrder, "inOrder");
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "InOrder_Complex.json", customConverters = "customConverters")
-    public void testInOrderComplex(JsonParameterSet params) {
+    public void testInOrderComplex(JsonParameterSet params) throws Throwable {
         testTraversing(params, SearchTree::inOrder, "inOrder");
     }
 
