@@ -1,14 +1,8 @@
 package p2;
 
-import javafx.application.Application;
 import p2.binarytree.AutoComplete;
-import p2.gui.MyApplication;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Main entry point in executing the program.
@@ -21,31 +15,29 @@ public class Main {
      * @param args program arguments, currently ignored
      */
     public static void main(String[] args) {
-//        AutoComplete ac = new AutoComplete();
-//
-//        try (BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(Main.class.getResourceAsStream("words_alpha.txt"))))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                ac.insert(line);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        List<String> result = ac.autoComplete("batch", 30);
-//
-//        for (int i = 0; i < result.size(); i++) {
-//            System.out.printf("%d: %s\n", i + 1, result.get(i));
-//        }
 
-        AutoComplete autoComplete = new AutoComplete();
+        String prefix = "z";
+        int max = 10;
 
-        for (int i = 'A'; i <= 'Z'; i++) {
-            autoComplete.insert(Character.toString(i) + Character.toString(i));
-        }
-
-        System.out.println(autoComplete);
+        autoCompleteExample(prefix, max, true);
+        autoCompleteExample(prefix, max, false);
 
         //Application.launch(MyApplication.class, args);
+    }
+
+    private static void autoCompleteExample(String prefix, int max, boolean useRBTree) {
+
+        AutoComplete acRBTree = new AutoComplete("words_alpha.txt", useRBTree);
+        String type = useRBTree ? "Red-Black Tree" : "Simple Binary Tree";
+
+        List<String> result = acRBTree.autoComplete(prefix, max);
+
+        System.out.printf("Initialization time using %s: %.2fms\n", type, (acRBTree.getInitializationTime() / 10000) / 100d);
+        System.out.printf("Computation time using %s: %.2fms\n", type, (acRBTree.getLastComputationTime() / 10000) / 100d);
+
+        System.out.printf("Results for prefix=\"%s\" and max=%s using %s:\n", prefix, max, type);
+        for (int i = 0; i < result.size(); i++) {
+            System.out.printf("%d: %s\n", i + 1, result.get(i));
+        }
     }
 }
