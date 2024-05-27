@@ -11,17 +11,17 @@ public class PrefixSearchTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "PrefixSearch_Simple.json", customConverters = "customConverters")
-    public void testPrefixSimple(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testPrefixSimple(JsonParameterSet params) {
         testPrefixSearch(params);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "PrefixSearch_Complex.json", customConverters = "customConverters")
-    public void testPrefixComplex(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testPrefixComplex(JsonParameterSet params) {
         testPrefixSearch(params);
     }
 
-    private void testPrefixSearch(JsonParameterSet params) throws ReflectiveOperationException {
+    private void testPrefixSearch(JsonParameterSet params) {
 
         AutoComplete autoComplete = params.get("autocomplete");
         String prefix = params.getString("prefix");

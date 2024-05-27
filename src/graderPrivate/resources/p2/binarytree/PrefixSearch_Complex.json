@@ -20,6 +20,16 @@
     "expectedKey": "BA"
   },
   {
+    "autocomplete": "[[,BA,R,],BB,B,[,CB,R,]]",
+    "prefix": "A",
+    "expectedKey": null
+  },
+  {
+    "autocomplete": "[[,BA,R,],BB,B,[,CB,R,]]",
+    "prefix": "D",
+    "expectedKey": null
+  },
+  {
     "autocomplete": "[[[[,AA,B,],AB,B,[,AC,B,]],AD,B,[[,AE,B,],AF,B,[,AG,B,]]],AH,B,[[[[,BA,B,],BB,B,[,BC,B,]],BD,B,[[,BE,B,],BF,B,[,BG,B,]]],BH,R,[[[,CA,B,],CB,B,[,CC,B,]],CD,B,[[[,CE,B,],CF,B,[,CG,B,]],CH,R,[[[,DA,B,],DB,R,[,DC,B,]],DD,B,[[,DE,B,],DF,R,[,DG,B,[,DH,R,]]]]]]]]",
     "prefix": "A",
     "expectedKey": "AA"
@@ -38,5 +48,10 @@
     "autocomplete": "[[[[,AA,B,],AB,B,[,AC,B,]],AD,B,[[,AE,B,],AF,B,[,AG,B,]]],AH,B,[[[[,BA,B,],BB,B,[,BC,B,]],BD,B,[[,BE,B,],BF,B,[,BG,B,]]],BH,R,[[[,CA,B,],CB,B,[,CC,B,]],CD,B,[[[,CE,B,],CF,B,[,CG,B,]],CH,R,[[[,DA,B,],DB,R,[,DC,B,]],DD,B,[[,DE,B,],DF,R,[,DG,B,[,DH,R,]]]]]]]]",
     "prefix": "D",
     "expectedKey": "DA"
+  },
+  {
+    "autocomplete": "[[[[,AA,B,],AB,B,[,AC,B,]],AD,B,[[,AE,B,],AF,B,[,AG,B,]]],AH,B,[[[[,BA,B,],BB,B,[,BC,B,]],BD,B,[[,BE,B,],BF,B,[,BG,B,]]],BH,R,[[[,CA,B,],CB,B,[,CC,B,]],CD,B,[[[,CE,B,],CF,B,[,CG,B,]],CH,R,[[[,DA,B,],DB,R,[,DC,B,]],DD,B,[[,DE,B,],DF,R,[,DG,B,[,DH,R,]]]]]]]]",
+    "prefix": "Z",
+    "expectedKey": null
   }
 ]
