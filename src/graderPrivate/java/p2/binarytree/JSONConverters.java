@@ -19,7 +19,7 @@ public class JSONConverters extends JsonConverters {
     }
 
     public static AutoComplete toAutoComplete(JsonNode node) {
-        return TreeParser.parseRBTree(node.asText(), Function.identity(), AutoComplete::new);
+        return new AutoComplete(TreeParser.parseRBTree(node.asText(), Function.identity(), TestRBTree::new));
     }
 
     public static List<Integer> toIntegerList(JsonNode node) {

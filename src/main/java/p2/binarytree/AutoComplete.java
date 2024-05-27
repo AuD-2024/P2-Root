@@ -34,9 +34,20 @@ public class AutoComplete {
     private final BinarySearchTree<String> searchTree;
 
     /**
-     * Creates a new {@link AutoComplete} instance.
+     * Creates a new {@link AutoComplete} instance that uses the given {@link BinarySearchTree} to search for
+     * possible suggestions.
+     *
+     * @param searchTree The {@link BinarySearchTree} to use for searching for suggestions.
+     */
+    public AutoComplete(BinarySearchTree<String> searchTree) {
+        this.searchTree = searchTree;
+    }
+
+    /**
+     * Creates a new {@link AutoComplete} instance that uses the words in the given File to search for possible suggestions.
      * <p>
      * It uses an {@link RBTree} internally to store the used words.
+     *
      * @param fileName The name of the file that contains a list of all words that are supposed to be used.
      */
     public AutoComplete(String fileName) {
@@ -44,11 +55,11 @@ public class AutoComplete {
     }
 
     /**
-     * Creates a new {@link AutoComplete} instance.
+     * Creates a new {@link AutoComplete} instance that uses the words in the given File to search for possible suggestions.
      *
      * @param useRBTree If, {@code true}, a {@link RBTree} is internally used to store the words. Otherwise, a
      *                  {@link SimpleBinarySearchTree} is used.
-     * @param fileName The name of the file that contains a list of all words that are supposed to be used.
+     * @param fileName  The name of the file that contains a list of all words that are supposed to be used.
      */
     public AutoComplete(String fileName, boolean useRBTree) {
         searchTree = useRBTree ? new RBTree<>() : new SimpleBinarySearchTree<>();
@@ -121,6 +132,13 @@ public class AutoComplete {
         }
 
         return result;
+    }
+
+    /**
+     * @return the {@link BinarySearchTree} that is internally used to store and search for possible suggestions.
+     */
+    public BinarySearchTree<String> getSearchTree() {
+        return searchTree;
     }
 
     /**

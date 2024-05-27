@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
-import p2.SearchTree;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -24,7 +23,7 @@ public abstract class P2_TestBase {
         Map.entry("expectedList", JSONConverters::toIntegerList)
     );
 
-    void testForBSTAndRBTree(JsonParameterSet params, ThrowingBiConsumer<SearchTree<Integer>, String> test) throws Throwable {
+    void testForBSTAndRBTree(JsonParameterSet params, ThrowingBiConsumer<BinarySearchTree<Integer>, String> test) throws Throwable {
 
         boolean testPerformed = false;
 
@@ -53,7 +52,6 @@ public abstract class P2_TestBase {
         }
     }
 
-    //TODO funktioniert wirklich (wird wirklich neuer Baum erstellt?)
     public void assertTreeUnchanged(RBTree<?> expected, RBTree<?> actual, Context context) {
         if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), actual.sentinel, context);
     }
@@ -111,7 +109,7 @@ public abstract class P2_TestBase {
         }
     }
 
-    private void assertRootParentCorrect(AbstractBinarySearchTree<?, ?> actual, Context context) throws ReflectiveOperationException {
+    private void assertRootParentCorrect(AbstractBinarySearchTree<?, ?> actual, Context context) {
         if (actual instanceof RBTree<?> rbTree) {
             assertSame(rbTree.sentinel, rbTree.getRoot().getParent(), context, result -> "The parent of the root should be the sentinel node");
         } else {
@@ -121,17 +119,17 @@ public abstract class P2_TestBase {
 
     private void assertNodeCorrect(BinaryNode<?> expected, BinaryNode<?> actual, BinaryNode<?> parent, Context context) {
 
-        StringBuilder nodeDescriptionviaParent = new StringBuilder();
+        StringBuilder nodeDescriptionViaParent = new StringBuilder();
 
         if (parent.getLeft() == actual) {
-            nodeDescriptionviaParent.append("left child");
+            nodeDescriptionViaParent.append("left child");
         } else {
-            nodeDescriptionviaParent.append("right child");
+            nodeDescriptionViaParent.append("right child");
         }
 
-        nodeDescriptionviaParent.append(" of the node with key ").append(parent.getKey());
+        nodeDescriptionViaParent.append(" of the node with key ").append(parent.getKey());
 
-        assertEquals(expected.getKey(), actual.getKey(), context, result -> "The key of the %s is not correct".formatted(nodeDescriptionviaParent));
+        assertEquals(expected.getKey(), actual.getKey(), context, result -> "The key of the %s is not correct".formatted(nodeDescriptionViaParent));
 
         String nodeDescription = "node with key %s".formatted(actual.getKey());
 

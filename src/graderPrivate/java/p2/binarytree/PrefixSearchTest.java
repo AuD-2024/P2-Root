@@ -33,7 +33,7 @@ public class PrefixSearchTest extends P2_TestBase {
             .add("prefix", prefix)
             .add("expected key", expectedKey);
 
-        RBNode<String> actual = callObject(() -> autoComplete.prefixSearch(prefix), context.build(),
+        BinaryNode<String> actual = callObject(() -> autoComplete.prefixSearch(prefix), context.build(),
             result -> "prefixSearch should not throw an exception");
 
         context.add("actual key", actual == null ? "null" : actual.getKey());
@@ -47,7 +47,8 @@ public class PrefixSearchTest extends P2_TestBase {
                 result -> "The method prefixSearch did not return a node with the correct key");
         }
 
-        assertTreeUnchanged(params.get("autocomplete"), autoComplete, context.build());
+        assertTreeUnchanged((RBTree<String>) params.<AutoComplete>get("autocomplete").getSearchTree(),
+            (RBTree<String>) autoComplete.getSearchTree(), context.build());
     }
 
 }
