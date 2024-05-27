@@ -2,12 +2,12 @@ package p2.gui;
 
 import javafx.application.Platform;
 import p2.binarytree.BSTNode;
-import p2.binarytree.BinarySearchTree;
+import p2.binarytree.SimpleBinarySearchTree;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-public class BinarySearchTreeAnimation<T extends Comparable<T>> extends BinarySearchTree<T> implements BinaryTreeAnimation {
+public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends SimpleBinarySearchTree<T> implements BinaryTreeAnimation {
 
     private final Object syncObject = new Object();
 
@@ -15,15 +15,15 @@ public class BinarySearchTreeAnimation<T extends Comparable<T>> extends BinarySe
 
     public boolean animate = false;
 
-    private final Consumer<BinarySearchTree<T>> toAnimate;
-    private final Consumer<BinarySearchTree<T>> beforeAnimation;
+    private final Consumer<SimpleBinarySearchTree<T>> toAnimate;
+    private final Consumer<SimpleBinarySearchTree<T>> beforeAnimation;
 
-    public BinarySearchTreeAnimation(Consumer<BinarySearchTree<T>> beforeAnimation, Consumer<BinarySearchTree<T>> toAnimate) {
+    public SimpleBinarySearchTreeAnimation(Consumer<SimpleBinarySearchTree<T>> beforeAnimation, Consumer<SimpleBinarySearchTree<T>> toAnimate) {
         this.toAnimate = toAnimate;
         this.beforeAnimation = beforeAnimation;
     }
 
-    public BinarySearchTreeAnimation() {
+    public SimpleBinarySearchTreeAnimation() {
         this(tree -> {}, tree -> {});
     }
 

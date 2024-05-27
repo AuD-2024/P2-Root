@@ -1,45 +1,24 @@
 package p2.binarytree;
 
-import p2.Node;
-
-import java.util.List;
-import java.util.function.Predicate;
+import p2.SearchTree;
 
 /**
- * A simple implementation of a binary search tree.
+ * An interface for a {@link SearchTree} that uses {@linkplain BinaryNode binary nodes}.
  *
- * @param <T> The type of the keys in the tree.
+ * @param <T> The type of the elements in the tree.
  *
+ * @see SearchTree
+ * @see BinaryNode
  * @see AbstractBinarySearchTree
  */
-public class BinarySearchTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T, BSTNode<T>> {
+public interface BinarySearchTree<T extends Comparable<T>> extends SearchTree<T> {
 
     @Override
-    public void insert(T value) {
-        insert(createNode(value), null);
-    }
+    BinaryNode<T> search(T value);
 
     @Override
-    public void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
-        if (node instanceof BSTNode<T> bstNode) {
-            super.inOrder(bstNode, result, max, predicate);
-            return;
-        }
-
-        if (node != null) throw new IllegalArgumentException("Node must be of type BSTNode");
-    }
+    BinaryNode<T> findSmallest();
 
     @Override
-    public void findNext(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
-        if (node instanceof BSTNode<T> rbNode) {
-            super.findNext(rbNode, result, max, predicate);
-            return;
-        }
-        if (node != null) throw new IllegalArgumentException("Node must be of type BSTNode");
-    }
-
-    @Override
-    protected BSTNode<T> createNode(T key) {
-        return new BSTNode<>(key);
-    }
+    BinaryNode<T> getRoot();
 }

@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import p2.binarytree.BinaryNode;
+import p2.binarytree.AbstractBinarySearchTree;
 import p2.binarytree.RBNode;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static p2.gui.GraphStyle.*;
 
 /**
- * A {@link Pane} that displays a {@link p2.binarytree.AbstractBinarySearchTree}.
+ * A {@link Pane} that displays a {@link AbstractBinarySearchTree}.
  */
 public class GraphPane extends Pane {
 

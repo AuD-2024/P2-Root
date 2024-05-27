@@ -58,7 +58,7 @@ public abstract class P2_TestBase {
         if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), actual.sentinel, context);
     }
 
-    public void assertTreeUnchanged(BinarySearchTree<?> expected, BinarySearchTree<?> actual, Context context) {
+    public void assertTreeUnchanged(SimpleBinarySearchTree<?> expected, SimpleBinarySearchTree<?> actual, Context context) {
         if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), null, context);
     }
 

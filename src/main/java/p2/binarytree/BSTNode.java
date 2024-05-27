@@ -1,11 +1,11 @@
 package p2.binarytree;
 
 /**
- * A node in a {@link BinarySearchTree}.
+ * A node in a {@link SimpleBinarySearchTree}.
  *
  * @param <T> the type of the key in the node.
  *
- * @see BinarySearchTree
+ * @see SimpleBinarySearchTree
  * @see AbstractBinaryNode
  */
 public class BSTNode<T extends Comparable<T>> extends AbstractBinaryNode<T, BSTNode<T>> {

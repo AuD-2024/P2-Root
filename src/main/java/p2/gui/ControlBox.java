@@ -55,9 +55,9 @@ public class ControlBox extends HBox {
 
         loadBSTButton.setOnAction(event -> loadTree(animationScene, str -> {
             if (str.chars().anyMatch(Character::isDigit)) {
-                return TreeParser.parseBST(str, Integer::parseInt, () -> new BinarySearchTreeAnimation<Integer>());
+                return TreeParser.parseBST(str, Integer::parseInt, () -> new SimpleBinarySearchTreeAnimation<Integer>());
             }
-            return TreeParser.parseBST(str, Function.identity(), BinarySearchTreeAnimation::new);
+            return TreeParser.parseBST(str, Function.identity(), SimpleBinarySearchTreeAnimation::new);
         }));
 
     }

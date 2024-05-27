@@ -19,7 +19,7 @@ import java.util.function.Predicate;
  * @see SearchTree
  * @see AbstractBinaryNode
  */
-public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extends AbstractBinaryNode<T, N>> implements SearchTree<T> {
+public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extends AbstractBinaryNode<T, N>> implements BinarySearchTree<T> {
 
     /**
      * The root node of the tree.

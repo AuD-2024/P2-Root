@@ -32,7 +32,7 @@ public class InsertTest extends P2_TestBase {
 
 
         int input = params.get("input");
-        BinarySearchTree<Integer> expectedBST = params.get("expectedBST");
+        SimpleBinarySearchTree<Integer> expectedBST = params.get("expectedBST");
 
         AbstractBinarySearchTree<Integer, N> bst = (AbstractBinarySearchTree<Integer, N>) tree;
         N initialPX = (bst instanceof RBTree<?> rbTree) ? (N) rbTree.sentinel : null;

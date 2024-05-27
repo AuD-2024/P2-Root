@@ -44,8 +44,8 @@ public class TreeParser {
      *
      * @return The parsed binary search tree.
      */
-    public static <T extends Comparable<T>> BinarySearchTree<T> parseBST(String input, Function<String, T> keyParser) {
-        return parseBST(input, keyParser, BinarySearchTree::new);
+    public static <T extends Comparable<T>> SimpleBinarySearchTree<T> parseBST(String input, Function<String, T> keyParser) {
+        return parseBST(input, keyParser, SimpleBinarySearchTree::new);
     }
 
     /**
@@ -57,7 +57,7 @@ public class TreeParser {
      *
      * @return The parsed binary search tree.
      */
-    public static <T extends Comparable<T>, TR extends BinarySearchTree<T>> TR parseBST(
+    public static <T extends Comparable<T>, TR extends SimpleBinarySearchTree<T>> TR parseBST(
         String input,
         Function<String, T> keyParser,
         Supplier<TR> treeFactory) {
