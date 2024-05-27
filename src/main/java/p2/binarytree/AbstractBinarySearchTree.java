@@ -80,25 +80,26 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
      * The method adds at most {@code max} elements.
      * The method stops traversing the tree if the predicate returns {@code false} for one of the elements and does
      * not add any further elements. The first element which did not satisfy the predicate is also excluded.
-     * If later elements exist that satisfy the predicate, they are excluded as well.
+     * It assumes that the predicate returns {@code false} for all greater values once it returned {@code false} for
+     * one value, i.e. it represents a limit check.
      *
      * @param node The root of the subtree to traverse.
      * @param result The list to store the elements in.
      * @param max The maximum number of elements to include in the result.
-     * @param predicate The predicate to test the elements against. If the predicate returns {@code false} for an element,
+     * @param limit The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */
-    protected void inOrder(N node, List<T> result, int max, Predicate<T> predicate) {
+    protected void inOrder(N node, List<T> result, int max, Predicate<T> limit) {
         if (node.hasLeft() && result.size() < max) {
-            inOrder(node.getLeft(), result, max, predicate);
+            inOrder(node.getLeft(), result, max, limit);
         }
 
-        if (!predicate.test(node.getKey())) return;
+        if (!limit.test(node.getKey())) return;
 
         if (result.size() < max) result.add(node.getKey());
 
         if (node.hasRight() && result.size() < max) {
-            inOrder(node.getRight(), result, max, predicate);
+            inOrder(node.getRight(), result, max, limit);
         }
     }
 
@@ -109,16 +110,17 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
      * The method adds at most {@code max} elements.
      * The method stops traversing the tree if the predicate returns {@code false} for one of the elements and does
      * not add any further elements. The first element which did not satisfy the predicate is also excluded.
-     * If later elements exist that satisfy the predicate, they are excluded as well.
+     * It assumes that the predicate returns {@code false} for all greater values once it returned {@code false} for
+     * one value, i.e. it represents a limit check.
      *
      * @param node The node to start the search from. The node itself is included in the search.
      * @param result The list to store the elements in.
      * @param max The maximum number of elements to include in the result.
-     * @param predicate The predicate to test the elements against. If the predicate returns {@code false} for an element,
+     * @param limit The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */
-    protected void findNext(N node, List<T> result, int max, Predicate<T> predicate) {
-        findNext(node, null, max, result, predicate);
+    protected void findNext(N node, List<T> result, int max, Predicate<T> limit) {
+        findNext(node, null, max, result, limit);
     }
 
     private void findNext(N node, N prev, int max, List<T> result, Predicate<T> predicate) {
