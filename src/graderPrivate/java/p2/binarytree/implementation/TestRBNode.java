@@ -1,4 +1,7 @@
-package p2.binarytree;
+package p2.binarytree.implementation;
+
+import p2.binarytree.Color;
+import p2.binarytree.RBNode;
 
 public class TestRBNode<T extends Comparable<T>> extends RBNode<T> {
 

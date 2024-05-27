@@ -4,6 +4,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
+import p2.binarytree.implementation.TestRBNode;
 
 import java.util.function.Consumer;
 
