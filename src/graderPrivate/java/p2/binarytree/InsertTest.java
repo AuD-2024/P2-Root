@@ -48,7 +48,7 @@ public class InsertTest extends P2_TestBase {
 
         context.add("actual bst", bst.toString());
 
-        assertTreeEquals(expectedBST, bst, context.build());
+        assertTreeEquals(expectedBST, bst, context.build(), "The resulting tree is not correct");
     }
 
 }

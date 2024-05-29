@@ -42,6 +42,6 @@ public class RotateTest extends P2_TestBase {
 
         context.add("actual tree", tree);
 
-        assertTreeEquals(expected, tree, context.build());
+        assertTreeEquals(expected, tree, context.build(), "The resulting tree is not correct");
     }
 }

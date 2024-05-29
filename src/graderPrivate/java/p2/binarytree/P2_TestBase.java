@@ -20,7 +20,9 @@ public abstract class P2_TestBase {
         Map.entry("expectedBST", JSONConverters::toIntegerBinarySearchTree),
         Map.entry("expectedRBTree", JSONConverters::toIntegerRBTree),
         Map.entry("autocomplete", JSONConverters::toAutoComplete),
-        Map.entry("expectedList", JSONConverters::toIntegerList)
+        Map.entry("expectedList", JSONConverters::toIntegerList),
+        Map.entry("leftRBTree", JSONConverters::toIntegerRBTree),
+        Map.entry("rightRBTree", JSONConverters::toIntegerRBTree)
     );
 
     void testForBSTAndRBTree(JsonParameterSet params, ThrowingBiConsumer<BinarySearchTree<Integer>, String> test) throws Throwable {
@@ -76,48 +78,48 @@ public abstract class P2_TestBase {
 
     }
 
-    public void assertTreeEquals(AbstractBinarySearchTree<?, ?> expected, AbstractBinarySearchTree<?, ?> actual, Context context) throws ReflectiveOperationException {
-        assertRootCorrect(expected.getRoot(), actual.getRoot(), context);
-        assertRootParentCorrect(actual, context);
+    public void assertTreeEquals(AbstractBinarySearchTree<?, ?> expected, AbstractBinarySearchTree<?, ?> actual, Context context, String message) {
+        assertRootCorrect(expected.getRoot(), actual.getRoot(), context, message);
+        assertRootParentCorrect(actual, context, message);
 
         if (expected.getRoot() != null) {
-            if (expected.getRoot().getLeft() != null) assertNodeCorrect(expected.getRoot().getLeft(), actual.getRoot().getLeft(), actual.getRoot(), context);
-            if (expected.getRoot().getRight() != null) assertNodeCorrect(expected.getRoot().getRight(), actual.getRoot().getRight(), actual.getRoot(), context);
+            if (expected.getRoot().getLeft() != null) assertNodeCorrect(expected.getRoot().getLeft(), actual.getRoot().getLeft(), actual.getRoot(), context, message);
+            if (expected.getRoot().getRight() != null) assertNodeCorrect(expected.getRoot().getRight(), actual.getRoot().getRight(), actual.getRoot(), context, message);
         }
 
     }
 
-    private void assertRootCorrect(BinaryNode<?> expectedRoot, BinaryNode<?> actualRoot, Context context) {
+    private void assertRootCorrect(BinaryNode<?> expectedRoot, BinaryNode<?> actualRoot, Context context, String message) {
 
         if (expectedRoot == null) {
-            assertNull(actualRoot, context, result -> "The root of the tree should be null");
+            assertNull(actualRoot, context, result -> message + ". The root of the tree should be null");
         } else {
-            assertNotNull(actualRoot, context, result -> "The root of the tree should not be null");
-            assertEquals(expectedRoot.getKey(), actualRoot.getKey(), context, result -> "The key of the root is not correct");
+            assertNotNull(actualRoot, context, result -> message + ". The root of the tree should not be null");
+            assertEquals(expectedRoot.getKey(), actualRoot.getKey(), context, result -> message + ". The key of the root is not correct");
         }
 
         if (expectedRoot.getLeft() == null) {
-            assertNull(actualRoot.getLeft(), context, result -> "The left child of the root should be null");
+            assertNull(actualRoot.getLeft(), context, result -> message + ". The left child of the root should be null");
         } else {
-            assertNotNull(actualRoot.getLeft(), context, result -> "The left child of the root should not be null");
+            assertNotNull(actualRoot.getLeft(), context, result -> message + ". The left child of the root should not be null");
         }
 
         if (expectedRoot.getRight() == null) {
-            assertNull(actualRoot.getRight(), context, result -> "The right child of the root should be null");
+            assertNull(actualRoot.getRight(), context, result -> message + ". The right child of the root should be null");
         } else {
-            assertNotNull(actualRoot.getRight(), context, result -> "The right child of the root should not be null");
+            assertNotNull(actualRoot.getRight(), context, result -> message + ". The right child of the root should not be null");
         }
     }
 
-    private void assertRootParentCorrect(AbstractBinarySearchTree<?, ?> actual, Context context) {
+    private void assertRootParentCorrect(AbstractBinarySearchTree<?, ?> actual, Context context, String message) {
         if (actual instanceof RBTree<?> rbTree) {
-            assertSame(rbTree.sentinel, rbTree.getRoot().getParent(), context, result -> "The parent of the root should be the sentinel node");
+            assertSame(rbTree.sentinel, rbTree.getRoot().getParent(), context, result -> message + ". The parent of the root should be the sentinel node");
         } else {
-            assertNull(actual.getRoot().getParent(), context, result -> "The parent of the root should be null");
+            assertNull(actual.getRoot().getParent(), context, result -> message + ". The parent of the root should be null");
         }
     }
 
-    private void assertNodeCorrect(BinaryNode<?> expected, BinaryNode<?> actual, BinaryNode<?> parent, Context context) {
+    private void assertNodeCorrect(BinaryNode<?> expected, BinaryNode<?> actual, BinaryNode<?> parent, Context context, String message) {
 
         StringBuilder nodeDescriptionViaParent = new StringBuilder();
 
@@ -129,25 +131,25 @@ public abstract class P2_TestBase {
 
         nodeDescriptionViaParent.append(" of the node with key ").append(parent.getKey());
 
-        assertEquals(expected.getKey(), actual.getKey(), context, result -> "The key of the %s is not correct".formatted(nodeDescriptionViaParent));
+        assertEquals(expected.getKey(), actual.getKey(), context, result -> message + ". The key of the %s is not correct".formatted(nodeDescriptionViaParent));
 
         String nodeDescription = "node with key %s".formatted(actual.getKey());
 
         if (expected.getLeft() == null) {
-            assertNull(actual.getLeft(), context, result -> "The left child of the %s should be null".formatted(nodeDescription));
+            assertNull(actual.getLeft(), context, result -> message + ". The left child of the %s should be null".formatted(nodeDescription));
         } else {
-            assertNotNull(actual.getLeft(), context, result -> "The left child of the %s should not be null".formatted(nodeDescription));
-            assertNodeCorrect(expected.getLeft(), actual.getLeft(), actual, context);
+            assertNotNull(actual.getLeft(), context, result -> message + ". The left child of the %s should not be null".formatted(nodeDescription));
+            assertNodeCorrect(expected.getLeft(), actual.getLeft(), actual, context, message);
         }
 
         if (expected.getRight() == null) {
-            assertNull(actual.getRight(), context, result -> "The right child of the %s should be null".formatted(nodeDescription));
+            assertNull(actual.getRight(), context, result -> message + ". The right child of the %s should be null".formatted(nodeDescription));
         } else {
-            assertNotNull(actual.getRight(), context, result -> "The right child of the %s should not be null".formatted(nodeDescription));
-            assertNodeCorrect(expected.getRight(), actual.getRight(), actual, context);
+            assertNotNull(actual.getRight(), context, result -> message + ". The right child of the %s should not be null".formatted(nodeDescription));
+            assertNodeCorrect(expected.getRight(), actual.getRight(), actual, context, message);
         }
 
-        assertSame(parent, actual.getParent(), context, result -> "The parent of the %s should be the node with key %s".formatted(nodeDescription, parent.getKey()));
+        assertSame(parent, actual.getParent(), context, result -> message + ". The parent of the %s should be the node with key %s".formatted(nodeDescription, parent.getKey()));
     }
 }
 
