@@ -33,7 +33,7 @@ public class GraphStyle {
     // --- Default --- //
 
     public static final Color DEFAULT_NODE_COLOR = Color.DARKGRAY;
-    public static final Color DEFAULT_EDGE_COLOR = Color.LIGHTGRAY;
+    public static final Color DEFAULT_EDGE_COLOR = Color.BLACK;
 
     // --- Dijkstra --- //
 

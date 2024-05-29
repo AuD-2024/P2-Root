@@ -10,34 +10,12 @@ import java.util.Random;
  */
 public class MyApplication extends Application {
 
-    private BinaryTreeAnimationScene animationScene;
-
     @Override
     public void start(Stage primaryStage) {
 
-        BinaryTreeAnimationScene animationScene = new BinaryTreeAnimationScene();
-        this.animationScene = animationScene;
+        LoadTreeScene loadTreeScene = new LoadTreeScene(primaryStage);
 
-        animationScene.loadTreeAnimation(new RBTreeAnimation<Integer>(tree -> {
-            Random random = new Random(2);
-
-            for (int i = 0; i < 20; i++) {
-                tree.insert(random.nextInt(100));
-            }
-//            RBTree<Integer> tree2 = new RBTree<>();
-//
-//            for (int i = 0; i < 40; i++) {
-//
-//                tree.insert(i);
-//                if (i < 20) tree2.insert(i + 100);
-//
-//            }
-//
-//            tree.join(tree2, 20);
-
-        }, tree -> tree.insert(35)));
-
-        primaryStage.setScene(animationScene);
+        primaryStage.setScene(loadTreeScene);
         primaryStage.setTitle("Binary Tree Animation");
 
         primaryStage.show();
@@ -45,7 +23,8 @@ public class MyApplication extends Application {
 
     @Override
     public void stop() {
-        animationScene.stopAnimation();
+        //TODO make static
+        //animationScene.stopAnimation();
     }
 
 }

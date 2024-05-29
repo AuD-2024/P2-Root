@@ -14,7 +14,7 @@ import java.util.function.Predicate;
  * where the left child is smaller than the parent and the right child is greater than the parent.
  *
  * @param <T> the type of the keys in the tree.
- * @param <N> the type of the nodes in the tree.
+ * @param <N> the type of the nodes in the tree, e.g., {@link BSTNode} or {@link RBNode}.
  *
  * @see SearchTree
  * @see AbstractBinaryNode

@@ -23,7 +23,6 @@ public class InfoBox extends VBox {
         super(5);
 
         setPadding(new Insets(5));
-        //setPrefWidth(100);
         setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
 
         getChildren().addAll(
@@ -34,7 +33,7 @@ public class InfoBox extends VBox {
 
     private Label createOperationLabel(StringProperty operation) {
         Label label = new Label();
-        label.textProperty().bind(operation);
+        label.textProperty().bind(new SimpleStringProperty("Last Operation: ").concat(operation));
         return label;
     }
 

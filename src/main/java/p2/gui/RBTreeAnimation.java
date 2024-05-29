@@ -6,37 +6,24 @@ import p2.binarytree.RBNode;
 import p2.binarytree.RBTree;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements BinaryTreeAnimation {
+public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements AnimatedBinaryTree<T> {
 
     private final Object syncObject = new Object();
 
-    private BinaryTreeAnimationScene animationScene;
+    private BinaryTreeAnimationScene<T> animationScene;
 
     public boolean animate = false;
 
-    private final Consumer<RBTree<T>> toAnimate;
-    private final Consumer<RBTree<T>> beforeAnimation;
-
-    public RBTreeAnimation(Consumer<RBTree<T>> beforeAnimation, Consumer<RBTree<T>> toAnimate) {
-        this.toAnimate = toAnimate;
-        this.beforeAnimation = beforeAnimation;
-    }
-
-    public RBTreeAnimation() {
-        this(tree -> {}, tree -> {});
-    }
-
     @Override
-    public void init(BinaryTreeAnimationScene animationScene) {
+    public void init(BinaryTreeAnimationScene<T> animationScene) {
         this.animationScene = animationScene;
-        beforeAnimation.accept(this);
     }
 
     @Override
     public void insert(T value) {
-        animationScene.getAnimationState().setOperation("Insert(" + value + ")");
         super.insert(value);
     }
 
@@ -46,9 +33,25 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
     }
 
     @Override
-    public void start() {
+    public String toString() {
+        AtomicReference<String> result = new AtomicReference<>();
+        runWithoutAnimation(() -> result.set(super.toString()));
+        return result.get();
+    }
+
+    @Override
+    public void turnOnAnimation() {
         animate = true;
-        toAnimate.accept(this);
+    }
+
+    @Override
+    public void turnOffAnimation() {
+        animate = false;
+    }
+
+    @Override
+    public boolean isAnimating() {
+        return animate;
     }
 
     @Override
@@ -59,15 +62,9 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
     private void updateState(StackTraceElement[] stackTrace, String operation) {
         animationScene.getAnimationState().setStackTrace(Arrays.stream(stackTrace)
             .filter(e -> e.getClassName().startsWith("p2"))
-                .filter(e -> !e.getClassName().contains(this.getClass().getSimpleName()))
+            .filter(e -> !e.getClassName().contains(this.getClass().getSimpleName()))
             .toArray(StackTraceElement[]::new));
         animationScene.getAnimationState().setOperation(operation);
-    }
-
-    private void runWithoutAnimation(Runnable runnable) {
-        animate = false;
-        runnable.run();
-        animate = true;
     }
 
     public class AnimatedRBNode extends RBNode<T> {
@@ -101,9 +98,8 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 
                 Platform.runLater(() -> {
-                    updateState(stackTrace, "(%s).setLeft(%s)".formatted(getKey(), left.getKey()));
-                    runWithoutAnimation(() ->
-                        animationScene.getGraphPane().setTree(getRoot()));
+                    updateState(stackTrace, "(%s).setLeft(%s)".formatted(getKey(), left == null ? "null" : left.getKey()));
+                    runWithoutAnimation(() -> animationScene.getGraphPane().setTree(getRoot()));
                     animationScene.refresh(this, left);
                 });
                 waitUntilNextStep();
@@ -135,9 +131,8 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 
                 Platform.runLater(() -> {
-                    updateState(stackTrace, "(%s).setRight(%s)".formatted(getKey(), right.getKey()));
-                    runWithoutAnimation(() ->
-                        animationScene.getGraphPane().setTree(getRoot()));
+                    updateState(stackTrace, "(%s).setRight(%s)".formatted(getKey(), right == null ? "null" : right.getKey()));
+                    runWithoutAnimation(() -> animationScene.getGraphPane().setTree(getRoot()));
                     animationScene.refresh(this, right);
                 });
                 waitUntilNextStep();
@@ -153,14 +148,17 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
 
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setColor(%s)".formatted(getKey(), color));
-                    javafx.scene.paint.Color fxColor = color == Color.RED ? javafx.scene.paint.Color.RED : javafx.scene.paint.Color.BLACK; //TODO how to handle null color?
-                    animationScene.getGraphPane().setNodeFillColor(this, fxColor);
-                    animationScene.getGraphPane().setNodeStrokeColor(this, fxColor);
+                    runWithoutAnimation(() -> animationScene.getGraphPane().setTree(getRoot()));
+                    animationScene.refresh(this);
                 });
                 waitUntilNextStep();
             }
         }
 
+        @Override
+        protected void buildString(StringBuilder builder) {
+            runWithoutAnimation(() -> super.buildString(builder));
+        }
     }
 
 }

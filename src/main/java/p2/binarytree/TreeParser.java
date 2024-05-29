@@ -17,7 +17,7 @@ public class TreeParser {
      * @return The parsed red-black tree.
      */
     public static <T extends Comparable<T>> RBTree<T> parseRBTree(String input, Function<String, T> keyParser) {
-        return parseRBTree(input, keyParser, RBTree::new);
+        return parseRBTree(input, keyParser, new RBTree<>());
     }
 
     /**
@@ -25,15 +25,15 @@ public class TreeParser {
      *
      * @param input The string representation of the tree.
      * @param keyParser The function used to convert the string representation of the key to its actual value.
-     * @param treeFactory A factory for creating the tree.
+     * @param tree An empty tree instance used to store the created tree.
      *
      * @return The parsed red-black tree.
      */
     public static <T extends Comparable<T>, TR extends RBTree<T>> TR parseRBTree(
         String input,
         Function<String, T> keyParser,
-        Supplier<TR> treeFactory) {
-        return parse(input, keyParser, treeFactory, true);
+        TR tree) {
+        return parse(input, keyParser, tree, true);
     }
 
     /**
@@ -45,7 +45,7 @@ public class TreeParser {
      * @return The parsed binary search tree.
      */
     public static <T extends Comparable<T>> SimpleBinarySearchTree<T> parseBST(String input, Function<String, T> keyParser) {
-        return parseBST(input, keyParser, SimpleBinarySearchTree::new);
+        return parseBST(input, keyParser, new SimpleBinarySearchTree<>());
     }
 
     /**
@@ -53,15 +53,15 @@ public class TreeParser {
      *
      * @param input The string representation of the tree.
      * @param keyParser The function used to convert the string representation of the key to its actual value.
-     * @param treeFactory A factory for creating the tree.
+     * @param tree An empty tree instance used to store the created tree.
      *
      * @return The parsed binary search tree.
      */
     public static <T extends Comparable<T>, TR extends SimpleBinarySearchTree<T>> TR parseBST(
         String input,
         Function<String, T> keyParser,
-        Supplier<TR> treeFactory) {
-        return parse(input, keyParser, treeFactory, false);
+        TR tree) {
+        return parse(input, keyParser, tree, false);
     }
 
     private static <T extends Comparable<T>,
@@ -69,21 +69,19 @@ public class TreeParser {
         TR extends AbstractBinarySearchTree<T, N>> TR parse(
             String input,
             Function<String, T> keyParser,
-            Supplier<TR> treeFactory,
+            TR tree,
             boolean rb) {
 
         StringReader reader = new StringReader(input);
 
         N node = null;
 
-        TR tree = treeFactory.get();
-
         if (!input.equals("[]")) node = parseNode(reader, keyParser, tree, rb);
 
         tree.root = node;
 
         if (rb) {
-            if (tree.root != null) tree.root.setParent((N) ((RBTree<Integer>) tree).sentinel);
+            if (tree.root != null) tree.root.setParent((N) ((RBTree<T>) tree).sentinel);
         }
 
         return tree;
@@ -130,7 +128,7 @@ public class TreeParser {
 
         N node = tree.createNode(value);
 
-        if (rbNode) ((RBNode<Integer>) node).setColor(color);
+        if (rbNode) ((RBNode<T>) node).setColor(color);
 
         node.setLeft(left);
         node.setRight(right);

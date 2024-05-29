@@ -7,30 +7,17 @@ import p2.binarytree.SimpleBinarySearchTree;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends SimpleBinarySearchTree<T> implements BinaryTreeAnimation {
+public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends SimpleBinarySearchTree<T> implements AnimatedBinaryTree<T> {
 
     private final Object syncObject = new Object();
 
-    private BinaryTreeAnimationScene animationScene;
+    private BinaryTreeAnimationScene<T> animationScene;
 
     public boolean animate = false;
 
-    private final Consumer<SimpleBinarySearchTree<T>> toAnimate;
-    private final Consumer<SimpleBinarySearchTree<T>> beforeAnimation;
-
-    public SimpleBinarySearchTreeAnimation(Consumer<SimpleBinarySearchTree<T>> beforeAnimation, Consumer<SimpleBinarySearchTree<T>> toAnimate) {
-        this.toAnimate = toAnimate;
-        this.beforeAnimation = beforeAnimation;
-    }
-
-    public SimpleBinarySearchTreeAnimation() {
-        this(tree -> {}, tree -> {});
-    }
-
     @Override
-    public void init(BinaryTreeAnimationScene animationScene) {
+    public void init(BinaryTreeAnimationScene<T> animationScene) {
         this.animationScene = animationScene;
-        beforeAnimation.accept(this);
     }
 
     @Override
@@ -45,9 +32,18 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
     }
 
     @Override
-    public void start() {
+    public void turnOnAnimation() {
         animate = true;
-        toAnimate.accept(this);
+    }
+
+    @Override
+    public void turnOffAnimation() {
+        animate = false;
+    }
+
+    @Override
+    public boolean isAnimating() {
+        return animate;
     }
 
     @Override
@@ -61,12 +57,6 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
             .filter(e -> !e.getClassName().contains(this.getClass().getSimpleName()))
             .toArray(StackTraceElement[]::new));
         animationScene.getAnimationState().setOperation(operation);
-    }
-
-    private void runWithoutAnimation(Runnable runnable) {
-        animate = false;
-        runnable.run();
-        animate = true;
     }
 
     public class AnimatedBSTNode extends BSTNode<T> {

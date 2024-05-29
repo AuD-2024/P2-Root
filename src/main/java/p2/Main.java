@@ -1,7 +1,14 @@
 package p2;
 
+import javafx.application.Application;
 import p2.binarytree.AutoComplete;
+import p2.binarytree.BinarySearchTree;
+import p2.binarytree.RBTree;
+import p2.binarytree.SimpleBinarySearchTree;
+import p2.gui.MyApplication;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,13 +23,32 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        String prefix = "z";
-        int max = 10;
+//        String prefix = "z";
+//        int max = 10;
+//
+//        autoCompleteExample(prefix, max, true);
+//        autoCompleteExample(prefix, max, false);
 
-        autoCompleteExample(prefix, max, true);
-        autoCompleteExample(prefix, max, false);
+        SearchTree<Integer> bst = new SimpleBinarySearchTree<>();
+        SearchTree<Integer> rb = new RBTree<>();
 
-        //Application.launch(MyApplication.class, args);
+        List<Integer> l = new ArrayList<>();
+        for (int i = 0; i < 40; i++) {
+            l.add(i);
+        }
+
+        Collections.shuffle(l);
+
+        for (int i : l) {
+            bst.insert(i);
+            rb.insert(i);
+        }
+
+        System.out.println(bst);
+        System.out.println(rb);
+
+
+        Application.launch(MyApplication.class, args);
     }
 
     private static void autoCompleteExample(String prefix, int max, boolean useRBTree) {

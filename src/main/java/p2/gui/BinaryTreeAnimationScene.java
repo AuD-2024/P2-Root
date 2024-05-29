@@ -1,65 +1,109 @@
 package p2.gui;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import p2.binarytree.AbstractBinaryNode;
 import p2.binarytree.BinaryNode;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * A scene for displaying an animation.
  */
-public class BinaryTreeAnimationScene extends Scene {
+public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
+
+    private final BorderPane root;
 
     private final GraphPane graphPane = new GraphPane();
+    private final OperationBox<T> operationBox;
+    private final InfoBox infoBox;
 
     private final AnimationState animationState = new AnimationState();
 
-    private Animation animation;
+    private final AnimatedBinaryTree<T> animation;
     private Thread animationThread;
+
+    private BinaryNode<T> lastSource;
+    private BinaryNode<T> lastTarget;
 
     /**
      * Constructs a new animation scene.
      */
-    public BinaryTreeAnimationScene() {
+    public BinaryTreeAnimationScene(AnimatedBinaryTree<T> animation, Function<String, T> inputParser) {
         super(new BorderPane());
-        BorderPane root = (BorderPane) getRoot();
+        root = (BorderPane) getRoot();
+
+        this.animation = animation;
 
         root.setPrefSize(700, 700);
 
         root.setCenter(graphPane);
-        root.setBottom(new ControlBox(this));
+        root.setBottom(new ControlBox<>(this));
 
-        InfoBox infoBox = new InfoBox(animationState);
-        root.setRight(infoBox);
+        infoBox = new InfoBox(animationState);
+
+        operationBox = new OperationBox<>(this, inputParser);
+        root.setRight(operationBox);
+
+        animation.runWithoutAnimation(() -> graphPane.setTree(animation.getRoot()));
     }
 
-    public void loadTreeAnimation(BinaryTreeAnimation animation) {
-        this.animation = animation;
+    public void refresh(BinaryNode<T> source, BinaryNode<T> target) {
+        resetOldHighlight();
 
-        animationState.clear();
+        lastSource = source;
+        lastTarget = target;
 
-        animation.init(this);
-        graphPane.setTree(animation.getRoot());
-        graphPane.center();
-        startAnimation();
+        graphPane.highlightNode(source);
+        if (target != null) graphPane.highlightEdge(source, target);
     }
 
-    public void refresh(BinaryNode<?> source, BinaryNode<?> target) {
-        graphPane.setEdgeColor(source, target, Color.GREEN);
-        graphPane.setNodeStrokeColor(source, Color.GREEN);
+    public void refresh(BinaryNode<T> node) {
+        resetOldHighlight();
+
+        lastSource = node;
+        lastTarget = null;
+
+        graphPane.highlightNode(node);
+    }
+
+    private void resetOldHighlight() {
+        if (lastSource != null) {
+            graphPane.resetNode(lastSource);
+
+            if (lastTarget != null) {
+                if (graphPane.containsEdge(lastSource, lastTarget)) {
+                    graphPane.resetEdge(lastSource, lastTarget);
+                }
+            }
+        }
     }
 
     public void stopAnimation() {
         if (animationThread != null) {
             animationThread.interrupt();
         }
+        root.setRight(operationBox);
     }
 
-    private void startAnimation() {
+    public void startAnimation(Consumer<AnimatedBinaryTree<T>> animation) {
         stopAnimation();
 
-        animationThread = new Thread(animation::start);
+        animationState.clear();
+        if (this.animation.isAnimating()) {
+            root.setRight(infoBox);
+        }
+
+        animationThread = new Thread(() -> {
+            animation.accept(this.animation);
+            Platform.runLater(() -> {
+                root.setRight(operationBox);
+                this.animation.runWithoutAnimation(() -> graphPane.setTree(this.animation.getRoot()));
+                operationBox.clearInputs();
+            });
+        });
+
         animationThread.start();
     }
 
@@ -67,7 +111,7 @@ public class BinaryTreeAnimationScene extends Scene {
         return graphPane;
     }
 
-    public Animation getAnimation() {
+    public AnimatedBinaryTree<T> getAnimation() {
         return animation;
     }
 

@@ -1,26 +1,26 @@
 package p2.gui;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import p2.binarytree.TreeParser;
-
-import java.util.function.Function;
 
 /**
  * A pane for controlling the animation.
  * it contains a button for stepping through the animation and a button for centering the graph.
  */
-public class ControlBox extends HBox {
+public class ControlBox<T extends Comparable<T>> extends HBox {
 
     private final Button nextStepButton;
 
     /**
      * Constructs a new control box.
      */
-    public ControlBox(BinaryTreeAnimationScene animationScene) {
+    public ControlBox(BinaryTreeAnimationScene<T> animationScene) {
         super(5);
 
         setPadding(new Insets(5));
@@ -30,10 +30,20 @@ public class ControlBox extends HBox {
         Button zoomOutButton = new Button("Zoom Out");
         Button zoomInButton = new Button("Zoom In");
         Button centerButton = new Button("Center Tree");
-        Button loadRBTreeButton = new Button("Load Red-Black Tree");
-        Button loadBSTButton = new Button("Load Binary Search Tree");
+        CheckBox animationCheckBox = new CheckBox("Animate");
 
-        getChildren().addAll(nextStepButton, centerButton, zoomInButton, zoomOutButton, loadRBTreeButton, loadBSTButton);
+        animationCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                animationScene.getAnimation().turnOnAnimation();
+            } else {
+                animationScene.getAnimation().turnOffAnimation();
+            }
+        });
+
+        animationCheckBox.setSelected(true);
+
+        getChildren().addAll(nextStepButton, centerButton, zoomInButton, zoomOutButton, animationCheckBox);
+        setAlignment(Pos.CENTER_LEFT);
 
         nextStepButton.setOnAction(event -> {
             synchronized (animationScene.getAnimation().getSyncObject()) {
@@ -44,31 +54,6 @@ public class ControlBox extends HBox {
         centerButton.setOnAction(event -> animationScene.getGraphPane().center());
         zoomInButton.setOnAction(event -> animationScene.getGraphPane().zoomIn());
         zoomOutButton.setOnAction(event -> animationScene.getGraphPane().zoomOut());
-
-        //TODO make it not so ugly
-        loadRBTreeButton.setOnAction(event -> loadTree(animationScene, str -> {
-            if (str.chars().anyMatch(Character::isDigit)) {
-                return TreeParser.parseRBTree(str, Integer::parseInt, () -> new RBTreeAnimation<Integer>());
-            }
-            return TreeParser.parseRBTree(str, Function.identity(), RBTreeAnimation::new);
-        }));
-
-        loadBSTButton.setOnAction(event -> loadTree(animationScene, str -> {
-            if (str.chars().anyMatch(Character::isDigit)) {
-                return TreeParser.parseBST(str, Integer::parseInt, () -> new SimpleBinarySearchTreeAnimation<Integer>());
-            }
-            return TreeParser.parseBST(str, Function.identity(), SimpleBinarySearchTreeAnimation::new);
-        }));
-
-    }
-
-    private void loadTree(BinaryTreeAnimationScene animationScene, Function<String, BinaryTreeAnimation> parser) {
-        TextInputDialog dialog = new TextInputDialog("title");
-        dialog.setTitle("Load Tree");
-        dialog.showAndWait().ifPresent(str -> {
-            BinaryTreeAnimation tree = parser.apply(str);
-            animationScene.loadTreeAnimation(tree);
-        });
     }
 
     public void disableNextStepButton() {

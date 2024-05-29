@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static p2.gui.GraphStyle.*;
@@ -64,7 +63,6 @@ public class GraphPane extends Pane {
         positionText.setFill(TEXT_COLOR);
 
         setTree(root);
-        center();
     }
 
     public void setTree(BinaryNode<?> root) {
@@ -80,6 +78,7 @@ public class GraphPane extends Pane {
         }
 
         redrawMap();
+        center();
     }
 
     private void addTree(BinaryNode<?> root, int depth, Map<BinaryNode<?>, Double> xOffsets) {
@@ -104,28 +103,25 @@ public class GraphPane extends Pane {
     // --- Edge Handling --- //
 
     /**
-     * Adds an {@linkplain Edge edge} to this {@link GraphPane} and displays it.
+     * Checks if an {@linkplain Edge edge} exists between the given source and target {@linkplain BinaryNode nodes}.
+     *
+     * @param source The source node of the edge.
+     * @param target The target node of the edge.
+     * @return {@code true} if an edge exists between the given nodes, {@code false} otherwise.
      */
-    public void addEdge(BinaryNode<?> source, BinaryNode<?> target) {
-
-        Edge edge = new Edge(source, target);
-
-        edges.put(edge, drawEdge(source, target));
-        nodesToEdge.computeIfAbsent(source, k -> new HashMap<>()).put(target, edge);
+    public boolean containsEdge(BinaryNode<?> source, BinaryNode<?> target) {
+        return nodesToEdge.get(source) != null && nodesToEdge.get(source).get(target) != null;
     }
 
     /**
-     * Removes the given {@linkplain Edge edge} from this {@link GraphPane}.
-     * The {@linkplain Edge edge} will not be displayed after anymore calling this method.
-     * If the given {@linkplain Edge edge} is not part of this {@linkplain GraphPane} the method does nothing.
+     * Highlights the given {@linkplain Edge edge} by changing its color and stroke settings.
+     *
+     * @param source The source node of the edge.
+     * @param target The target node of the edge.
      */
-    public void removeEdge(BinaryNode<?> source, BinaryNode<?> target) {
-        Line line = edges.remove(getEdge(source, target));
-        nodesToEdge.get(source).remove(target);
-
-        if (line != null) {
-            getChildren().remove(line);
-        }
+    public void highlightEdge(BinaryNode<?> source, BinaryNode<?> target) {
+        setEdgeColor(source, target, Color.BLUE);
+        setEdgeDash(source, target, 50, 10.0);
     }
 
     /**
@@ -141,28 +137,26 @@ public class GraphPane extends Pane {
     /**
      * Updates the dashing settings of the stroke used to draw the given {@linkplain Edge edge}.
      *
-     * @param dash       Whether to use dashing or not.
+     * @param source     The source node of the edge.
+     * @param target     The target node of the edge.
      * @param dashLength The length of the individual dashes.
      * @param gapLength  The length of the gaps between the dashes.
      * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
      */
-    public void setEdgeDash(BinaryNode<?> source, BinaryNode<?> target, boolean dash, double dashLength, double gapLength) {
-        Line line = getEdgeLine(source, target);
-
-        line.getStrokeDashArray().clear();
-
-        if (dash) {
-            line.getStrokeDashArray().addAll(dashLength, gapLength);
-        }
+    public void setEdgeDash(BinaryNode<?> source, BinaryNode<?> target, double dashLength, double gapLength) {
+        getEdgeLine(source, target).getStrokeDashArray().setAll(dashLength, gapLength);
     }
 
     /**
-     * Resets the color used to draw the given {@linkplain Edge edge} to the default color ({@link GraphStyle#DEFAULT_EDGE_COLOR}).
+     * Resets the color used to draw the given {@linkplain Edge edge} to the default color ({@link GraphStyle#DEFAULT_EDGE_COLOR})
+     * and removes any dashing settings of the stroke.
      *
      * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
      */
-    public void resetEdgeColor(BinaryNode<?> source, BinaryNode<?> target) {
-        setEdgeColor(source, target, DEFAULT_EDGE_COLOR);
+    public void resetEdge(BinaryNode<?> source, BinaryNode<?> target) {
+        Line line = getEdgeLine(source, target);
+        line.getStrokeDashArray().clear();
+        line.setStroke(DEFAULT_EDGE_COLOR);
     }
 
     /**
@@ -172,15 +166,6 @@ public class GraphPane extends Pane {
         for (Edge edge : edges.keySet()) {
             redrawEdge(edge);
         }
-    }
-
-    /**
-     * Updates the position of the given {@linkplain Edge edge}.
-     *
-     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
-     */
-    public void redrawEdge(BinaryNode<?> source, BinaryNode<?> target) {
-        redrawEdge(getEdge(source, target));
     }
 
     private void redrawEdge(Edge edge) {
@@ -199,31 +184,13 @@ public class GraphPane extends Pane {
     // --- Node Handling --- //
 
     /**
-     * Adds a node to this {@link GraphPane} and displays it.
+     * Highlights the given node by changing its color and stroke settings.
      *
-     * @param node The node to display.
+     * @param node The node to highlight.
      */
-    public void addNode(BinaryNode<?> node, Location location) {
-        nodeLocations.put(node, location);
-        nodes.put(node, drawNode(node));
-    }
-
-    /**
-     * Removes the given node from this {@link GraphPane}.<p>
-     * {@linkplain Edge edge}s connected to the removed node will not get removed.
-     * The node will not be displayed after anymore calling this method.
-     * If the given node is not part of this {@linkplain GraphPane} the method does nothing.
-     *
-     * @param node The node to remove.
-     */
-    public void removeNode(BinaryNode<?> node) {
-        LabeledNode labeledNode = nodes.remove(node);
-        nodeLocations.remove(node);
-        nodesToEdge.remove(node);
-
-        if (labeledNode != null) {
-            getChildren().removeAll(labeledNode.ellipse(), labeledNode.text());
-        }
+    public void highlightNode(BinaryNode<?> node) {
+        setNodeStrokeColor(node, Color.BLUE);
+        setNodeDash(node, 10.0, 10.0);
     }
 
     /**
@@ -234,40 +201,33 @@ public class GraphPane extends Pane {
      * @throws IllegalArgumentException If the given node is not part of this {@link GraphPane}.
      */
     public void setNodeStrokeColor(BinaryNode<?> node, Color color) {
-        LabeledNode labeledNode = nodes.get(node);
-
-        if (labeledNode == null) {
-            throw new IllegalArgumentException("The given node is not part of this GraphPane");
-        }
-
-        labeledNode.setStrokeColor(color);
+        getLabeledNode(node).setStrokeColor(color);
     }
 
     /**
-     * Updates the color used to fill the given N.
+     * Updates the dashing settings of the stroke used to draw the given {@linkplain Edge edge}.
      *
-     * @param node  The N to update.
-     * @param color The new color.
-     * @throws IllegalArgumentException If the given N is not part of this {@link GraphPane}.
+     * @param node       The node to update.
+     * @param dashLength The length of the individual dashes.
+     * @param gapLength  The length of the gaps between the dashes.
+     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
      */
-    public void setNodeFillColor(BinaryNode<?> node, Color color) {
-        LabeledNode labeledNode = nodes.get(node);
-
-        if (labeledNode == null) {
-            throw new IllegalArgumentException("The given node is not part of this GraphPane");
-        }
-
-        labeledNode.setFillColor(color);
+    public void setNodeDash(BinaryNode<?> node, double dashLength, double gapLength) {
+        getLabeledNode(node).ellipse().getStrokeDashArray().setAll(dashLength, gapLength);
     }
 
+
     /**
-     * Resets the color used to draw the given N to the default color ({@link GraphStyle#DEFAULT_NODE_COLOR}).
+     * Resets the color used to draw the given node to the default color ({@link GraphStyle#DEFAULT_NODE_COLOR})
+     * and removes any dashing settings of the stroke.
      *
-     * @param node The N to update.
-     * @throws IllegalArgumentException If the given N is not part of this {@link GraphPane}.
+     * @param node The node to update.
+     * @throws IllegalArgumentException If the given node is not part of this {@link GraphPane}.
      */
-    public void resetNodeColor(BinaryNode<?> node) {
-        setNodeStrokeColor(node, DEFAULT_NODE_COLOR);
+    public void resetNode(BinaryNode<?> node) {
+        LabeledNode labeledNode = getLabeledNode(node);
+        labeledNode.ellipse().getStrokeDashArray().clear();
+        labeledNode.setStrokeColor(getNodeColor(node));
     }
 
     /**
@@ -299,13 +259,6 @@ public class GraphPane extends Pane {
 
         labeledNode.text().setX(transformedMidPoint.getX() - labeledNode.text().getLayoutBounds().getWidth() / 2.0);
         labeledNode.text().setY(transformedMidPoint.getY() + labeledNode.text().getLayoutBounds().getHeight() / 4.0);
-
-        if (node instanceof RBNode<?> rbNode) {
-            Color color = rbNode.getColor() == null ? DEFAULT_NODE_COLOR : rbNode.isRed() ? Color.RED : Color.BLACK;
-
-            labeledNode.setFillColor(color);
-            labeledNode.setStrokeColor(color);
-        }
     }
 
     // --- Other Util --- //
@@ -328,7 +281,6 @@ public class GraphPane extends Pane {
     public void redrawMap() {
         redrawEdges();
         redrawNodes();
-
     }
 
     /**
@@ -400,7 +352,6 @@ public class GraphPane extends Pane {
     public void zoomOut() {
         zoom(getWidth() / 2.0, getHeight() / 2.0, SCALE_OUT);
     }
-
 
 
     // --- Private Methods --- //
@@ -476,6 +427,14 @@ public class GraphPane extends Pane {
         redrawGrid();
     }
 
+    private void addEdge(BinaryNode<?> source, BinaryNode<?> target) {
+
+        Edge edge = new Edge(source, target);
+
+        edges.put(edge, drawEdge(source, target));
+        nodesToEdge.computeIfAbsent(source, k -> new HashMap<>()).put(target, edge);
+    }
+
     private Line drawEdge(BinaryNode<?> source, BinaryNode<?> target) {
         Location a = getLocation(source);
         Location b = getLocation(target);
@@ -484,8 +443,8 @@ public class GraphPane extends Pane {
         Point2D transformedB = transform(b);
 
         Line line = new Line(transformedA.getX(), transformedA.getY(), transformedB.getX(), transformedB.getY());
-        //line.getStrokeDashArray().addAll(50.0, 10.0);
 
+        line.setStroke(DEFAULT_EDGE_COLOR);
         line.setStrokeWidth(EDGE_STROKE_WIDTH);
 
         getChildren().add(line);
@@ -493,13 +452,21 @@ public class GraphPane extends Pane {
         return line;
     }
 
+    private void addNode(BinaryNode<?> node, Location location) {
+        nodeLocations.put(node, location);
+        nodes.put(node, drawNode(node));
+    }
+
     private LabeledNode drawNode(BinaryNode<?> node) {
         Point2D transformedPoint = transform(getLocation(node));
 
         Ellipse ellipse = new Ellipse(transformedPoint.getX(), transformedPoint.getY(), NODE_DIAMETER, NODE_DIAMETER);
-        ellipse.setStroke(DEFAULT_NODE_COLOR);
-        ellipse.setFill(DEFAULT_NODE_COLOR);
+
+        Color color = getNodeColor(node);
+        ellipse.setFill(color);
+        ellipse.setStroke(color);
         ellipse.setStrokeWidth(NODE_STROKE_WIDTH);
+
         setMouseTransparent(false);
 
         Text text = new Text(transformedPoint.getX(), transformedPoint.getY(), node.getKey().toString());
@@ -508,6 +475,14 @@ public class GraphPane extends Pane {
         getChildren().addAll(ellipse, text);
 
         return new LabeledNode(ellipse, text);
+    }
+
+    private Color getNodeColor(BinaryNode<?> node) {
+        if (node instanceof RBNode<?> rbNode) {
+            return rbNode.getColor() == null ? DEFAULT_NODE_COLOR : rbNode.isRed() ? Color.RED : Color.BLACK;
+        } else {
+            return DEFAULT_NODE_COLOR;
+        }
     }
 
     private void drawGrid() {
@@ -555,16 +530,24 @@ public class GraphPane extends Pane {
     }
 
     private Edge getEdge(BinaryNode<?> source, BinaryNode<?> target) {
+        if (nodesToEdge.get(source) == null || nodesToEdge.get(source).get(target) == null) {
+            throw new IllegalArgumentException("The given edge is not part of this GraphPane");
+        }
         return nodesToEdge.get(source).get(target);
     }
 
     private Line getEdgeLine(BinaryNode<?> source, BinaryNode<?> target) {
-        Line line = edges.get(getEdge(source, target));
+        return edges.get(getEdge(source, target));
+    }
 
-        if (line == null) {
-            throw new IllegalArgumentException("The given edge is not part of this GraphPane");
+    private LabeledNode getLabeledNode(BinaryNode<?> node) {
+        LabeledNode labeledNode = nodes.get(node);
+
+        if (labeledNode == null) {
+            throw new IllegalArgumentException("The given node is not part of this GraphPane");
         }
-        return line;
+
+        return labeledNode;
     }
 
     private Location getLocation(BinaryNode<?> node) {
@@ -648,59 +631,38 @@ public class GraphPane extends Pane {
     private double calculateXOffsets(BinaryNode<?> root, Map<BinaryNode<?>, Double> xOffsets, double currentOffset) {
 
         if (root == null) {
-            return currentOffset;
+            return 0;
         }
 
-        double leftMaxOffset = currentOffset;
+        double initialOffset = currentOffset;
+
+        double leftWidth = 0;
 
         if (root.hasLeft()) {
-            leftMaxOffset = calculateXOffsets(root.getLeft(), xOffsets, currentOffset);
+            leftWidth = calculateXOffsets(root.getLeft(), xOffsets, currentOffset);
+            currentOffset += leftWidth + NODE_DISTANCE;
         }
 
-        double rightMaxOffset = currentOffset;
+        double rightWidth = 0;
 
         if (root.hasRight()) {
-            rightMaxOffset = calculateXOffsets(root.getRight(), xOffsets, leftMaxOffset + NODE_DISTANCE);
+            rightWidth = calculateXOffsets(root.getRight(), xOffsets, currentOffset + NODE_DISTANCE);
+            currentOffset += rightWidth;
         }
 
-        if (root.hasLeft() && root.hasRight()) {
+        double leftOffset = xOffsets.getOrDefault(root.getLeft(), currentOffset);
+        double rightOffset = xOffsets.getOrDefault(root.getRight(), currentOffset);
 
-            double leftOffset = xOffsets.get(root.getLeft());
-            double rightOffset = xOffsets.get(root.getRight());
+        xOffsets.put(root, leftOffset + (rightOffset - leftOffset) / 2.0);
 
-            xOffsets.put(root, leftOffset + (rightOffset - leftOffset) / 2.0);
-        } else {
-            xOffsets.put(root, leftMaxOffset + (rightMaxOffset - leftMaxOffset) / 2.0);
-        }
-
-        return rightMaxOffset;
+        return currentOffset - initialOffset;
     }
 
     private record Edge(BinaryNode<?> source, BinaryNode<?> target) {
 
     }
 
-    private static class LabeledNode {
-        private final Ellipse ellipse;
-        private final Text text;
-
-        private LabeledNode(Ellipse ellipse, Text text) {
-            this(ellipse, text, DEFAULT_NODE_COLOR);
-        }
-
-        private LabeledNode(Ellipse ellipse, Text text, Color color) {
-            this.ellipse = ellipse;
-            this.text = text;
-            setStrokeColor(color);
-        }
-
-        public Ellipse ellipse() {
-            return ellipse;
-        }
-
-        public Text text() {
-            return text;
-        }
+    private record LabeledNode(Ellipse ellipse, Text text) {
 
         public void setStrokeColor(Color strokeColor) {
             ellipse.setStroke(strokeColor);
@@ -710,24 +672,11 @@ public class GraphPane extends Pane {
             ellipse.setFill(fillColor);
         }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) return true;
-            if (obj == null || obj.getClass() != this.getClass()) return false;
-            var that = (LabeledNode) obj;
-            return Objects.equals(this.ellipse, that.ellipse) &&
-                Objects.equals(this.text, that.text);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(ellipse, text);
-        }
-
     }
 
     /**
      * A data class for storing a location in a 2D plane.
+     *
      * @param x The x-coordinate.
      * @param y The y-coordinate.
      */
@@ -735,12 +684,5 @@ public class GraphPane extends Pane {
 
         public static final Location ORIGIN = new Location(0, 0);
 
-        Location add(int x, int y) {
-            return new Location(this.x + x, this.y + y);
-        }
-
-        Location subtract(int x, int y) {
-            return new Location(this.x - x, this.y - y);
-        }
     }
 }
