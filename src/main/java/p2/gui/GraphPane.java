@@ -28,7 +28,7 @@ public class GraphPane extends Pane {
 
     private static final double SCALE_IN = 1.1;
     private static final double SCALE_OUT = 1 / SCALE_IN;
-    private static final double MAX_SCALE = 100;
+    private static final double MAX_SCALE = 10000;
     private static final double MIN_SCALE = 3;
 
     private final AtomicReference<Point2D> lastPoint = new AtomicReference<>();
@@ -62,7 +62,7 @@ public class GraphPane extends Pane {
         drawPositionText();
         positionText.setFill(TEXT_COLOR);
 
-        setTree(root);
+        if (root != null) setTree(root);
     }
 
     public void setTree(BinaryNode<?> root) {
@@ -325,7 +325,7 @@ public class GraphPane extends Pane {
         Affine inverse = new Affine();
 
         inverse.appendTranslation(minX - widthPadding, minY - heightPadding);
-        inverse.appendScale((width) / getWidth(), (height) / getHeight());
+        inverse.appendScale(width / getWidth(), height / getHeight());
 
         try {
             transformation = inverse.createInverse();
@@ -631,31 +631,29 @@ public class GraphPane extends Pane {
     private double calculateXOffsets(BinaryNode<?> root, Map<BinaryNode<?>, Double> xOffsets, double currentOffset) {
 
         if (root == null) {
-            return 0;
+            return currentOffset;
         }
 
-        double initialOffset = currentOffset;
-
-        double leftWidth = 0;
+        double leftDiff = NODE_DISTANCE;
 
         if (root.hasLeft()) {
-            leftWidth = calculateXOffsets(root.getLeft(), xOffsets, currentOffset);
-            currentOffset += leftWidth + NODE_DISTANCE;
+            currentOffset = calculateXOffsets(root.getLeft(), xOffsets, currentOffset) + NODE_DISTANCE;
+            leftDiff = currentOffset - xOffsets.get(root.getLeft());
         }
 
-        double rightWidth = 0;
+        xOffsets.put(root, currentOffset);
 
         if (root.hasRight()) {
-            rightWidth = calculateXOffsets(root.getRight(), xOffsets, currentOffset + NODE_DISTANCE);
-            currentOffset += rightWidth;
+            currentOffset = calculateXOffsets(root.getRight(), xOffsets, currentOffset + leftDiff);
         }
 
-        double leftOffset = xOffsets.getOrDefault(root.getLeft(), currentOffset);
-        double rightOffset = xOffsets.getOrDefault(root.getRight(), currentOffset);
+        if (root.hasLeft() && root.hasRight()) {
+            double leftOffset = xOffsets.get(root.getLeft());
+            double rightOffset = xOffsets.get(root.getRight());
+            xOffsets.put(root, leftOffset + (rightOffset - leftOffset) / 2.0);
+        }
 
-        xOffsets.put(root, leftOffset + (rightOffset - leftOffset) / 2.0);
-
-        return currentOffset - initialOffset;
+        return currentOffset;
     }
 
     private record Edge(BinaryNode<?> source, BinaryNode<?> target) {

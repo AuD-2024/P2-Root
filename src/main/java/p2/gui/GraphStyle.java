@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
  */
 public class GraphStyle {
 
-    public static final double NODE_DISTANCE = 3;
+    public static final double NODE_DISTANCE = 1;
 
     public static final double NODE_VERTICAL_DISTANCE = 2 * NODE_DISTANCE;
 
