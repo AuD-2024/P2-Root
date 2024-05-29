@@ -11,15 +11,15 @@ import java.util.function.Function;
 public class JSONConverters extends JsonConverters {
 
     public static TestRBTree<Integer> toIntegerRBTree(JsonNode node)  {
-        return TreeParser.parseRBTree(node.asText(), Integer::parseInt, TestRBTree::new);
+        return TreeParser.parseRBTree(node.asText(), Integer::parseInt, new TestRBTree<Integer>());
     }
 
     public static TestBST<Integer> toIntegerBinarySearchTree(JsonNode node) {
-        return TreeParser.parseBST(node.asText(), Integer::parseInt, TestBST::new);
+        return TreeParser.parseBST(node.asText(), Integer::parseInt, new TestBST<Integer>());
     }
 
     public static AutoComplete toAutoComplete(JsonNode node) {
-        return new AutoComplete(TreeParser.parseRBTree(node.asText(), Function.identity(), TestRBTree::new));
+        return new AutoComplete(TreeParser.parseRBTree(node.asText(), Function.identity(), new TestRBTree<>()));
     }
 
     public static List<Integer> toIntegerList(JsonNode node) {
