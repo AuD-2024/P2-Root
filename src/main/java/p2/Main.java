@@ -19,36 +19,43 @@ public class Main {
     /**
      * Main entry point in executing the program.
      *
-     * @param args program arguments, currently ignored
+     * <h2>GUI Guide:</h2>
+     * <p>
+     * After starting the gui you can load an empty red-black or simple binary search tree by clicking the respective
+     * buttons. When entering a string representation of a tree used in the test, that tree will be loaded instead.
+     * <p>
+     * When a tree is loaded, you can view it in the center. On the top right you can enter input values and execute
+     * the respective operation by clicking the buttons below.
+     * <ul>
+     *     <li>Inserts: Invokes insert with the value given in "value".</li>
+     *     <li>In Order: Invokes inOrder with the value given in "value" as the start node, "Max" as the maximum amount
+     *     of values to return and {@code x -> x <= "Limit"} as the predicate.</li>
+     *     <li>Find Next: Invokes findNext with the value given in "value" as the start node, "Max" as the maximum amount
+     *      of values to return and {@code x -> x <= "Limit"} as the predicate.
+     * </ul>
+     *
+     * When the "Animate" checkbox at the bottom left is selected, the program will stop after each invocation of
+     * {@code {get,set}{Left,Right}} and {@code setColor} and highlight the respective nodes. You can then continue the
+     * animation by clicking the "Next Step" button at the bottom left. When stopped, the current stack trace and the
+     * last performed operation is shown at the top right.
+     * <p>
+     * You can change the appearance and colors of the tree in the class {@link p2.gui.GraphStyle}.
+     *
+     * @param args program arguments
      */
     public static void main(String[] args) {
 
-//        String prefix = "z";
-//        int max = 10;
-//
-//        autoCompleteExample(prefix, max, true);
-//        autoCompleteExample(prefix, max, false);
-
-        SearchTree<Integer> bst = new SimpleBinarySearchTree<>();
-        SearchTree<Integer> rb = new RBTree<>();
-
-        List<Integer> l = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
-            l.add(i);
-        }
-
-        Collections.shuffle(l);
-
-        for (int i : l) {
-            bst.insert(i);
-            rb.insert(i);
-        }
-
-        System.out.println(bst);
-        System.out.println(rb);
-
+        // Uncomment the following line to run the AutoComplete example for task H3 d)
+        // runAutoCompleteExample();
 
         Application.launch(MyApplication.class, args);
+    }
+
+    private static void runAutoCompleteExample() {
+        String prefix = "z";
+        int max = 10;
+        autoCompleteExample(prefix, max, true);
+        autoCompleteExample(prefix, max, false);
     }
 
     private static void autoCompleteExample(String prefix, int max, boolean useRBTree) {
