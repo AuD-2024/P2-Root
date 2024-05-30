@@ -149,7 +149,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     }
 
     @Override
-    public void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
+    public void inOrder(Node<T> node, List<? super T> result, int max, Predicate<? super T> predicate) {
         if (node instanceof RBNode<T> rbNode) {
             super.inOrder(rbNode, result, max, predicate);
             return;
@@ -159,7 +159,7 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
     }
 
     @Override
-    public void findNext(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
+    public void findNext(Node<T> node, List<? super T> result, int max, Predicate<? super T> predicate) {
         if (node instanceof RBNode<T> rbNode) {
             super.findNext(rbNode, result, max, predicate);
             return;

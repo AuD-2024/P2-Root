@@ -89,7 +89,7 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
      * @param limit The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */
-    protected void inOrder(N node, List<T> result, int max, Predicate<T> limit) {
+    protected void inOrder(N node, List<? super T> result, int max, Predicate<? super T> limit) {
         if (node.hasLeft() && result.size() < max) {
             inOrder(node.getLeft(), result, max, limit);
         }
@@ -119,11 +119,11 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
      * @param limit The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */
-    protected void findNext(N node, List<T> result, int max, Predicate<T> limit) {
+    protected void findNext(N node, List<? super T> result, int max, Predicate<? super T> limit) {
         findNext(node, null, max, result, limit);
     }
 
-    private void findNext(N node, N prev, int max, List<T> result, Predicate<T> predicate) {
+    private void findNext(N node, N prev, int max, List<? super T> result, Predicate<? super T> predicate) {
 
         if ((prev == null || node.getRight() != prev) && result.size() < max) {
 

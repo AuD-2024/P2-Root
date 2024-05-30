@@ -71,7 +71,7 @@ public interface SearchTree<T extends Comparable<T>> {
      * @param predicate The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */
-    void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate);
+    void inOrder(Node<T> node, List<? super T> result, int max, Predicate<? super T> predicate);
 
     /**
      * Adds all elements in the tree that are greater than or equal to the given node to the given list.
@@ -88,7 +88,7 @@ public interface SearchTree<T extends Comparable<T>> {
      * @param predicate The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */
-    void findNext(Node<T> node, List<T> result, int max, Predicate<T> predicate);
+    void findNext(Node<T> node, List<? super T> result, int max, Predicate<? super T> predicate);
 
     /**
      * Finds and returns the node that contains the smallest element in the tree.

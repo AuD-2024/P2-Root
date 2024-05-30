@@ -20,7 +20,7 @@ public class SimpleBinarySearchTree<T extends Comparable<T>> extends AbstractBin
     }
 
     @Override
-    public void inOrder(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
+    public void inOrder(Node<T> node, List<? super T> result, int max, Predicate<? super T> predicate) {
         if (node instanceof BSTNode<T> bstNode) {
             super.inOrder(bstNode, result, max, predicate);
             return;
@@ -30,7 +30,7 @@ public class SimpleBinarySearchTree<T extends Comparable<T>> extends AbstractBin
     }
 
     @Override
-    public void findNext(Node<T> node, List<T> result, int max, Predicate<T> predicate) {
+    public void findNext(Node<T> node, List<? super T> result, int max, Predicate<? super T> predicate) {
         if (node instanceof BSTNode<T> rbNode) {
             super.findNext(rbNode, result, max, predicate);
             return;
