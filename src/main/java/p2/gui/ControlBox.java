@@ -8,6 +8,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 /**
  * A pane for controlling the animation.
@@ -15,21 +16,21 @@ import javafx.scene.paint.Color;
  */
 public class ControlBox<T extends Comparable<T>> extends HBox {
 
-    private final Button nextStepButton;
-
     /**
      * Constructs a new control box.
      */
-    public ControlBox(BinaryTreeAnimationScene<T> animationScene) {
+    public ControlBox(Stage primaryStage, BinaryTreeAnimationScene<T> animationScene) {
         super(5);
 
         setPadding(new Insets(5));
         setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
 
-        nextStepButton = new Button("Next Step");
+        Button backButton = new Button("Back");
+        Button nextStepButton = new Button("Next Step");
         Button zoomOutButton = new Button("Zoom Out");
         Button zoomInButton = new Button("Zoom In");
         Button centerButton = new Button("Center Tree");
+        Button printTreeButton = new Button("Print Tree");
         CheckBox animationCheckBox = new CheckBox("Animate");
 
         animationCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -42,8 +43,13 @@ public class ControlBox<T extends Comparable<T>> extends HBox {
 
         animationCheckBox.setSelected(true);
 
-        getChildren().addAll(nextStepButton, centerButton, zoomInButton, zoomOutButton, animationCheckBox);
+        getChildren().addAll(backButton, nextStepButton, centerButton, zoomInButton, zoomOutButton, printTreeButton, animationCheckBox);
         setAlignment(Pos.CENTER_LEFT);
+
+        backButton.setOnAction(event -> {
+            animationScene.stopAnimation();
+            primaryStage.setScene(new LoadTreeScene(primaryStage));
+        });
 
         nextStepButton.setOnAction(event -> {
             synchronized (animationScene.getAnimation().getSyncObject()) {
@@ -54,10 +60,8 @@ public class ControlBox<T extends Comparable<T>> extends HBox {
         centerButton.setOnAction(event -> animationScene.getTreePane().center());
         zoomInButton.setOnAction(event -> animationScene.getTreePane().zoomIn());
         zoomOutButton.setOnAction(event -> animationScene.getTreePane().zoomOut());
-    }
 
-    public void disableNextStepButton() {
-        nextStepButton.setDisable(true);
+        printTreeButton.setOnAction(event -> System.out.println("Current Tree: " + animationScene.getAnimation().toString()));
     }
 
 }

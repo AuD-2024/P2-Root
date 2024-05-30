@@ -73,7 +73,7 @@ public class LoadTreeScene extends Scene {
     }
 
     private <T extends Comparable<T>> void loadScene(Stage primaryStage, AnimatedBinaryTree<T> tree, Function<String, T> inputParser) {
-        BinaryTreeAnimationScene<T> animationScene = new BinaryTreeAnimationScene<>(tree, inputParser);
+        BinaryTreeAnimationScene<T> animationScene = new BinaryTreeAnimationScene<>(primaryStage, tree, inputParser);
 
         tree.init(animationScene);
 

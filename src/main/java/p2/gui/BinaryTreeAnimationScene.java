@@ -3,6 +3,7 @@ package p2.gui;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import p2.binarytree.BinaryNode;
 
 import java.util.function.Consumer;
@@ -30,7 +31,7 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
     /**
      * Constructs a new animation scene.
      */
-    public BinaryTreeAnimationScene(AnimatedBinaryTree<T> animation, Function<String, T> inputParser) {
+    public BinaryTreeAnimationScene(Stage primaryStage, AnimatedBinaryTree<T> animation, Function<String, T> inputParser) {
         super(new BorderPane());
         root = (BorderPane) getRoot();
 
@@ -39,7 +40,7 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
         root.setPrefSize(700, 700);
 
         root.setCenter(treePane);
-        root.setBottom(new ControlBox<>(this));
+        root.setBottom(new ControlBox<>(primaryStage, this));
 
         infoBox = new InfoBox(animationState);
 
@@ -82,7 +83,7 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
 
     public void stopAnimation() {
         if (animationThread != null) {
-            animationThread.interrupt();
+            animationThread.interrupt(); //TODO: actually kill old thread
         }
         root.setRight(operationBox);
     }
