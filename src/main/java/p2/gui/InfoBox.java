@@ -27,6 +27,7 @@ public class InfoBox extends VBox {
 
         getChildren().addAll(
             createStackTraceTableView(state.getStackTrace()),
+            createExecutingLabel(state.getExecuting()),
             createOperationLabel(state.getOperation())
         );
     }
@@ -34,6 +35,12 @@ public class InfoBox extends VBox {
     private Label createOperationLabel(StringProperty operation) {
         Label label = new Label();
         label.textProperty().bind(new SimpleStringProperty("Last Operation: ").concat(operation));
+        return label;
+    }
+
+    private Label createExecutingLabel(StringProperty executing) {
+        Label label = new Label();
+        label.textProperty().bind(new SimpleStringProperty("Currently Executing: ").concat(executing));
         return label;
     }
 

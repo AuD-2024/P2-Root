@@ -26,7 +26,10 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         HBox insertHBOX = new HBox();
         Button insertButton =  new Button("Insert");
 
-        insertButton.setOnAction(event -> animationScene.startAnimation(tree -> tree.insert(inputParser.apply(insertTextField.getText()))));
+        insertButton.setOnAction(event -> {
+            animationScene.getAnimationState().setExecuting("Insert(" + insertTextField.getText() + ")");
+            animationScene.startAnimation(tree -> tree.insert(inputParser.apply(insertTextField.getText())));
+        });
 
         insertHBOX.getChildren().addAll(insertButton, insertTextField);
 

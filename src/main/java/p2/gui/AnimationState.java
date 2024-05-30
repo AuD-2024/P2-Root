@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 public class AnimationState {
 
     private final StringProperty operation = new SimpleStringProperty();
+    private final StringProperty executing = new SimpleStringProperty();
     private final ObservableList<StackTraceElement> stackTrace = FXCollections.observableArrayList();
 
     public StringProperty getOperation() {
@@ -16,6 +17,14 @@ public class AnimationState {
 
     public void setOperation(String operation) {
         this.operation.set(operation);
+    }
+
+    public StringProperty getExecuting() {
+        return executing;
+    }
+
+    public void setExecuting(String executing) {
+        this.executing.set(executing);
     }
 
     public ObservableList<StackTraceElement> getStackTrace() {
