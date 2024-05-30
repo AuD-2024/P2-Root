@@ -1,23 +1,25 @@
 package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
+@TestForSubmission
 public class PrefixSearchTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "PrefixSearch_Simple.json", customConverters = "customConverters")
-    public void testPrefixSimple(JsonParameterSet params) {
+    public void testPrefixSearchSimple(JsonParameterSet params) {
         testPrefixSearch(params);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "PrefixSearch_Complex.json", customConverters = "customConverters")
-    public void testPrefixComplex(JsonParameterSet params) {
+    public void testPrefixSearchComplex(JsonParameterSet params) {
         testPrefixSearch(params);
     }
 

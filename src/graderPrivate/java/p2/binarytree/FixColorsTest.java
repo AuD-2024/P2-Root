@@ -1,6 +1,7 @@
 package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
@@ -8,6 +9,7 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.call;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.contextBuilder;
 
+@TestForSubmission
 public class FixColorsTest extends P2_TestBase {
 
     @ParameterizedTest

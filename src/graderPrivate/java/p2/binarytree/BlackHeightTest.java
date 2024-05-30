@@ -1,12 +1,14 @@
 package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
+@TestForSubmission
 public class BlackHeightTest extends P2_TestBase {
 
     @ParameterizedTest

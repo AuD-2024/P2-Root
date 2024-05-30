@@ -1,10 +1,12 @@
 package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 import p2.SearchTree;
 
+@TestForSubmission
 public class InOrderTest extends TraversingTest {
 
     @ParameterizedTest

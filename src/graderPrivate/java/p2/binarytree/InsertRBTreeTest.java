@@ -2,17 +2,19 @@ package p2.binarytree;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
-public class InsertCombinedTest extends P2_TestBase {
+@TestForSubmission
+public class InsertRBTreeTest extends P2_TestBase {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testInsertCombined() {
+    public void testInsertRBTree() {
         final int value = 1;
 
         RBTree<Integer> tree = spy(new RBTree<>());

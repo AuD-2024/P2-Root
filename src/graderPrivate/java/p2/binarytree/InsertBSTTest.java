@@ -1,6 +1,7 @@
 package p2.binarytree;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
@@ -9,7 +10,8 @@ import p2.SearchTree;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.call;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.contextBuilder;
 
-public class InsertTest extends P2_TestBase {
+@TestForSubmission
+public class InsertBSTTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "InsertBST_Simple.json", customConverters = "customConverters")
