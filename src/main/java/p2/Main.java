@@ -2,13 +2,9 @@ package p2;
 
 import javafx.application.Application;
 import p2.binarytree.AutoComplete;
-import p2.binarytree.BinarySearchTree;
-import p2.binarytree.RBTree;
-import p2.binarytree.SimpleBinarySearchTree;
 import p2.gui.MyApplication;
+import p2.gui.TreeStyle;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +35,7 @@ public class Main {
      * animation by clicking the "Next Step" button at the bottom left. When stopped, the current stack trace and the
      * last performed operation is shown at the top right.
      * <p>
-     * You can change the appearance and colors of the tree in the class {@link p2.gui.GraphStyle}.
+     * You can change the appearance and colors of the tree in the class {@link TreeStyle}.
      *
      * @param args program arguments
      */

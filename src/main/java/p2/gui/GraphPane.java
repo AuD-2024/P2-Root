@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static p2.gui.GraphStyle.*;
+import static p2.gui.TreeStyle.*;
 
 /**
  * A {@link Pane} that displays a {@link AbstractBinarySearchTree}.
@@ -120,8 +120,8 @@ public class GraphPane extends Pane {
      * @param target The target node of the edge.
      */
     public void highlightEdge(BinaryNode<?> source, BinaryNode<?> target) {
-        setEdgeColor(source, target, Color.BLUE);
-        setEdgeDash(source, target, 50, 10.0);
+        setEdgeColor(source, target, HIGHLIGHT_COLOR);
+        if (ADD_DASHES) setEdgeDash(source, target, 50, 10.0);
     }
 
     /**
@@ -148,7 +148,7 @@ public class GraphPane extends Pane {
     }
 
     /**
-     * Resets the color used to draw the given {@linkplain Edge edge} to the default color ({@link GraphStyle#DEFAULT_EDGE_COLOR})
+     * Resets the color used to draw the given {@linkplain Edge edge} to the default color ({@link TreeStyle#DEFAULT_EDGE_COLOR})
      * and removes any dashing settings of the stroke.
      *
      * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
@@ -189,8 +189,8 @@ public class GraphPane extends Pane {
      * @param node The node to highlight.
      */
     public void highlightNode(BinaryNode<?> node) {
-        setNodeStrokeColor(node, Color.BLUE);
-        setNodeDash(node, 10.0, 10.0);
+        setNodeStrokeColor(node, HIGHLIGHT_COLOR);
+        if (ADD_DASHES) setNodeDash(node, 10.0, 10.0);
     }
 
     /**
@@ -218,7 +218,7 @@ public class GraphPane extends Pane {
 
 
     /**
-     * Resets the color used to draw the given node to the default color ({@link GraphStyle#DEFAULT_NODE_COLOR})
+     * Resets the color used to draw the given node to the default color ({@link TreeStyle#DEFAULT_NODE_COLOR})
      * and removes any dashing settings of the stroke.
      *
      * @param node The node to update.
@@ -479,7 +479,7 @@ public class GraphPane extends Pane {
 
     private Color getNodeColor(BinaryNode<?> node) {
         if (node instanceof RBNode<?> rbNode) {
-            return rbNode.getColor() == null ? DEFAULT_NODE_COLOR : rbNode.isRed() ? Color.RED : Color.BLACK;
+            return rbNode.getColor() == null ? DEFAULT_NODE_COLOR : rbNode.isRed() ? RED_NODE_COLOR : BLACK_NODE_COLOR;
         } else {
             return DEFAULT_NODE_COLOR;
         }
