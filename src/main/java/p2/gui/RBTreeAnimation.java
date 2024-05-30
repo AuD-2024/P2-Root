@@ -23,11 +23,6 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
     }
 
     @Override
-    public void insert(T value) {
-        super.insert(value);
-    }
-
-    @Override
     protected RBNode<T> createNode(T key) {
         return new AnimatedRBNode(key, Color.RED);
     }

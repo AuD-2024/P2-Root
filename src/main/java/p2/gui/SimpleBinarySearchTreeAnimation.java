@@ -21,12 +21,6 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
     }
 
     @Override
-    public void insert(T value) {
-        animationScene.getAnimationState().setOperation("Insert(" + value + ")");
-        super.insert(value);
-    }
-
-    @Override
     protected BSTNode<T> createNode(T key) {
         return new AnimatedBSTNode(key);
     }
