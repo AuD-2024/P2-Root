@@ -114,11 +114,23 @@ public abstract class AbstractBinaryNode<T extends Comparable<T>, N extends Abst
     protected void buildString(StringBuilder builder) {
         builder.append("[");
 
-        if (getLeft() != null) getLeft().buildString(builder);
+        if (getLeft() != null) {
+            if (getLeft() == this) {
+                builder.append("<left child is reference to itself>");
+            } else {
+                getLeft().buildString(builder);
+            }
+        }
 
         builder.append(",").append(getKey()).append(",");
 
-        if (getRight() != null) getRight().buildString(builder);
+        if (getRight() != null) {
+            if (getRight() == this) {
+                builder.append("<right child is reference to itself>");
+            } else {
+                getRight().buildString(builder);
+            }
+        }
 
         builder.append("]");
     }
