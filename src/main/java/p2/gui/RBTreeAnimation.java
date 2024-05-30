@@ -6,7 +6,6 @@ import p2.binarytree.RBNode;
 import p2.binarytree.RBTree;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements AnimatedBinaryTree<T> {
@@ -99,7 +98,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
 
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setLeft(%s)".formatted(getKey(), left == null ? "null" : left.getKey()));
-                    runWithoutAnimation(() -> animationScene.getGraphPane().setTree(getRoot()));
+                    runWithoutAnimation(() -> animationScene.getTreePane().setTree(getRoot()));
                     animationScene.refresh(this, left);
                 });
                 waitUntilNextStep();
@@ -132,7 +131,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
 
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setRight(%s)".formatted(getKey(), right == null ? "null" : right.getKey()));
-                    runWithoutAnimation(() -> animationScene.getGraphPane().setTree(getRoot()));
+                    runWithoutAnimation(() -> animationScene.getTreePane().setTree(getRoot()));
                     animationScene.refresh(this, right);
                 });
                 waitUntilNextStep();
@@ -148,7 +147,7 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
 
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setColor(%s)".formatted(getKey(), color));
-                    runWithoutAnimation(() -> animationScene.getGraphPane().setTree(getRoot()));
+                    runWithoutAnimation(() -> animationScene.getTreePane().setTree(getRoot()));
                     animationScene.refresh(this);
                 });
                 waitUntilNextStep();

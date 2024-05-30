@@ -51,9 +51,9 @@ public class ControlBox<T extends Comparable<T>> extends HBox {
             }
         });
 
-        centerButton.setOnAction(event -> animationScene.getGraphPane().center());
-        zoomInButton.setOnAction(event -> animationScene.getGraphPane().zoomIn());
-        zoomOutButton.setOnAction(event -> animationScene.getGraphPane().zoomOut());
+        centerButton.setOnAction(event -> animationScene.getTreePane().center());
+        zoomInButton.setOnAction(event -> animationScene.getTreePane().zoomIn());
+        zoomOutButton.setOnAction(event -> animationScene.getTreePane().zoomOut());
     }
 
     public void disableNextStepButton() {

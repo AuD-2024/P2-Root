@@ -15,7 +15,7 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
 
     private final BorderPane root;
 
-    private final GraphPane graphPane = new GraphPane();
+    private final TreePane treePane = new TreePane();
     private final OperationBox<T> operationBox;
     private final InfoBox infoBox;
 
@@ -38,7 +38,7 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
 
         root.setPrefSize(700, 700);
 
-        root.setCenter(graphPane);
+        root.setCenter(treePane);
         root.setBottom(new ControlBox<>(this));
 
         infoBox = new InfoBox(animationState);
@@ -46,7 +46,7 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
         operationBox = new OperationBox<>(this, inputParser);
         root.setRight(operationBox);
 
-        animation.runWithoutAnimation(() -> graphPane.setTree(animation.getRoot()));
+        animation.runWithoutAnimation(() -> treePane.setTree(animation.getRoot()));
     }
 
     public void refresh(BinaryNode<T> source, BinaryNode<T> target) {
@@ -55,8 +55,8 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
         lastSource = source;
         lastTarget = target;
 
-        graphPane.highlightNode(source);
-        if (target != null) graphPane.highlightEdge(source, target);
+        treePane.highlightNode(source);
+        if (target != null) treePane.highlightEdge(source, target);
     }
 
     public void refresh(BinaryNode<T> node) {
@@ -65,16 +65,16 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
         lastSource = node;
         lastTarget = null;
 
-        graphPane.highlightNode(node);
+        treePane.highlightNode(node);
     }
 
     private void resetOldHighlight() {
         if (lastSource != null) {
-            graphPane.resetNode(lastSource);
+            treePane.resetNode(lastSource);
 
             if (lastTarget != null) {
-                if (graphPane.containsEdge(lastSource, lastTarget)) {
-                    graphPane.resetEdge(lastSource, lastTarget);
+                if (treePane.containsEdge(lastSource, lastTarget)) {
+                    treePane.resetEdge(lastSource, lastTarget);
                 }
             }
         }
@@ -99,7 +99,7 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
             animation.accept(this.animation);
             Platform.runLater(() -> {
                 root.setRight(operationBox);
-                this.animation.runWithoutAnimation(() -> graphPane.setTree(this.animation.getRoot()));
+                this.animation.runWithoutAnimation(() -> treePane.setTree(this.animation.getRoot()));
                 operationBox.clearInputs();
             });
         });
@@ -107,8 +107,8 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
         animationThread.start();
     }
 
-    public GraphPane getGraphPane() {
-        return graphPane;
+    public TreePane getTreePane() {
+        return treePane;
     }
 
     public AnimatedBinaryTree<T> getAnimation() {

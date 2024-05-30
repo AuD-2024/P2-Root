@@ -24,7 +24,7 @@ import static p2.gui.TreeStyle.*;
 /**
  * A {@link Pane} that displays a {@link AbstractBinarySearchTree}.
  */
-public class GraphPane extends Pane {
+public class TreePane extends Pane {
 
     private static final double SCALE_IN = 1.1;
     private static final double SCALE_OUT = 1 / SCALE_IN;
@@ -47,13 +47,13 @@ public class GraphPane extends Pane {
     private boolean alreadyCentered = false;
 
     /**
-     * Creates a new, empty {@link GraphPane}.
+     * Creates a new, empty {@link TreePane}.
      */
-    public GraphPane() {
+    public TreePane() {
         this(null);
     }
 
-    public GraphPane(BinaryNode<?> root) {
+    public TreePane(BinaryNode<?> root) {
         // avoid division by zero when scale = 1
         transformation.appendScale(MIN_SCALE, MIN_SCALE);
 
@@ -128,7 +128,7 @@ public class GraphPane extends Pane {
      * Updates the color used to draw the given {@linkplain Edge edge}.
      *
      * @param color The new color.
-     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link TreePane}.
      */
     public void setEdgeColor(BinaryNode<?> source, BinaryNode<?> target, Color color) {
         getEdgeLine(source, target).setStroke(color);
@@ -141,7 +141,7 @@ public class GraphPane extends Pane {
      * @param target     The target node of the edge.
      * @param dashLength The length of the individual dashes.
      * @param gapLength  The length of the gaps between the dashes.
-     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link TreePane}.
      */
     public void setEdgeDash(BinaryNode<?> source, BinaryNode<?> target, double dashLength, double gapLength) {
         getEdgeLine(source, target).getStrokeDashArray().setAll(dashLength, gapLength);
@@ -151,7 +151,7 @@ public class GraphPane extends Pane {
      * Resets the color used to draw the given {@linkplain Edge edge} to the default color ({@link TreeStyle#DEFAULT_EDGE_COLOR})
      * and removes any dashing settings of the stroke.
      *
-     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link TreePane}.
      */
     public void resetEdge(BinaryNode<?> source, BinaryNode<?> target) {
         Line line = getEdgeLine(source, target);
@@ -160,7 +160,7 @@ public class GraphPane extends Pane {
     }
 
     /**
-     * Updates the position of all {@linkplain Edge edges} on this {@link GraphPane}.
+     * Updates the position of all {@linkplain Edge edges} on this {@link TreePane}.
      */
     public void redrawEdges() {
         for (Edge edge : edges.keySet()) {
@@ -198,7 +198,7 @@ public class GraphPane extends Pane {
      *
      * @param node  The node to update.
      * @param color The new color.
-     * @throws IllegalArgumentException If the given node is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given node is not part of this {@link TreePane}.
      */
     public void setNodeStrokeColor(BinaryNode<?> node, Color color) {
         getLabeledNode(node).setStrokeColor(color);
@@ -210,7 +210,7 @@ public class GraphPane extends Pane {
      * @param node       The node to update.
      * @param dashLength The length of the individual dashes.
      * @param gapLength  The length of the gaps between the dashes.
-     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given {@linkplain Edge edge} is not part of this {@link TreePane}.
      */
     public void setNodeDash(BinaryNode<?> node, double dashLength, double gapLength) {
         getLabeledNode(node).ellipse().getStrokeDashArray().setAll(dashLength, gapLength);
@@ -222,7 +222,7 @@ public class GraphPane extends Pane {
      * and removes any dashing settings of the stroke.
      *
      * @param node The node to update.
-     * @throws IllegalArgumentException If the given node is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given node is not part of this {@link TreePane}.
      */
     public void resetNode(BinaryNode<?> node) {
         LabeledNode labeledNode = getLabeledNode(node);
@@ -231,7 +231,7 @@ public class GraphPane extends Pane {
     }
 
     /**
-     * Updates the position of all nodes on this {@link GraphPane}.
+     * Updates the position of all nodes on this {@link TreePane}.
      */
     public void redrawNodes() {
         for (BinaryNode<?> node : nodes.keySet()) {
@@ -243,11 +243,11 @@ public class GraphPane extends Pane {
      * Updates the position of the given node.
      *
      * @param node The node to update.
-     * @throws IllegalArgumentException If the given node is not part of this {@link GraphPane}.
+     * @throws IllegalArgumentException If the given node is not part of this {@link TreePane}.
      */
     public void redrawNode(BinaryNode<?> node) {
         if (!nodes.containsKey(node)) {
-            throw new IllegalArgumentException("The given node is not part of this GraphPane");
+            throw new IllegalArgumentException("The given node is not part of this TreePane");
         }
 
         Point2D transformedMidPoint = transform(midPoint(node));
@@ -264,7 +264,7 @@ public class GraphPane extends Pane {
     // --- Other Util --- //
 
     /**
-     * Removes all components from this {@link GraphPane}.
+     * Removes all components from this {@link TreePane}.
      */
     public void clear() {
         nodes.clear();
@@ -276,7 +276,7 @@ public class GraphPane extends Pane {
     }
 
     /**
-     * Updates the position of all components on this {@link GraphPane}.
+     * Updates the position of all components on this {@link TreePane}.
      */
     public void redrawMap() {
         redrawEdges();
@@ -284,7 +284,7 @@ public class GraphPane extends Pane {
     }
 
     /**
-     * Tries to center this {@link GraphPane} as good as possible such that each node is visible while keeping the zoom factor as high as possible.
+     * Tries to center this {@link TreePane} as good as possible such that each node is visible while keeping the zoom factor as high as possible.
      */
     public void center() {
 
@@ -340,14 +340,14 @@ public class GraphPane extends Pane {
     }
 
     /**
-     * Increases the zoom of the current graphPane, i.e. the size of the covered area is decreased.
+     * Increases the zoom of the current treePane, i.e. the size of the covered area is decreased.
      */
     public void zoomIn() {
         zoom(getWidth() / 2.0, getHeight() / 2.0, SCALE_IN);
     }
 
     /**
-     * Decreases the zoom of the current graphPane, i.e. the size of the covered area is increased.
+     * Decreases the zoom of the current treePane, i.e. the size of the covered area is increased.
      */
     public void zoomOut() {
         zoom(getWidth() / 2.0, getHeight() / 2.0, SCALE_OUT);
@@ -531,7 +531,7 @@ public class GraphPane extends Pane {
 
     private Edge getEdge(BinaryNode<?> source, BinaryNode<?> target) {
         if (nodesToEdge.get(source) == null || nodesToEdge.get(source).get(target) == null) {
-            throw new IllegalArgumentException("The given edge is not part of this GraphPane");
+            throw new IllegalArgumentException("The given edge is not part of this TreePane");
         }
         return nodesToEdge.get(source).get(target);
     }
@@ -544,7 +544,7 @@ public class GraphPane extends Pane {
         LabeledNode labeledNode = nodes.get(node);
 
         if (labeledNode == null) {
-            throw new IllegalArgumentException("The given node is not part of this GraphPane");
+            throw new IllegalArgumentException("The given node is not part of this TreePane");
         }
 
         return labeledNode;

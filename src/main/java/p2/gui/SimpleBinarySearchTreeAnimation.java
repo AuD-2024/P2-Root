@@ -5,7 +5,6 @@ import p2.binarytree.BSTNode;
 import p2.binarytree.SimpleBinarySearchTree;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends SimpleBinarySearchTree<T> implements AnimatedBinaryTree<T> {
 
@@ -92,7 +91,7 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setLeft(%s)".formatted(getKey(), left.getKey()));
                     runWithoutAnimation(() ->
-                        animationScene.getGraphPane().setTree(getRoot()));
+                        animationScene.getTreePane().setTree(getRoot()));
                     animationScene.refresh(this, left);
                 });
                 waitUntilNextStep();
@@ -126,7 +125,7 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
                 Platform.runLater(() -> {
                     updateState(stackTrace, "(%s).setRight(%s)".formatted(getKey(), right.getKey()));
                     runWithoutAnimation(() ->
-                        animationScene.getGraphPane().setTree(getRoot()));
+                        animationScene.getTreePane().setTree(getRoot()));
                     animationScene.refresh(this, right);
                 });
                 waitUntilNextStep();
