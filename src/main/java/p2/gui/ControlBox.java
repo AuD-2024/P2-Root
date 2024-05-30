@@ -48,6 +48,7 @@ public class ControlBox<T extends Comparable<T>> extends HBox {
 
         backButton.setOnAction(event -> {
             animationScene.stopAnimation();
+            MyApplication.currentScene = null;
             primaryStage.setScene(new LoadTreeScene(primaryStage));
         });
 

@@ -12,7 +12,8 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
 
     private BinaryTreeAnimationScene<T> animationScene;
 
-    public boolean animate = false;
+    private boolean animate = false;
+    private boolean finishWithNextStep = false;
 
     @Override
     public void init(BinaryTreeAnimationScene<T> animationScene) {
@@ -43,6 +44,21 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
     @Override
     public boolean isAnimating() {
         return animate;
+    }
+
+    @Override
+    public boolean isFinishingWithNextStep() {
+        return finishWithNextStep;
+    }
+
+    @Override
+    public void disableFinishWithNextStep() {
+        finishWithNextStep = false;
+    }
+
+    @Override
+    public void finishWithNextStep() {
+        finishWithNextStep = true;
     }
 
     @Override

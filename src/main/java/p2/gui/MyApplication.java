@@ -1,6 +1,7 @@
 package p2.gui;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.Random;
@@ -9,6 +10,8 @@ import java.util.Random;
  * Main entry point in executing the GUI.
  */
 public class MyApplication extends Application {
+
+    public static BinaryTreeAnimationScene<?> currentScene = null;
 
     @Override
     public void start(Stage primaryStage) {
@@ -23,8 +26,7 @@ public class MyApplication extends Application {
 
     @Override
     public void stop() {
-        //TODO make static
-        //animationScene.stopAnimation();
+        currentScene.stopAnimation();
     }
 
 }

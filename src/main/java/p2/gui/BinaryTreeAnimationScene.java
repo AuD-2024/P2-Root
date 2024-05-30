@@ -83,13 +83,18 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
 
     public void stopAnimation() {
         if (animationThread != null) {
-            animationThread.interrupt(); //TODO: actually kill old thread
+            animation.finishWithNextStep();
+            synchronized (animation.getSyncObject()) {
+                animation.getSyncObject().notify();
+            }
         }
         root.setRight(operationBox);
     }
 
     public void startAnimation(Consumer<AnimatedBinaryTree<T>> animation) {
         stopAnimation();
+
+        this.animation.disableFinishWithNextStep();
 
         animationState.clear();
         if (this.animation.isAnimating()) {

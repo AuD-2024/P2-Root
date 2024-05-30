@@ -18,11 +18,28 @@ public interface Animation {
      */
     Object getSyncObject();
 
+    /**
+     * Tells the animation to finish gracefully independent of the current state.
+     */
+    void finishWithNextStep();
+
+    /**
+     * Tells the animation that it does not need to finish with the next step anymore.
+     */
+    void disableFinishWithNextStep();
+
+    /**
+     * @return {@code true} if the animation should finish with the next step, {@code false} otherwise
+     */
+    boolean isFinishingWithNextStep();
+
     default void waitUntilNextStep() {
-        synchronized (getSyncObject()) {
-            try {
-                getSyncObject().wait();
-            } catch (InterruptedException ignored) {
+        if (!isFinishingWithNextStep()) {
+            synchronized (getSyncObject()) {
+                try {
+                    getSyncObject().wait();
+                } catch (InterruptedException ignored) {
+                }
             }
         }
     }
