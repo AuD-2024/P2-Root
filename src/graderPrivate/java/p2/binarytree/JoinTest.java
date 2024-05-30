@@ -19,6 +19,18 @@ public class JoinTest extends P2_TestBase {
         testJoin(params);
     }
 
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "Join_LeftGreater.json", customConverters = "customConverters")
+    public void testJoinLeftGreater(JsonParameterSet params) {
+        testJoin(params);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "Join_RightGreater.json", customConverters = "customConverters")
+    public void testJoinRightGreater(JsonParameterSet params) {
+        testJoin(params);
+    }
+
     private void testJoin(JsonParameterSet params) {
 
         RBTree<Integer> leftRBTree = spy(params.<RBTree<Integer>>get("leftRBTree"));
