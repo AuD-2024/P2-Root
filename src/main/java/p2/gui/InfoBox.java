@@ -33,6 +33,7 @@ public class InfoBox extends VBox {
 
         setPadding(new Insets(5));
         setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+        setMaxWidth(300);
 
         getChildren().addAll(
             createStackTraceTableView(state.getStackTrace()),
@@ -53,31 +54,35 @@ public class InfoBox extends VBox {
         return label;
     }
 
-    private ScrollPane createStackTraceTableView(ObservableList<StackTraceElement> stackTrace) {
+    private TableView<StackTraceElement> createStackTraceTableView(ObservableList<StackTraceElement> stackTrace) {
 
         TableView<StackTraceElement> tableView = new TableView<>(stackTrace);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        ScrollPane scrollPane = new ScrollPane(tableView);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        tableView.maxWidth(290);
 
         TableColumn<StackTraceElement, Integer> indexColumn = new TableColumn<>("#");
         indexColumn.setCellValueFactory(data -> new SimpleIntegerProperty(stackTrace.indexOf(data.getValue()) + 1).asObject());
+        indexColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.1));
 
         TableColumn<StackTraceElement, String> nameColumn = new TableColumn<>("Class");
         nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClassName().substring(data.getValue().getClassName().lastIndexOf('.') + 1)));
+        nameColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
 
         TableColumn<StackTraceElement, String> methodColumn = new TableColumn<>("Method");
         methodColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMethodName()));
+        methodColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.35));
 
         TableColumn<StackTraceElement, Integer> lineColumn = new TableColumn<>("Line");
         lineColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getLineNumber()).asObject());
+        lineColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.2));
 
         tableView.getColumns().addAll(List.of(indexColumn, nameColumn, methodColumn, lineColumn));
 
         tableView.setFixedCellSize(25);
         tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()).add(30));
 
-        return scrollPane;
+        return tableView;
     }
 
 }
