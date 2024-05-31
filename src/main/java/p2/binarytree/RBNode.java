@@ -6,7 +6,6 @@ package p2.binarytree;
  * i.e. it can be red or black.
  *
  * @param <T> the type of the key in the node.
- *
  * @see RBTree
  * @see AbstractBinaryNode
  */
@@ -20,7 +19,7 @@ public class RBNode<T extends Comparable<T>> extends AbstractBinaryNode<T, RBNod
     /**
      * Creates a new node with the given key and color.
      *
-     * @param key the key of the node.
+     * @param key   the key of the node.
      * @param color the color of the node.
      */
     public RBNode(T key, Color color) {
@@ -91,7 +90,7 @@ public class RBNode<T extends Comparable<T>> extends AbstractBinaryNode<T, RBNod
         builder.append(",")
             .append(getKey())
             .append(",")
-            .append(color == Color.RED ? "R" : color == Color.BLACK ? "B": "null")
+            .append(color == Color.RED ? "R" : color == Color.BLACK ? "B" : "null")
             .append(",");
 
         if (getRight() != null) {

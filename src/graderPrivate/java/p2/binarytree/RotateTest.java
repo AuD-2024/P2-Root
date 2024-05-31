@@ -14,17 +14,17 @@ public class RotateTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RotateLeft.json", customConverters = "customConverters")
-    public void testRotateLeft(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testRotateLeft(JsonParameterSet params) {
         testRotate(params, true);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RotateRight.json", customConverters = "customConverters")
-    public void testRotateRight(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testRotateRight(JsonParameterSet params) {
         testRotate(params, false);
     }
 
-    private void testRotate(JsonParameterSet params, boolean rotateLeft) throws ReflectiveOperationException {
+    private void testRotate(JsonParameterSet params, boolean rotateLeft) {
 
         RBTree<Integer> tree = params.get("RBTree");
         int node = params.getInt("node");
@@ -37,7 +37,7 @@ public class RotateTest extends P2_TestBase {
             .add("expected tree", expected.toString());
 
         if (rotateLeft) {
-            call(() -> tree.rotateLeft(tree.search(node)), context.build(), result  -> "rotateLeft should not throw an exception");
+            call(() -> tree.rotateLeft(tree.search(node)), context.build(), result -> "rotateLeft should not throw an exception");
         } else {
             call(() -> tree.rotateRight(tree.search(node)), context.build(), result -> "rotateRight should not throw an exception");
         }

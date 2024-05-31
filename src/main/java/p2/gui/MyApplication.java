@@ -1,10 +1,7 @@
 package p2.gui;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Random;
 
 /**
  * Main entry point in executing the GUI.

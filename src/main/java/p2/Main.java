@@ -29,7 +29,7 @@ public class Main {
      *     <li>Find Next: Invokes findNext with the value given in "value" as the start node, "Max" as the maximum amount
      *      of values to return and {@code x -> x <= "Limit"} as the predicate.
      * </ul>
-     *
+     * <p>
      * When the "Animate" checkbox at the bottom left is selected, the program will stop after each invocation of
      * {@code {get,set}{Left,Right}} and {@code setColor} and highlight the respective nodes. You can then continue the
      * animation by clicking the "Next Step" button at the bottom left. When stopped, the current stack trace and the

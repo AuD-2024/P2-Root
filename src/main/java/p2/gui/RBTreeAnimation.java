@@ -8,6 +8,7 @@ import p2.binarytree.RBTree;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("DuplicatedCode")
 public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements AnimatedBinaryTree<T> {
 
     private final Object syncObject = new Object();

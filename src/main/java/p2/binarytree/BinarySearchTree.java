@@ -6,7 +6,6 @@ import p2.SearchTree;
  * An interface for a {@link SearchTree} that uses {@linkplain BinaryNode binary nodes}.
  *
  * @param <T> The type of the elements in the tree.
- *
  * @see SearchTree
  * @see BinaryNode
  * @see AbstractBinarySearchTree

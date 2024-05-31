@@ -11,7 +11,6 @@ import p2.Node;
  * The key can be of any type that implements the {@link Comparable} interface.
  *
  * @param <T> the type of the key in the node.
- *
  * @see AbstractBinaryNode
  * @see Node
  * @see AbstractBinarySearchTree

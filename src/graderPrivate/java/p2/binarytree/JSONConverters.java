@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public class JSONConverters extends JsonConverters {
 
-    public static TestRBTree<Integer> toIntegerRBTree(JsonNode node)  {
+    public static TestRBTree<Integer> toIntegerRBTree(JsonNode node) {
         return TreeParser.parseRBTree(node.asText(), Integer::parseInt, new TestRBTree<Integer>());
     }
 

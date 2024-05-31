@@ -1,15 +1,19 @@
 package p2.binarytree;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertEquals;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertNotNull;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertNull;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertSame;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.fail;
 
 @SkipAfterFirstFailedTest
 public abstract class P2_TestBase {
@@ -26,7 +30,7 @@ public abstract class P2_TestBase {
         Map.entry("rightRBTree", JSONConverters::toIntegerRBTree)
     );
 
-    void testForBSTAndRBTree(JsonParameterSet params, ThrowingBiConsumer<BinarySearchTree<Integer>, String> test) throws Throwable {
+    void testForBSTAndRBTree(JsonParameterSet params, BiConsumer<BinarySearchTree<Integer>, String> test) {
 
         boolean testPerformed = false;
 
@@ -56,7 +60,8 @@ public abstract class P2_TestBase {
     }
 
     public void assertTreeUnchanged(RBTree<?> expected, RBTree<?> actual, Context context) {
-        if (expected.getRoot() != null) assertNodeUnchanged(expected.getRoot(), actual.getRoot(), actual.sentinel, context);
+        if (expected.getRoot() != null)
+            assertNodeUnchanged(expected.getRoot(), actual.getRoot(), actual.sentinel, context);
     }
 
     public void assertTreeUnchanged(SimpleBinarySearchTree<?> expected, SimpleBinarySearchTree<?> actual, Context context) {
@@ -70,10 +75,12 @@ public abstract class P2_TestBase {
         assertEquals(expected.getKey(), actual.getKey(), context, result -> "The tree should not change. The key of the node with key %s is not correct".formatted(expected.getKey()));
 
         if (expected.getLeft() != null) assertNodeUnchanged(expected.getLeft(), actual.getLeft(), actual, context);
-        else assertNull(actual.getLeft(), context, result -> "The tree should not change. The left child of the node with key %s should be null".formatted(expected.getKey()));
+        else
+            assertNull(actual.getLeft(), context, result -> "The tree should not change. The left child of the node with key %s should be null".formatted(expected.getKey()));
 
         if (expected.getRight() != null) assertNodeUnchanged(expected.getRight(), actual.getRight(), actual, context);
-        else assertNull(actual.getRight(), context, result -> "The tree should not change. The right child of the node with key %s should be null".formatted(expected.getKey()));
+        else
+            assertNull(actual.getRight(), context, result -> "The tree should not change. The right child of the node with key %s should be null".formatted(expected.getKey()));
 
         assertSame(parent, actual.getParent(), context, result -> "The tree should not change. The parent of the node with key %s should be the node with key %s".formatted(expected.getKey(), parent.getKey()));
 
@@ -84,8 +91,10 @@ public abstract class P2_TestBase {
         assertRootParentCorrect(actual, context, message);
 
         if (expected.getRoot() != null) {
-            if (expected.getRoot().getLeft() != null) assertNodeCorrect(expected.getRoot().getLeft(), actual.getRoot().getLeft(), actual.getRoot(), context, message);
-            if (expected.getRoot().getRight() != null) assertNodeCorrect(expected.getRoot().getRight(), actual.getRoot().getRight(), actual.getRoot(), context, message);
+            if (expected.getRoot().getLeft() != null)
+                assertNodeCorrect(expected.getRoot().getLeft(), actual.getRoot().getLeft(), actual.getRoot(), context, message);
+            if (expected.getRoot().getRight() != null)
+                assertNodeCorrect(expected.getRoot().getRight(), actual.getRoot().getRight(), actual.getRoot(), context, message);
         }
 
     }
@@ -99,6 +108,7 @@ public abstract class P2_TestBase {
             assertEquals(expectedRoot.getKey(), actualRoot.getKey(), context, result -> message + ". The key of the root is not correct");
         }
 
+        assert expectedRoot != null;
         if (expectedRoot.getLeft() == null) {
             assertNull(actualRoot.getLeft(), context, result -> message + ". The left child of the root should be null");
         } else {
@@ -152,11 +162,4 @@ public abstract class P2_TestBase {
 
         assertSame(parent, actual.getParent(), context, result -> message + ". The parent of the %s should be the node with key %s".formatted(nodeDescription, parent.getKey()));
     }
-}
-
-@FunctionalInterface
-interface ThrowingBiConsumer<T, U> {
-
-    void accept(T t, U u) throws Throwable;
-
 }

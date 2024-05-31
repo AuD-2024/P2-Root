@@ -15,7 +15,6 @@ import java.util.function.Predicate;
  *
  * @param <T> the type of the keys in the tree.
  * @param <N> the type of the nodes in the tree, e.g., {@link BSTNode} or {@link RBNode}.
- *
  * @see SearchTree
  * @see AbstractBinaryNode
  */
@@ -45,7 +44,7 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
     /**
      * Inserts the given node into the tree.
      *
-     * @param node the node to insert.
+     * @param node      the node to insert.
      * @param initialPX The initial value used for the pointer to the parent node.
      *                  This is required for implementations that use a sentinel node. For normal trees, this value
      *                  should be {@code null}.
@@ -83,11 +82,11 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
      * It assumes that the predicate returns {@code false} for all greater values once it returned {@code false} for
      * one value, i.e. it represents a limit check.
      *
-     * @param node The root of the subtree to traverse.
+     * @param node   The root of the subtree to traverse.
      * @param result The list to store the elements in.
-     * @param max The maximum number of elements to include in the result.
-     * @param limit The predicate to test the elements against. If the predicate returns {@code false} for an element,
-     *                  the traversal stops.
+     * @param max    The maximum number of elements to include in the result.
+     * @param limit  The predicate to test the elements against. If the predicate returns {@code false} for an element,
+     *               the traversal stops.
      */
     protected void inOrder(N node, List<? super T> result, int max, Predicate<? super T> limit) {
         if (node.hasLeft() && result.size() < max) {
@@ -113,11 +112,11 @@ public abstract class AbstractBinarySearchTree<T extends Comparable<T>, N extend
      * It assumes that the predicate returns {@code false} for all greater values once it returned {@code false} for
      * one value, i.e. it represents a limit check.
      *
-     * @param node The node to start the search from. The node itself is included in the search.
+     * @param node   The node to start the search from. The node itself is included in the search.
      * @param result The list to store the elements in.
-     * @param max The maximum number of elements to include in the result.
-     * @param limit The predicate to test the elements against. If the predicate returns {@code false} for an element,
-     *                  the traversal stops.
+     * @param max    The maximum number of elements to include in the result.
+     * @param limit  The predicate to test the elements against. If the predicate returns {@code false} for an element,
+     *               the traversal stops.
      */
     protected void findNext(N node, List<? super T> result, int max, Predicate<? super T> limit) {
         findNext(node, null, max, result, limit);

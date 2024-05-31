@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertEquals;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.call;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.contextBuilder;
 
 public class TraversingTest extends P2_TestBase {
 
-    protected void testTraversing(JsonParameterSet params, TraversingMethod traversingMethod, String method) throws Throwable {
+    protected void testTraversing(JsonParameterSet params, TraversingMethod traversingMethod, String method) {
         testForBSTAndRBTree(params, (tree, className) -> testTraversing(params, tree, traversingMethod, method, className));
     }
 

@@ -249,9 +249,8 @@ public class RBTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T,
      * It assumes that the tree is non-empty and that there is a node with the target black height.
      *
      * @param targetBlackHeight The target black height to find a node with.
-     * @param totalBlackHeight The total black height of the tree.
-     * @param findSmallest Whether to find the smallest or largest node with the target black height.
-     *
+     * @param totalBlackHeight  The total black height of the tree.
+     * @param findSmallest      Whether to find the smallest or largest node with the target black height.
      * @return A black node with the target black height.
      */
     public RBNode<T> findBlackNodeWithBlackHeight(int targetBlackHeight, int totalBlackHeight, boolean findSmallest) {

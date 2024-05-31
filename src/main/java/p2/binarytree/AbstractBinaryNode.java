@@ -5,7 +5,6 @@ package p2.binarytree;
  *
  * @param <T> the type of the key in the node.
  * @param <N> the concrete type of the node, e.g., {@link BSTNode} or {@link RBNode}.
- *
  * @see BinaryNode
  * @see AbstractBinarySearchTree
  */
@@ -33,6 +32,7 @@ public abstract class AbstractBinaryNode<T extends Comparable<T>, N extends Abst
 
     /**
      * Creates a new node with the given key.
+     *
      * @param key the key of the node.
      */
     public AbstractBinaryNode(T key) {

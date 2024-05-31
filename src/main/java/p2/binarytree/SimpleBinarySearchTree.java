@@ -9,7 +9,6 @@ import java.util.function.Predicate;
  * A simple implementation of a binary search tree.
  *
  * @param <T> The type of the keys in the tree.
- *
  * @see AbstractBinarySearchTree
  */
 public class SimpleBinarySearchTree<T extends Comparable<T>> extends AbstractBinarySearchTree<T, BSTNode<T>> {

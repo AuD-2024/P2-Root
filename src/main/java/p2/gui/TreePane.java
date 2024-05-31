@@ -9,8 +9,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import p2.binarytree.BinaryNode;
 import p2.binarytree.AbstractBinarySearchTree;
+import p2.binarytree.BinaryNode;
 import p2.binarytree.RBNode;
 
 import java.util.ArrayList;
@@ -19,7 +19,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static p2.gui.TreeStyle.*;
+import static p2.gui.TreeStyle.ADD_DASHES;
+import static p2.gui.TreeStyle.BLACK_NODE_COLOR;
+import static p2.gui.TreeStyle.DEFAULT_EDGE_COLOR;
+import static p2.gui.TreeStyle.DEFAULT_NODE_COLOR;
+import static p2.gui.TreeStyle.EDGE_STROKE_WIDTH;
+import static p2.gui.TreeStyle.GRID_FIVE_TICKS_WIDTH;
+import static p2.gui.TreeStyle.GRID_LINE_COLOR;
+import static p2.gui.TreeStyle.GRID_TEN_TICKS_WIDTH;
+import static p2.gui.TreeStyle.HIGHLIGHT_COLOR;
+import static p2.gui.TreeStyle.NODE_DIAMETER;
+import static p2.gui.TreeStyle.NODE_DISTANCE;
+import static p2.gui.TreeStyle.NODE_STROKE_WIDTH;
+import static p2.gui.TreeStyle.NODE_VERTICAL_DISTANCE;
+import static p2.gui.TreeStyle.RED_NODE_COLOR;
+import static p2.gui.TreeStyle.TEXT_COLOR;
 
 /**
  * A {@link Pane} that displays a {@link AbstractBinarySearchTree}.
@@ -664,10 +678,6 @@ public class TreePane extends Pane {
 
         public void setStrokeColor(Color strokeColor) {
             ellipse.setStroke(strokeColor);
-        }
-
-        public void setFillColor(Color fillColor) {
-            ellipse.setFill(fillColor);
         }
 
     }

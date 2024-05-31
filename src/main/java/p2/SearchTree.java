@@ -13,7 +13,6 @@ import java.util.function.Predicate;
  * The Tree can store any type of elements that implement the {@link Comparable} interface.
  *
  * @param <T> the type of the elements in the tree.
- *
  * @see Node
  */
 public interface SearchTree<T extends Comparable<T>> {
@@ -22,7 +21,6 @@ public interface SearchTree<T extends Comparable<T>> {
      * Checks if the tree contains the given value.
      *
      * @param value the value to search for.
-     *
      * @return {@code true} if the value is in the tree, {@code false} otherwise.
      */
     default boolean contains(T value) {
@@ -33,7 +31,6 @@ public interface SearchTree<T extends Comparable<T>> {
      * Searches for the given value in the tree.
      *
      * @param value the value to search for.
-     *
      * @return the node containing the value, or {@code null} if the value is not in the tree.
      */
     Node<T> search(T value);
@@ -65,9 +62,9 @@ public interface SearchTree<T extends Comparable<T>> {
      * not add any further elements. The first element which did not satisfy the predicate is also excluded.
      * If later elements exist that satisfy the predicate, they are excluded as well.
      *
-     * @param node The root of the subtree to traverse.
-     * @param result The list to store the elements in.
-     * @param max The maximum number of elements to include in the result.
+     * @param node      The root of the subtree to traverse.
+     * @param result    The list to store the elements in.
+     * @param max       The maximum number of elements to include in the result.
      * @param predicate The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */
@@ -82,9 +79,9 @@ public interface SearchTree<T extends Comparable<T>> {
      * not add any further elements. The first element which did not satisfy the predicate is also excluded.
      * If later elements exist that satisfy the predicate, they are excluded as well.
      *
-     * @param node The node to start the search from. The node itself is included in the search.
-     * @param result The list to store the elements in.
-     * @param max The maximum number of elements to include in the result.
+     * @param node      The node to start the search from. The node itself is included in the search.
+     * @param result    The list to store the elements in.
+     * @param max       The maximum number of elements to include in the result.
      * @param predicate The predicate to test the elements against. If the predicate returns {@code false} for an element,
      *                  the traversal stops.
      */

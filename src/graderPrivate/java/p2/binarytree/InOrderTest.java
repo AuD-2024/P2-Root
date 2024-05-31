@@ -22,5 +22,4 @@ public class InOrderTest extends TraversingTest {
     }
 
 
-
 }

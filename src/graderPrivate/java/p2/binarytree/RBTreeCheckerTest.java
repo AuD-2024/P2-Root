@@ -9,36 +9,38 @@ import p2.binarytree.implementation.TestRBNode;
 
 import java.util.function.Consumer;
 
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.call;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.contextBuilder;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.fail;
 
 @TestForSubmission
 public class RBTreeCheckerTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule1.json", customConverters = "customConverters")
-    public void testRule1(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testRule1(JsonParameterSet params) {
         testRule(params, 1, RBTreeChecker::checkRule1);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule2.json", customConverters = "customConverters")
-    public void testRule2(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testRule2(JsonParameterSet params) {
         testRule(params, 2, RBTreeChecker::checkRule2);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule3.json", customConverters = "customConverters")
-    public void testRule3(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testRule3(JsonParameterSet params) {
         testRule(params, 3, RBTreeChecker::checkRule3);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "RBTreeChecker_Rule4.json", customConverters = "customConverters")
-    public void testRule4(JsonParameterSet params) throws ReflectiveOperationException {
+    public void testRule4(JsonParameterSet params) {
         testRule(params, 4, RBTreeChecker::checkRule4);
     }
 
-    private void testRule(JsonParameterSet params, int rule, Consumer<RBTree<Integer>> checkRule) throws ReflectiveOperationException {
+    private void testRule(JsonParameterSet params, int rule, Consumer<RBTree<Integer>> checkRule) {
         RBTree<Integer> tree = params.get("RBTree");
         boolean valid = params.getBoolean("valid");
 

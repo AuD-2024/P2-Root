@@ -6,6 +6,7 @@ import p2.binarytree.SimpleBinarySearchTree;
 
 import java.util.Arrays;
 
+@SuppressWarnings("DuplicatedCode")
 public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends SimpleBinarySearchTree<T> implements AnimatedBinaryTree<T> {
 
     private final Object syncObject = new Object();

@@ -6,7 +6,11 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertEquals;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertNotNull;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertNull;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.callObject;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.contextBuilder;
 
 @TestForSubmission
 public class PrefixSearchTest extends P2_TestBase {
@@ -45,6 +49,7 @@ public class PrefixSearchTest extends P2_TestBase {
         } else {
             assertNotNull(actual, context.build(), result -> "The method prefixSearch should not return null");
 
+            assert actual != null;
             assertEquals(expectedKey, actual.getKey(), context.build(),
                 result -> "The method prefixSearch did not return a node with the correct key");
         }

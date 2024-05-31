@@ -4,7 +4,6 @@ package p2.binarytree;
  * A node in a {@link SimpleBinarySearchTree}.
  *
  * @param <T> the type of the key in the node.
- *
  * @see SimpleBinarySearchTree
  * @see AbstractBinaryNode
  */

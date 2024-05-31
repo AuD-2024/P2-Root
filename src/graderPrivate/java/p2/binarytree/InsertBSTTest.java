@@ -15,22 +15,22 @@ public class InsertBSTTest extends P2_TestBase {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "InsertBST_Simple.json", customConverters = "customConverters")
-    public void testBSTInsertSimple(JsonParameterSet params) throws Throwable {
+    public void testBSTInsertSimple(JsonParameterSet params) {
         testBSTInsert(params);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "InsertBST_Complex.json", customConverters = "customConverters")
-    public void testBSTInsertComplex(JsonParameterSet params) throws Throwable {
+    public void testBSTInsertComplex(JsonParameterSet params) {
         testBSTInsert(params);
     }
 
-    private void testBSTInsert(JsonParameterSet params) throws Throwable {
+    private void testBSTInsert(JsonParameterSet params) {
         testForBSTAndRBTree(params, (tree, className) -> testBSTInsert(params, tree, className));
     }
 
     @SuppressWarnings("unchecked")
-    private <N extends AbstractBinaryNode<Integer, N>> void testBSTInsert(JsonParameterSet params, SearchTree<Integer> tree, String className) throws ReflectiveOperationException {
+    private <N extends AbstractBinaryNode<Integer, N>> void testBSTInsert(JsonParameterSet params, SearchTree<Integer> tree, String className) {
 
 
         int input = params.get("input");

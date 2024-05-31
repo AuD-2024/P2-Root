@@ -1,19 +1,18 @@
 package p2.binarytree;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Utility class for parsing strings that represent either red-black tree or a binary search tree.
  */
+@SuppressWarnings("unused")
 public class TreeParser {
 
     /**
      * Parses a red-black tree from a string.
      *
-     * @param input The string representation of the tree.
+     * @param input     The string representation of the tree.
      * @param keyParser The function used to convert the string representation of the key to its actual value.
-     *
      * @return The parsed red-black tree.
      */
     public static <T extends Comparable<T>> RBTree<T> parseRBTree(String input, Function<String, T> keyParser) {
@@ -23,10 +22,9 @@ public class TreeParser {
     /**
      * Parses a red-black tree from a string.
      *
-     * @param input The string representation of the tree.
+     * @param input     The string representation of the tree.
      * @param keyParser The function used to convert the string representation of the key to its actual value.
-     * @param tree An empty tree instance used to store the created tree.
-     *
+     * @param tree      An empty tree instance used to store the created tree.
      * @return The parsed red-black tree.
      */
     public static <T extends Comparable<T>, TR extends RBTree<T>> TR parseRBTree(
@@ -39,9 +37,8 @@ public class TreeParser {
     /**
      * Parses a binary search tree from a string.
      *
-     * @param input The string representation of the tree.
+     * @param input     The string representation of the tree.
      * @param keyParser The function used to convert the string representation of the key to its actual value.
-     *
      * @return The parsed binary search tree.
      */
     public static <T extends Comparable<T>> SimpleBinarySearchTree<T> parseBST(String input, Function<String, T> keyParser) {
@@ -51,10 +48,9 @@ public class TreeParser {
     /**
      * Parses a binary search tree from a string.
      *
-     * @param input The string representation of the tree.
+     * @param input     The string representation of the tree.
      * @param keyParser The function used to convert the string representation of the key to its actual value.
-     * @param tree An empty tree instance used to store the created tree.
-     *
+     * @param tree      An empty tree instance used to store the created tree.
      * @return The parsed binary search tree.
      */
     public static <T extends Comparable<T>, TR extends SimpleBinarySearchTree<T>> TR parseBST(
@@ -64,13 +60,14 @@ public class TreeParser {
         return parse(input, keyParser, tree, false);
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Comparable<T>,
         N extends AbstractBinaryNode<T, N>,
         TR extends AbstractBinarySearchTree<T, N>> TR parse(
-            String input,
-            Function<String, T> keyParser,
-            TR tree,
-            boolean rb) {
+        String input,
+        Function<String, T> keyParser,
+        TR tree,
+        boolean rb) {
 
         StringReader reader = new StringReader(input);
 
@@ -87,6 +84,7 @@ public class TreeParser {
         return tree;
     }
 
+    @SuppressWarnings("unchecked")
     private static <T extends Comparable<T>, N extends AbstractBinaryNode<T, N>> N parseNode(
         StringReader reader,
         Function<String, T> keyParser,

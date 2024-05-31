@@ -8,7 +8,6 @@ package p2;
  * The keys can be of any type that implements the {@link Comparable} interface.
  *
  * @param <T> the type of the keys in the node.
- *
  * @see SearchTree
  */
 public interface Node<T extends Comparable<T>> {
