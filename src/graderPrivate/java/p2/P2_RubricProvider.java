@@ -70,25 +70,23 @@ public class P2_RubricProvider implements RubricProvider {
     public static final Criterion H2_2_2 = createCriterion("Die Methode [[[rotateRight]]] der Klasse [[[RBTree]]] funktioniert vollständig korrekt", 1,
         () -> RotateTest.class.getMethod("testRotateRight", JsonParameterSet.class));
 
-    public static final Criterion H2_2 = createParentCriterion("2 b)", "RB-Tree Rotation", H2_2_1, H2_2_2);
-
-    public static final Criterion H2_3_1 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert korrekt, wenn nur die Farbe der Wurzel korrigiert wird", 1,
+    public static final Criterion H2_2_3 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert korrekt, wenn nur die Farbe der Wurzel korrigiert wird", 1,
         () -> FixColorsTest.class.getMethod("testFixColorsRoot", JsonParameterSet.class));
 
-    public static final Criterion H2_3_2 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert für einfache Fälle korrekt", 1,
+    public static final Criterion H2_2_4 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert für einfache Fälle korrekt", 1,
         () -> FixColorsTest.class.getMethod("testFixColorsSimple", JsonParameterSet.class));
 
-    public static final Criterion H2_3_3 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert für komplexe Fälle korrekt", 1,
+    public static final Criterion H2_2_5 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert für komplexe Fälle korrekt", 1,
         () -> FixColorsTest.class.getMethod("testFixColorsComplex", JsonParameterSet.class));
 
-    public static final Criterion H2_3 = createParentCriterion("2 c)", "RB-Tree Fix Colors", H2_3_1, H2_3_2, H2_3_3);
+    public static final Criterion H2_2 = createParentCriterion("2 b)", "RB-Tree FixUp", H2_2_1, H2_2_2, H2_2_3, H2_2_4, H2_2_5);
 
-    public static final Criterion H2_4_1 = createCriterion("Die Methode [[[insert]]] der Klasse [[[RBTree]]] funktioniert vollständig korrekt", 1,
+    public static final Criterion H2_3_1 = createCriterion("Die Methode [[[insert]]] der Klasse [[[RBTree]]] funktioniert vollständig korrekt", 1,
         () -> InsertRBTreeTest.class.getMethod("testInsertRBTree"));
 
-    public static final Criterion H2_4 = createParentCriterion("2 d)", "RB-Tree Insert", H2_4_1);
+    public static final Criterion H2_3 = createParentCriterion("2 c)", "RB-Tree Insert", H2_3_1);
 
-    public static final Criterion H2 = createParentCriterion("2", "RB-Tree Insert", H2_1, H2_2, H2_3, H2_4);
+    public static final Criterion H2 = createParentCriterion("2", "RB-Tree Insert", H2_1, H2_2, H2_3);
 
     public static final Criterion H3_1_1 = createCriterion("Die Methode [[[inOrder]]] der Klasse [[[AbstractBinarySearchTree]]] funktioniert für einfache Fälle korrekt", 1,
         () -> InOrderTest.class.getMethod("testInOrderSimple", JsonParameterSet.class));
