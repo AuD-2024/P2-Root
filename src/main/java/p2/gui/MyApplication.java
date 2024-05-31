@@ -8,6 +8,10 @@ import javafx.stage.Stage;
  */
 public class MyApplication extends Application {
 
+    /**
+     * The current {@link BinaryTreeAnimationScene} that is displayed. This is used to stop the animation when the
+     * application is closed.
+     */
     public static BinaryTreeAnimationScene<?> currentScene = null;
 
     @Override
@@ -23,7 +27,7 @@ public class MyApplication extends Application {
 
     @Override
     public void stop() {
-        currentScene.stopAnimation();
+        if (currentScene != null) currentScene.stopAnimation();
     }
 
 }

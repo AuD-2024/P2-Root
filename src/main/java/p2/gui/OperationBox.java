@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * A box for triggering optionally animated operations on the displayed {@link AnimatedBinaryTree}.
+ *
+ * @param <T> The type of the elements in the tree.
+ */
 public class OperationBox<T extends Comparable<T>> extends VBox {
 
     private final TextField value = new TextField();
@@ -27,6 +32,12 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
 
     private final StringProperty lastResult = new SimpleStringProperty("-");
 
+    /**
+     * Constructs a new operation box.
+     *
+     * @param animationScene The scene containing the tree to operate on.
+     * @param inputParser    A function for parsing the input strings to the type of the elements in the tree.
+     */
     public OperationBox(BinaryTreeAnimationScene<T> animationScene, Function<String, T> inputParser) {
         super(5);
 

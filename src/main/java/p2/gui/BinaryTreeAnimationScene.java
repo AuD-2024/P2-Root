@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * A scene for displaying an animation.
+ * A scene for displaying an {@link AnimatedBinaryTree}.
  */
 public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
 

@@ -8,7 +8,23 @@ import p2.binarytree.RBTree;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
-@SuppressWarnings("DuplicatedCode")
+/**
+ * A red-black tree that can be animated.
+ * <p>
+ * The animation stops after each invocation of the following methods:
+ * <ul>
+ *     <li>{@link RBNode#getLeft()}</li>
+ *     <li>{@link RBNode#setLeft(RBNode)}</li>
+ *     <li>{@link RBNode#getRight()}</li>
+ *     <li>{@link RBNode#setRight(RBNode)}</li>
+ *     <li>{@link RBNode#setColor(Color)}</li>
+ * </ul>
+ *
+ * @param <T> The type of the elements in the tree.
+ * @see RBTree
+ * @see AnimatedBinaryTree
+ */
+@SuppressWarnings({"DuplicatedCode", "JavadocReference"})
 public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements AnimatedBinaryTree<T> {
 
     private BinaryTreeAnimationScene<T> animationScene;

@@ -5,6 +5,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Stores the current state of the animation, e.g., the last performed operation, the current executing operation, and the
+ * current stack trace
+ */
 public class AnimationState {
 
     private final StringProperty operation = new SimpleStringProperty();

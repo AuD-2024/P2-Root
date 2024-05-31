@@ -6,7 +6,22 @@ import p2.binarytree.SimpleBinarySearchTree;
 
 import java.util.Arrays;
 
-@SuppressWarnings("DuplicatedCode")
+/**
+ * A simple binary search tree that can be animated.
+ * <p>
+ * The animation stops after each invocation of the following methods:
+ * <ul>
+ *     <li>{@link BSTNode#getLeft()}</li>
+ *     <li>{@link BSTNode#setLeft(BSTNode)}</li>
+ *     <li>{@link BSTNode#getRight()}</li>
+ *     <li>{@link BSTNode#setRight(BSTNode)}</li>
+ * </ul>
+ *
+ * @param <T> The type of the elements in the tree.
+ * @see SimpleBinarySearchTree
+ * @see AnimatedBinaryTree
+ */
+@SuppressWarnings({"DuplicatedCode", "JavadocReference"})
 public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends SimpleBinarySearchTree<T> implements AnimatedBinaryTree<T> {
 
     private BinaryTreeAnimationScene<T> animationScene;

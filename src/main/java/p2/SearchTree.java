@@ -19,6 +19,11 @@ public interface SearchTree<T extends Comparable<T>> {
 
     /**
      * Checks if the tree contains the given value.
+     * <p>
+     * A given value is contained in the tree if there exists at least one node with a key {@code k} for which
+     * {@code k.compareTo(value) == 0} returns {@code true}.
+     * <p>
+     * This method is equivalent to {@code search(value) != null}.
      *
      * @param value the value to search for.
      * @return {@code true} if the value is in the tree, {@code false} otherwise.
@@ -28,7 +33,13 @@ public interface SearchTree<T extends Comparable<T>> {
     }
 
     /**
-     * Searches for the given value in the tree.
+     * Searches for the given value in the tree and returns the node containing the value. If the value is not in the
+     * tree, the method returns {@code null}.
+     * <p>
+     * If there are multiple nodes with the same value, the method may return any of them.
+     * <p>
+     * A node contains the given value if at least one key {@code k} in the node satisfies the condition
+     * {@code k.compareTo(value) == 0}.
      *
      * @param value the value to search for.
      * @return the node containing the value, or {@code null} if the value is not in the tree.

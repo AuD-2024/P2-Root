@@ -14,8 +14,17 @@ import p2.binarytree.TreeParser;
 
 import java.util.function.Function;
 
+/**
+ * The initial scene for loading a {@link SimpleBinarySearchTreeAnimation} or a {@link RBTreeAnimation} from a string
+ * representation of the tree.
+ */
 public class LoadTreeScene extends Scene {
 
+    /**
+     * Constructs a new load tree scene.
+     *
+     * @param primaryStage The stage used to display the scene.
+     */
     public LoadTreeScene(Stage primaryStage) {
         super(new BorderPane());
         BorderPane root = (BorderPane) getRoot();

@@ -36,7 +36,9 @@ import static p2.gui.TreeStyle.RED_NODE_COLOR;
 import static p2.gui.TreeStyle.TEXT_COLOR;
 
 /**
- * A {@link Pane} that displays a {@link AbstractBinarySearchTree}.
+ * A {@link Pane} that displays an {@link AbstractBinarySearchTree}.
+ * <p>
+ * It allows to zoom in and out, drag the displayed tree, center it, and highlights nodes and edges.
  */
 public class TreePane extends Pane {
 
@@ -67,6 +69,11 @@ public class TreePane extends Pane {
         this(null);
     }
 
+    /**
+     * Creates a new {@link TreePane} that initially displays the tree with the given root node.
+     *
+     * @param root The root node of the tree to display.
+     */
     public TreePane(BinaryNode<?> root) {
         // avoid division by zero when scale = 1
         transformation.appendScale(MIN_SCALE, MIN_SCALE);
@@ -79,6 +86,11 @@ public class TreePane extends Pane {
         if (root != null) setTree(root);
     }
 
+    /**
+     * Sets the tree to display to the given one.
+     *
+     * @param root The root node of the tree to display.
+     */
     public void setTree(BinaryNode<?> root) {
         clear();
         Map<BinaryNode<?>, Double> xOffsets = new HashMap<>();

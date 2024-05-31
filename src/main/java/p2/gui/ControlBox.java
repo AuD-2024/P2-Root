@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 /**
  * A pane for controlling the animation.
- * it contains a button for stepping through the animation and a button for centering the graph.
+ * It, for example, contains a button for stepping through the animation and a button for centering the graph.
  */
 public class ControlBox<T extends Comparable<T>> extends HBox {
 

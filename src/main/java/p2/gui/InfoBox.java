@@ -17,8 +17,17 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
+/**
+ * A box for displaying information about the current state of the animation represented by an {@link AnimationState}.
+ * It automatically updates its content when the state changes.
+ */
 public class InfoBox extends VBox {
 
+    /**
+     * Constructs a new info box.
+     *
+     * @param state The state of the animation to display.
+     */
     public InfoBox(AnimationState state) {
         super(5);
 
