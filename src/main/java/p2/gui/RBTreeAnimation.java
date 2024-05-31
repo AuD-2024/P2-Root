@@ -11,8 +11,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @SuppressWarnings("DuplicatedCode")
 public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implements AnimatedBinaryTree<T> {
 
-    private final Object syncObject = new Object();
-
     private BinaryTreeAnimationScene<T> animationScene;
 
     private boolean animate = false;
@@ -63,11 +61,6 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
     @Override
     public void finishWithNextStep() {
         finishWithNextStep = true;
-    }
-
-    @Override
-    public Object getSyncObject() {
-        return syncObject;
     }
 
     private void updateState(StackTraceElement[] stackTrace, String operation) {

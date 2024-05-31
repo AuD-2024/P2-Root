@@ -84,8 +84,8 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
     public void stopAnimation() {
         if (animationThread != null) {
             animation.finishWithNextStep();
-            synchronized (animation.getSyncObject()) {
-                animation.getSyncObject().notify();
+            synchronized (animation) {
+                animation.notify();
             }
         }
         root.setRight(operationBox);

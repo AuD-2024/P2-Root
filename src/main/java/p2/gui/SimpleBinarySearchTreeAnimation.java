@@ -9,8 +9,6 @@ import java.util.Arrays;
 @SuppressWarnings("DuplicatedCode")
 public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends SimpleBinarySearchTree<T> implements AnimatedBinaryTree<T> {
 
-    private final Object syncObject = new Object();
-
     private BinaryTreeAnimationScene<T> animationScene;
 
     private boolean animate = false;
@@ -54,11 +52,6 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
     @Override
     public void finishWithNextStep() {
         finishWithNextStep = true;
-    }
-
-    @Override
-    public Object getSyncObject() {
-        return syncObject;
     }
 
     private void updateState(StackTraceElement[] stackTrace, String operation) {

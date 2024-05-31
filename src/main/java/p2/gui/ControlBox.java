@@ -53,8 +53,8 @@ public class ControlBox<T extends Comparable<T>> extends HBox {
         });
 
         nextStepButton.setOnAction(event -> {
-            synchronized (animationScene.getAnimation().getSyncObject()) {
-                animationScene.getAnimation().getSyncObject().notify();
+            synchronized (animationScene.getAnimation()) {
+                animationScene.getAnimation().notify();
             }
         });
 

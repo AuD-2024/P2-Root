@@ -6,7 +6,7 @@ import p2.binarytree.BinaryNode;
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface AnimatedBinaryTree<T extends Comparable<T>> extends Animation {
+public interface AnimatedBinaryTree<T extends Comparable<T>> {
 
     BinaryNode<T> getRoot();
 
@@ -17,6 +17,21 @@ public interface AnimatedBinaryTree<T extends Comparable<T>> extends Animation {
     void turnOffAnimation();
 
     boolean isAnimating();
+
+    /**
+     * Tells the animation to finish gracefully independent of the current state.
+     */
+    void finishWithNextStep();
+
+    /**
+     * Tells the animation that it does not need to finish with the next step anymore.
+     */
+    void disableFinishWithNextStep();
+
+    /**
+     * @return {@code true} if the animation should finish with the next step, {@code false} otherwise
+     */
+    boolean isFinishingWithNextStep();
 
     BinaryNode<T> search(T value);
 
@@ -31,6 +46,17 @@ public interface AnimatedBinaryTree<T extends Comparable<T>> extends Animation {
         turnOffAnimation();
         runnable.run();
         if (previousState) turnOnAnimation();
+    }
+
+    default void waitUntilNextStep() {
+        if (!isFinishingWithNextStep()) {
+            synchronized (this) {
+                try {
+                    this.wait();
+                } catch (InterruptedException ignored) {
+                }
+            }
+        }
     }
 
 }
