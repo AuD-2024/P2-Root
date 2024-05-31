@@ -3,12 +3,18 @@ plugins {
     application
     alias(libs.plugins.style)
     alias(libs.plugins.jagr.gradle)
+    alias(libs.plugins.javafx)
 }
 
 version = file("version").readLines().first()
 
+javafx {
+    version = "17.0.1"
+    modules("javafx.controls", "javafx.fxml", "javafx.swing")
+}
+
 jagr {
-    assignmentId.set("h02")
+    assignmentId.set("p2")
     submissions {
         val main by creating {
             studentId.set("ab12cdef")
@@ -17,16 +23,12 @@ jagr {
         }
     }
     graders {
-        val graderPublic by creating {
-            graderName.set("P02-Public")
-            rubricProviderName.set("h02.H02_RubricProvider")
+        val graderPrivate by creating {
+            graderName.set("P2-Private")
+            rubricProviderName.set("p2.P2_RubricProvider")
             configureDependencies {
                 implementation(libs.algoutils.tutor)
             }
-        }
-        val graderPrivate by creating {
-            parent(graderPublic)
-            graderName.set("P02-Private")
         }
     }
 }
@@ -38,7 +40,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("h02.Main")
+    mainClass.set("p2.Main")
 }
 
 tasks {

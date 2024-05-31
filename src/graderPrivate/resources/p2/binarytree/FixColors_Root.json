@@ -1,0 +1,12 @@
+[
+  {
+    "RBTree": "[,1,R,]",
+    "node": 1,
+    "expectedRBTree": "[,1,B,]"
+  },
+  {
+    "RBTree": "[[,1,R,],2,R,[,3,R,]]",
+    "node": 2,
+    "expectedRBTree": "[[,1,R,],2,B,[,3,R,]]"
+  }
+]

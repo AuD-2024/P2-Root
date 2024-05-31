@@ -1,0 +1,206 @@
+[
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 0,
+    "expectedList": [],
+    "limit": 100
+  },
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 1,
+    "expectedList": [1],
+    "limit": 100
+  },
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 2,
+    "expectedList": [1,2],
+    "limit": 100
+  },
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 3,
+    "expectedList": [1,2,3],
+    "limit": 100
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 0,
+    "expectedList": [],
+    "limit": 100
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 1,
+    "expectedList": [1],
+    "limit": 100
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 2,
+    "expectedList": [1,2],
+    "limit": 100
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 3,
+    "expectedList": [1,2,3],
+    "limit": 100
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 0,
+    "expectedList": [],
+    "limit": 100
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 1,
+    "expectedList": [1],
+    "limit": 100
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 2,
+    "expectedList": [1,2],
+    "limit": 100
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 3,
+    "expectedList": [1,2,3],
+    "limit": 100
+  },
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 100,
+    "expectedList": [],
+    "limit": 0
+  },
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 100,
+    "expectedList": [1],
+    "limit": 1
+  },
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 100,
+    "expectedList": [1,2],
+    "limit": 2
+  },
+  {
+    "bst": "[,1,[,2,[,3,]]]",
+    "startNode": 1,
+    "max": 100,
+    "expectedList": [1,2,3],
+    "limit": 3
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 100,
+    "expectedList": [],
+    "limit": 0
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 100,
+    "expectedList": [1],
+    "limit": 1
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 100,
+    "expectedList": [1,2],
+    "limit": 2
+  },
+  {
+    "bst": "[[[,1,],2,],3,]",
+    "startNode": 3,
+    "max": 100,
+    "expectedList": [1,2,3],
+    "limit": 3
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 100,
+    "expectedList": [],
+    "limit": 0
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 100,
+    "expectedList": [1],
+    "limit": 1
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 100,
+    "expectedList": [1,2],
+    "limit": 2
+  },
+  {
+    "bst": "[[,1,],2,[,3,]]",
+    "RBTree": "[[,1,R,],2,B,[,3,R,]]",
+    "startNode": 2,
+    "max": 100,
+    "expectedList": [1,2,3],
+    "limit": 3
+  },
+  {
+    "bst": "[,0,[,1,[[[[[[,2,],3,[,4,]],5,],6,],7,[[[[,8,],9,],10,],11,[[,12,],13,]]],14,[,15,[[,16,],17,[,18,[,19,]]]]]]]",
+    "startNode": 0,
+    "max": 10,
+    "expectedList": [0,1,2,3,4,5,6,7,8,9],
+    "limit": 15
+  },
+  {
+    "RBTree": "[[[[,0,B,],1,B,[[[,2,R,],3,B,],4,R,[,5,B,]]],6,R,[[,7,B,],8,B,[,9,B,]]],10,B,[[,11,B,[,12,R,]],13,B,[[[,14,R,],15,B,],16,R,[[,17,R,],18,B,[,19,R,]]]]]",
+    "startNode": 10,
+    "max": 10,
+    "expectedList": [0,1,2,3,4,5,6,7,8,9],
+    "limit": 15
+  },
+  {
+    "bst": "[,0,[,1,[[[[[[,2,],3,[,4,]],5,],6,],7,[[[[,8,],9,],10,],11,[[,12,],13,]]],14,[,15,[[,16,],17,[,18,[,19,]]]]]]]",
+    "startNode": 0,
+    "max": 10,
+    "expectedList": [0,1,2,3,4,5],
+    "limit": 5
+  },
+  {
+    "RBTree": "[[[[,0,B,],1,B,[[[,2,R,],3,B,],4,R,[,5,B,]]],6,R,[[,7,B,],8,B,[,9,B,]]],10,B,[[,11,B,[,12,R,]],13,B,[[[,14,R,],15,B,],16,R,[[,17,R,],18,B,[,19,R,]]]]]",
+    "startNode": 10,
+    "max": 10,
+    "expectedList": [0,1,2,3,4,5],
+    "limit": 5
+  }
+]
