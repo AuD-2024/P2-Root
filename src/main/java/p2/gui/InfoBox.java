@@ -57,7 +57,7 @@ public class InfoBox extends VBox {
     private TableView<StackTraceElement> createStackTraceTableView(ObservableList<StackTraceElement> stackTrace) {
 
         TableView<StackTraceElement> tableView = new TableView<>(stackTrace);
-        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_LAST_COLUMN);
 
         tableView.maxWidth(290);
 
