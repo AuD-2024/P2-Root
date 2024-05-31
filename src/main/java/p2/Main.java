@@ -29,11 +29,13 @@ public class Main {
      * When a tree is loaded, you can view it in the center. On the top right you can enter input values and execute
      * the respective operation by clicking the buttons below.
      * <ul>
-     *     <li>Inserts: Invokes insert with the value given in "value".</li>
-     *     <li>In Order: Invokes inOrder with the value given in "value" as the start node, "Max" as the maximum amount
+     *     <li>Inserts: Invokes insert with the value given in "Value".</li>
+     *     <li>In Order: Invokes inOrder with the value given in "Value" as the start node, "Max" as the maximum amount
      *     of values to return and {@code x -> x <= "Limit"} as the predicate.</li>
-     *     <li>Find Next: Invokes findNext with the value given in "value" as the start node, "Max" as the maximum amount
+     *     <li>Find Next: Invokes findNext with the value given in "Value" as the start node, "Max" as the maximum amount
      *      of values to return and {@code x -> x <= "Limit"} as the predicate.
+     *      <li>Join: Invokes join with the value given in "Value" as the join key, and "Join Tree" as other tree to
+     *      join with.
      * </ul>
      * <p>
      * When the "Animate" checkbox at the bottom left is selected, the program will stop after each invocation of
