@@ -5,7 +5,13 @@ import p2.binarytree.AutoComplete;
 import p2.gui.MyApplication;
 import p2.gui.TreeStyle;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Main entry point in executing the program.
@@ -42,31 +48,76 @@ public class Main {
     public static void main(String[] args) {
 
         // Uncomment the following line to run the AutoComplete example for task H3 d)
-        // runAutoCompleteExample();
+        // autoCompleteExample();
 
         Application.launch(MyApplication.class, args);
     }
 
-    private static void runAutoCompleteExample() {
+    private static void autoCompleteExample() {
+        String fileName = "words_alpha.txt";
         String prefix = "z";
         int max = 10;
-        autoCompleteExample(prefix, max, true);
-        autoCompleteExample(prefix, max, false);
+
+        System.out.println(makeGreen("\n=== AutoComplete Example ==="));
+
+        long lineCount;
+        try (Stream<String> stream = Files.lines(Paths.get(Objects.requireNonNull(Main.class.getResource(fileName)).toURI()))) {
+            lineCount = stream.count();
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(makeGreen("->") + " Input file: " + makeYellow(fileName)  + " with " + makeYellow(Long.toString(lineCount)) + " words");
+        System.out.println(makeGreen("->") + " Prefix: " + makeYellow(prefix));
+        System.out.println(makeGreen("->") + " Max: " + makeYellow(Integer.toString(max)));
+
+        System.out.println(makeGreen("->") + " Running using " + makeYellow("Red-Black Tree") + ":");
+        runAutoComplete(fileName, prefix, max, true);
+
+        System.out.println(makeGreen("->") + " Running using " + makeYellow("Simple Binary Tree") + ":");
+        runAutoComplete(fileName, prefix, max, false);
+
+        System.out.println(makeGreen("============================"));
     }
 
-    private static void autoCompleteExample(String prefix, int max, boolean useRBTree) {
+    private static void runAutoComplete(String fileName, String prefix, int max, boolean useRBTree) {
 
-        AutoComplete acRBTree = new AutoComplete("words_alpha.txt", useRBTree);
-        String type = useRBTree ? "Red-Black Tree" : "Simple Binary Tree";
+        String running = "<Runnning>";
+
+        System.out.print(makeGreen("    ->") + " Initialization time: ");
+        System.out.print(makeRed(running));
+
+        AutoComplete acRBTree = new AutoComplete(fileName, useRBTree);
+
+        for (int i = 0; i < running.length(); i++) {
+            System.out.print("\b");
+        }
+
+        System.out.printf(makeYellow("%.2fms\n".formatted(acRBTree.getInitializationTime() / 1000000d)));
+
+
+        System.out.printf(makeGreen("    ->") + " Computation time:    ");
+        System.out.print(makeRed(running));
 
         List<String> result = acRBTree.autoComplete(prefix, max);
 
-        System.out.printf("Initialization time using %s: %.2fms\n", type, (acRBTree.getInitializationTime() / 10000) / 100d);
-        System.out.printf("Computation time using %s: %.2fms\n", type, (acRBTree.getLastComputationTime() / 10000) / 100d);
-
-        System.out.printf("Results for prefix=\"%s\" and max=%s using %s:\n", prefix, max, type);
-        for (int i = 0; i < result.size(); i++) {
-            System.out.printf("%d: %s\n", i + 1, result.get(i));
+        for (int i = 0; i < running.length(); i++) {
+            System.out.print("\b");
         }
+
+        System.out.printf(makeYellow("%.2fms\n".formatted(acRBTree.getLastComputationTime() / 1000000d)));
+        System.out.printf(makeGreen("    ->") + " Results:             " + makeYellow("%s\n".formatted(result)));
+    }
+
+    private static String makeYellow(String str) {
+        return "\u001B[33m" + str + "\u001B[0m";
+    }
+
+    private static String makeGreen(String str) {
+        return "\u001B[32m" + str + "\u001B[0m";
+    }
+
+    private static String makeRed(String str) {
+        return "\u001B[31m" + str + "\u001B[0m";
     }
 }
