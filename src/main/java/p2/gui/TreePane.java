@@ -210,6 +210,16 @@ public class TreePane extends Pane {
     // --- Node Handling --- //
 
     /**
+     * Checks if the given node exists within this treePane.
+     *
+     * @param node The node to check.
+     * @return {@code true} if the node exists within this treePane, {@code false} otherwise.
+     */
+    public boolean containsNode(BinaryNode<?> node) {
+        return nodes.containsKey(node);
+    }
+
+    /**
      * Highlights the given node by changing its color and stroke settings.
      *
      * @param node The node to highlight.

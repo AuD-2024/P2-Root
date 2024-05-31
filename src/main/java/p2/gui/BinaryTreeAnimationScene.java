@@ -56,8 +56,8 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
         lastSource = source;
         lastTarget = target;
 
-        treePane.highlightNode(source);
-        if (target != null) treePane.highlightEdge(source, target);
+        if (treePane.containsNode(source)) treePane.highlightNode(source);
+        if (treePane.containsEdge(source, target)) treePane.highlightEdge(source, target);
     }
 
     public void refresh(BinaryNode<T> node) {
@@ -66,19 +66,12 @@ public class BinaryTreeAnimationScene<T extends Comparable<T>> extends Scene {
         lastSource = node;
         lastTarget = null;
 
-        treePane.highlightNode(node);
+        if (treePane.containsNode(node)) treePane.highlightNode(node);
     }
 
     private void resetOldHighlight() {
-        if (lastSource != null) {
-            treePane.resetNode(lastSource);
-
-            if (lastTarget != null) {
-                if (treePane.containsEdge(lastSource, lastTarget)) {
-                    treePane.resetEdge(lastSource, lastTarget);
-                }
-            }
-        }
+        if (treePane.containsNode(lastSource)) treePane.resetNode(lastSource);
+        if (treePane.containsEdge(lastSource, lastTarget)) treePane.resetEdge(lastSource, lastTarget);
     }
 
     public void stopAnimation() {
