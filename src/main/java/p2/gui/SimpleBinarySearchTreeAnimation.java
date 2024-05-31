@@ -15,6 +15,8 @@ import java.util.Arrays;
  *     <li>{@link BSTNode#setLeft(BSTNode)}</li>
  *     <li>{@link BSTNode#getRight()}</li>
  *     <li>{@link BSTNode#setRight(BSTNode)}</li>
+ *     <li>{@link BSTNode#getParent()}</li>
+ *     <li>{@link BSTNode#setParent(BSTNode)}</li>
  * </ul>
  *
  * @param <T> The type of the elements in the tree.
@@ -146,6 +148,39 @@ public class SimpleBinarySearchTreeAnimation<T extends Comparable<T>> extends Si
                     runWithoutAnimation(() ->
                         animationScene.getTreePane().setTree(getRoot()));
                     animationScene.refresh(this, right);
+                });
+                waitUntilNextStep();
+            }
+        }
+
+        @Override
+        public BSTNode<T> getParent() {
+            BSTNode<T> parent = super.getParent();
+
+            if (animate && parent != null) {
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+                Platform.runLater(() -> {
+                    updateState(stackTrace, "(%s).getParent()".formatted(getKey()));
+                    animationScene.refresh(this, parent);
+                });
+                waitUntilNextStep();
+            }
+
+            return parent;
+        }
+
+        @Override
+        public void setParent(BSTNode<T> parent) {
+            super.setParent(parent);
+
+            if (animate) {
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+                Platform.runLater(() -> {
+                    updateState(stackTrace, "(%s).setParent(%s)".formatted(getKey(), parent == null ? "null" : parent.getKey()));
+                    runWithoutAnimation(() -> animationScene.getTreePane().setTree(getRoot()));
+                    animationScene.refresh(this, parent);
                 });
                 waitUntilNextStep();
             }

@@ -18,6 +18,8 @@ import java.util.concurrent.atomic.AtomicReference;
  *     <li>{@link RBNode#getRight()}</li>
  *     <li>{@link RBNode#setRight(RBNode)}</li>
  *     <li>{@link RBNode#setColor(Color)}</li>
+ *     <li>{@link RBNode#getParent()}</li>
+ *     <li>{@link RBNode#setParent(RBNode)}</li>
  * </ul>
  *
  * @param <T> The type of the elements in the tree.
@@ -154,6 +156,39 @@ public class RBTreeAnimation<T extends Comparable<T>> extends RBTree<T> implemen
                     updateState(stackTrace, "(%s).setRight(%s)".formatted(getKey(), right == null ? "null" : right.getKey()));
                     runWithoutAnimation(() -> animationScene.getTreePane().setTree(getRoot()));
                     animationScene.refresh(this, right);
+                });
+                waitUntilNextStep();
+            }
+        }
+
+        @Override
+        public RBNode<T> getParent() {
+            RBNode<T> parent = super.getParent();
+
+            if (animate && parent != null) {
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+                Platform.runLater(() -> {
+                    updateState(stackTrace, "(%s).getParent()".formatted(getKey()));
+                    animationScene.refresh(this, parent);
+                });
+                waitUntilNextStep();
+            }
+
+            return parent;
+        }
+
+        @Override
+        public void setParent(RBNode<T> parent) {
+            super.setParent(parent);
+
+            if (animate) {
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+
+                Platform.runLater(() -> {
+                    updateState(stackTrace, "(%s).setParent(%s)".formatted(getKey(), parent == null ? "null" : parent.getKey()));
+                    runWithoutAnimation(() -> animationScene.getTreePane().setTree(getRoot()));
+                    animationScene.refresh(this, parent);
                 });
                 waitUntilNextStep();
             }
