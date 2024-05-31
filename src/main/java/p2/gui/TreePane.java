@@ -60,7 +60,7 @@ public class TreePane extends Pane {
 
     private final List<Line> grid = new ArrayList<>();
 
-    private boolean alreadyCentered = false;
+    private boolean centered = true;
 
     /**
      * Creates a new, empty {@link TreePane}.
@@ -372,7 +372,7 @@ public class TreePane extends Pane {
         redrawGrid();
         redrawMap();
 
-        alreadyCentered = true;
+        centered = true;
     }
 
     /**
@@ -406,6 +406,7 @@ public class TreePane extends Pane {
 
                 lastPoint.set(point);
 
+                centered = false;
             }
         );
 
@@ -415,6 +416,8 @@ public class TreePane extends Pane {
             }
 
             zoom(event.getX(), event.getY(), event.getDeltaY() > 0 ? SCALE_IN : SCALE_OUT);
+
+            centered = false;
         });
 
         setOnMouseMoved(event -> {
@@ -426,11 +429,10 @@ public class TreePane extends Pane {
         widthProperty().addListener((obs, oldValue, newValue) -> {
             setClip(new Rectangle(0, 0, getWidth(), getHeight()));
 
-            if (alreadyCentered) {
+            if (getWidth() != 0.0 && getHeight() != 0.0) {
                 redrawGrid();
                 redrawMap();
-            } else {
-                center();
+                if (centered) center();
             }
 
             drawPositionText();
@@ -439,11 +441,10 @@ public class TreePane extends Pane {
         heightProperty().addListener((obs, oldValue, newValue) -> {
             setClip(new Rectangle(0, 0, getWidth(), getHeight()));
 
-            if (alreadyCentered) {
+            if (getWidth() != 0.0 && getHeight() != 0.0) {
                 redrawGrid();
                 redrawMap();
-            } else {
-                center();
+                if (centered) center();
             }
 
             drawPositionText();
@@ -525,6 +526,10 @@ public class TreePane extends Pane {
 
         int stepX = (int) (getTransformScaleX() / 2);
         int stepY = (int) (getTransformScaleY() / 2);
+
+        if (stepX < 1 || stepY < 1) {
+            return;
+        }
 
         int offsetX = (int) getTransformTranslateX();
         int offsetY = (int) getTransformTranslateY();
