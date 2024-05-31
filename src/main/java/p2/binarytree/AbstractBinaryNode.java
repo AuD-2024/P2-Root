@@ -96,13 +96,6 @@ public abstract class AbstractBinaryNode<T extends Comparable<T>, N extends Abst
         this.parent = parent;
     }
 
-    @Override
-    public String toString() {
-        return "BinaryNode{" +
-            "key=" + key +
-            '}';
-    }
-
     /**
      * Creates a string representation of the node and its children and appends it to the given builder.
      * It has the format {@code [left,key,right]}, where {@code left} and {@code right} are the string

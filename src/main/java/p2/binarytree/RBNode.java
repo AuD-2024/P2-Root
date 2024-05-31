@@ -67,6 +67,14 @@ public class RBNode<T extends Comparable<T>> extends AbstractBinaryNode<T, RBNod
         this.color = color;
     }
 
+    @Override
+    public String toString() {
+        return "RBNode{" +
+            "key=" + getKey() +
+            ", color=" + color +
+            '}';
+    }
+
     /**
      * Creates a string representation of the node and its children and appends it to the given builder.
      * It has the format {@code [left,key,color,right]}, where {@code left} and {@code right} are the string

@@ -12,4 +12,11 @@ public class BSTNode<T extends Comparable<T>> extends AbstractBinaryNode<T, BSTN
     public BSTNode(T key) {
         super(key);
     }
+
+    @Override
+    public String toString() {
+        return "BSTNode{" +
+            "key=" + getKey() +
+            '}';
+    }
 }
