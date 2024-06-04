@@ -1,6 +1,7 @@
 package p2.gui;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,11 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import p2.binarytree.BinaryNode;
 import p2.binarytree.RBTree;
@@ -22,6 +19,7 @@ import p2.binarytree.TreeParser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -32,12 +30,18 @@ import java.util.function.Function;
 @SuppressWarnings("DuplicatedCode")
 public class OperationBox<T extends Comparable<T>> extends VBox {
 
-    private final TextField value = new TextField();
+    private final TextField valueTextField = new TextField();
     private final TextField maxTextField = new TextField();
     private final TextField limitTextField = new TextField();
-    private final TextField joinTree = new TextField();
+    private final TextField joinTreeTextField = new TextField();
 
     private final StringProperty lastResult = new SimpleStringProperty("-");
+
+    private final BooleanProperty valueIsValid = new SimpleBooleanProperty();
+    private final BooleanProperty maxIsValid = new SimpleBooleanProperty();
+    private final BooleanProperty limitIsValid = new SimpleBooleanProperty();
+    private final BooleanProperty joinTreeIsValid = new SimpleBooleanProperty();
+
 
     /**
      * Constructs a new operation box.
@@ -51,6 +55,14 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         setPadding(new Insets(5));
         setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
 
+        limitTextField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                limitTextField.setText(newValue.replaceAll("\\D", ""));
+            }
+        });
+
+        initValidInputBindings(inputParser);
+
         HBox buttons = new HBox(5,
             createInsertButton(animationScene, inputParser),
             createInOrderButton(animationScene, inputParser),
@@ -62,18 +74,48 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         getChildren().addAll(createInputGrid(), buttons, createLastResultLabel());
     }
 
+    private void initValidInputBindings(Function<String, T> inputParser) {
+
+        valueTextField.textProperty().addListener((obs, oldValue, newValue) -> valueIsValid.setValue(isInputValid(inputParser::apply, newValue)));
+
+        maxTextField.textProperty().addListener((obs, oldValue, newValue) -> maxIsValid.setValue(isInputValid(inputParser::apply, newValue)));
+
+        SimpleBooleanProperty limitIsPositive = new SimpleBooleanProperty();
+        limitTextField.textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                limitIsPositive.setValue(Integer.parseInt(newValue) >= 0);
+            } catch (NumberFormatException e) {
+                limitIsPositive.setValue(false);
+            }
+        });
+
+        limitIsValid.bind(limitTextField.textProperty().isEmpty().not().and(limitIsPositive));
+
+        joinTreeTextField.textProperty().addListener((obs, oldValue, newValue) ->
+            joinTreeIsValid.setValue(isInputValid(str -> TreeParser.parseRBTree(str, inputParser, new RBTreeAnimation<>()), newValue)));
+    }
+
+    private boolean isInputValid(Consumer<String> validator, String str) {
+        try {
+            validator.accept(str);
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
     private Button createInsertButton(BinaryTreeAnimationScene<T> animationScene, Function<String, T> inputParser) {
         Button insertButton = new Button("Insert");
 
         insertButton.setOnAction(event -> {
-            animationScene.getAnimationState().setExecuting("Insert(" + value.getText() + ")");
+            animationScene.getAnimationState().setExecuting("Insert(" + valueTextField.getText() + ")");
             animationScene.startAnimation(tree -> {
-                tree.insert(inputParser.apply(value.getText()));
-                Platform.runLater(() -> lastResult.set("Inserted " + value.getText()));
+                tree.insert(inputParser.apply(valueTextField.getText()));
+                Platform.runLater(() -> lastResult.set("Inserted " + valueTextField.getText()));
             });
         });
 
-        insertButton.disableProperty().bind(value.textProperty().isEmpty());
+        insertButton.disableProperty().bind(valueIsValid.not());
 
         return insertButton;
     }
@@ -82,14 +124,14 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         Button findNextButton = new Button("Find Next");
 
         findNextButton.setOnAction(event -> {
-            animationScene.getAnimationState().setExecuting("FindNext(" + value.getText() + "," + maxTextField.getText() + ", x -> x <=" + limitTextField.getText() + ")");
+            animationScene.getAnimationState().setExecuting("FindNext(" + valueTextField.getText() + "," + maxTextField.getText() + ", x -> x <=" + limitTextField.getText() + ")");
             List<Object> result = new ArrayList<>();
 
             AtomicReference<BinaryNode<T>> startNode = new AtomicReference<>();
 
-            animationScene.getAnimation().runWithoutAnimation(() -> {
-                startNode.set(animationScene.getAnimation().search(inputParser.apply(value.getText())));
-            });
+            animationScene.getAnimation().runWithoutAnimation(
+                () -> startNode.set(animationScene.getAnimation().search(inputParser.apply(valueTextField.getText())))
+            );
 
             animationScene.startAnimation(tree -> {
                 tree.findNext(
@@ -104,7 +146,7 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
             });
         });
 
-        findNextButton.disableProperty().bind(value.textProperty().isEmpty().or(maxTextField.textProperty().isEmpty()).or(limitTextField.textProperty().isEmpty()));
+        findNextButton.disableProperty().bind(valueIsValid.and(maxIsValid).and(limitIsValid).not());
 
         return findNextButton;
     }
@@ -113,14 +155,14 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         Button inOrderButton = new Button("In Order");
 
         inOrderButton.setOnAction(event -> {
-            animationScene.getAnimationState().setExecuting("InOrder(" + value.getText() + "," + maxTextField.getText() + ", x -> x <=" + limitTextField.getText() + ")");
+            animationScene.getAnimationState().setExecuting("InOrder(" + valueTextField.getText() + "," + maxTextField.getText() + ", x -> x <=" + limitTextField.getText() + ")");
             List<Object> result = new ArrayList<>();
 
             AtomicReference<BinaryNode<T>> startNode = new AtomicReference<>();
 
-            animationScene.getAnimation().runWithoutAnimation(() -> {
-                startNode.set(animationScene.getAnimation().search(inputParser.apply(value.getText())));
-            });
+            animationScene.getAnimation().runWithoutAnimation(
+                () -> startNode.set(animationScene.getAnimation().search(inputParser.apply(valueTextField.getText())))
+            );
 
             animationScene.startAnimation(tree -> {
                 tree.inOrder(
@@ -135,7 +177,7 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
             });
         });
 
-        inOrderButton.disableProperty().bind(value.textProperty().isEmpty().or(maxTextField.textProperty().isEmpty()).or(limitTextField.textProperty().isEmpty()));
+        inOrderButton.disableProperty().bind(valueIsValid.and(maxIsValid).and(limitIsValid).not());
 
         return inOrderButton;
     }
@@ -145,19 +187,19 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         Button joinButton = new Button("Join");
 
         joinButton.setOnAction(event -> {
-            animationScene.getAnimationState().setExecuting("join(" + joinTree.getText() + "," + value.getText() + ")");
+            animationScene.getAnimationState().setExecuting("join(" + joinTreeTextField.getText() + "," + valueTextField.getText() + ")");
 
-            animationScene.startAnimation(tree -> {
+            animationScene.startAnimation(tree ->
                 ((RBTree<T>) tree).join(
-                    TreeParser.parseRBTree(joinTree.getText(), inputParser, new RBTreeAnimation<>()),
-                    inputParser.apply(value.getText())
-                );
-            });
+                    TreeParser.parseRBTree(joinTreeTextField.getText(), inputParser, new RBTreeAnimation<>()),
+                    inputParser.apply(valueTextField.getText())
+                )
+            );
 
             Platform.runLater(() -> lastResult.set("-"));
         });
 
-        joinButton.disableProperty().bind(value.textProperty().isEmpty().or(joinTree.textProperty().isEmpty()).or(new SimpleBooleanProperty(!(animationScene.getAnimation() instanceof RBTree))));
+        joinButton.disableProperty().bind(valueIsValid.and(joinTreeIsValid).and(new SimpleBooleanProperty(animationScene.getAnimation() instanceof RBTree)).not());
 
         return joinButton;
     }
@@ -170,7 +212,7 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         inputGrid.setPadding(new Insets(5, 5, 5, 5));
 
         inputGrid.add(new Label("Value:"), 0, 0);
-        inputGrid.add(value, 1, 0);
+        inputGrid.add(valueTextField, 1, 0);
 
         inputGrid.add(new Label("Max:"), 0, 1);
         inputGrid.add(maxTextField, 1, 1);
@@ -179,7 +221,7 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
         inputGrid.add(limitTextField, 1, 2);
 
         inputGrid.add(new Label("Join Tree:"), 0, 3);
-        inputGrid.add(joinTree, 1, 3);
+        inputGrid.add(joinTreeTextField, 1, 3);
 
         return inputGrid;
     }
@@ -191,10 +233,10 @@ public class OperationBox<T extends Comparable<T>> extends VBox {
     }
 
     public void clearInputs() {
-        value.clear();
+        valueTextField.clear();
         maxTextField.clear();
         limitTextField.clear();
-        joinTree.clear();
+        joinTreeTextField.clear();
     }
 
 }
