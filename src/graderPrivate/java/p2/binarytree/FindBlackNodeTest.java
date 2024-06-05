@@ -6,9 +6,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertEquals;
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.callObject;
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.contextBuilder;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
 @TestForSubmission
 public class FindBlackNodeTest extends P2_TestBase {
@@ -47,6 +45,8 @@ public class FindBlackNodeTest extends P2_TestBase {
 
         RBNode<Integer> actual = callObject(() -> tree.findBlackNodeWithBlackHeight(targetBlackHeight, totalBlackHeight, findSmallest),
             context.build(), result -> "findBlackNodeWithBlackHeight should not throw an exception");
+
+        assertNotNull(actual, context.build(), result -> "The returned node is null");
 
         context.add("actual node", actual.getKey());
 
