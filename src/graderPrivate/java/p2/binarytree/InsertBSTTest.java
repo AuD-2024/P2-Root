@@ -32,7 +32,6 @@ public class InsertBSTTest extends P2_TestBase {
     @SuppressWarnings("unchecked")
     private <N extends AbstractBinaryNode<Integer, N>> void testBSTInsert(JsonParameterSet params, SearchTree<Integer> tree, String className) {
 
-
         int input = params.get("input");
         SimpleBinarySearchTree<Integer> expectedBST = params.get("expectedBST");
 
@@ -41,14 +40,14 @@ public class InsertBSTTest extends P2_TestBase {
 
         Context.Builder<?> context = contextBuilder()
             .subject("AbstractBinarySearchTree#insert(N, N)")
-            .add("initial tree", bst.toString())
+            .add("initial tree", treeToString(bst))
             .add("implementation", className)
             .add("input", input)
-            .add("expected bst", expectedBST.toString());
+            .add("expected bst", treeToString(expectedBST));
 
         call(() -> bst.insert(bst.createNode(input), initialPX), context.build(), result -> "insert should not throw an exception");
 
-        context.add("actual bst", bst.toString());
+        context.add("actual bst", treeToString(bst));
 
         assertTreeEquals(expectedBST, bst, context.build(), "The resulting tree is not correct");
     }

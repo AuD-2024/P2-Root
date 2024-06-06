@@ -35,7 +35,7 @@ public class PrefixSearchTest extends P2_TestBase {
 
         Context.Builder<?> context = contextBuilder()
             .subject("AutoComplete#prefixSearch")
-            .add("rbTree", autoComplete.toString())
+            .add("rbTree", treeToString(autoComplete.getSearchTree()))
             .add("prefix", prefix)
             .add("expected key", expectedKey);
 

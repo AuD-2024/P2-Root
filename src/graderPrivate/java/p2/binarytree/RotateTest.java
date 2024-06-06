@@ -32,9 +32,9 @@ public class RotateTest extends P2_TestBase {
 
         Context.Builder<?> context = contextBuilder()
             .subject("RBTree#" + (rotateLeft ? "rotateLeft" : "rotateRight"))
-            .add("initial tree", tree.toString())
+            .add("initial tree", treeToString(tree))
             .add("rotated node", node)
-            .add("expected tree", expected.toString());
+            .add("expected tree", treeToString(expected));
 
         if (rotateLeft) {
             call(() -> tree.rotateLeft(tree.search(node)), context.build(), result -> "rotateLeft should not throw an exception");
@@ -42,7 +42,7 @@ public class RotateTest extends P2_TestBase {
             call(() -> tree.rotateRight(tree.search(node)), context.build(), result -> "rotateRight should not throw an exception");
         }
 
-        context.add("actual tree", tree);
+        context.add("actual tree", treeToString(tree));
 
         assertTreeEquals(expected, tree, context.build(), "The resulting tree is not correct");
     }

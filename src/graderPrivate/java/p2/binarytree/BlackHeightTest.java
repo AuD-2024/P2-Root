@@ -22,7 +22,7 @@ public class BlackHeightTest extends P2_TestBase {
 
         Context.Builder<?> context = contextBuilder()
             .subject("RBTree#blackHeight")
-            .add("rb tree", tree.toString())
+            .add("rb tree", treeToString(tree))
             .add("expected blackHeight", expected);
 
         int actual = callObject(tree::blackHeight, context.build(), result -> "blackHeight should not throw an exception");

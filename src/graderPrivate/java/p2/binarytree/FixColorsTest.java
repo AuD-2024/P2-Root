@@ -38,9 +38,9 @@ public class FixColorsTest extends P2_TestBase {
 
         Context.Builder<?> context = contextBuilder()
             .subject("RBTree#fixColorsAfterInsertion")
-            .add("initial tree", tree.toString())
+            .add("initial tree", treeToString(tree))
             .add("node (z)", node)
-            .add("expected tree", expectedTree.toString());
+            .add("expected tree", treeToString(expectedTree));
 
         call(() -> tree.fixColorsAfterInsertion(tree.search(node)), context.build(),
             result -> "fixColorsAfterInsertion should not throw an exception");
