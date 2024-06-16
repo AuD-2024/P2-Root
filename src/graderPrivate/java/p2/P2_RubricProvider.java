@@ -5,14 +5,19 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import p2.binarytree.*;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class P2_RubricProvider implements RubricProvider {
 
     @SafeVarargs
     private static Criterion createCriterion(String shortDescription, int maxPoints, Callable<Method>... methodReferences) {
+        return createCriterion(shortDescription, maxPoints, Arrays.stream(methodReferences).map(JUnitTestRef::ofMethod).toArray(JUnitTestRef[]::new));
+    }
 
-        if (methodReferences.length == 0) {
+    private static Criterion createCriterion(String shortDescription, int maxPoints, JUnitTestRef... testRefs) {
+
+        if (testRefs.length == 0) {
             return Criterion.builder()
                 .shortDescription(shortDescription)
                 .maxPoints(maxPoints)
@@ -21,8 +26,8 @@ public class P2_RubricProvider implements RubricProvider {
 
         Grader.TestAwareBuilder graderBuilder = Grader.testAwareBuilder();
 
-        for (Callable<Method> reference : methodReferences) {
-            graderBuilder.requirePass(JUnitTestRef.ofMethod(reference));
+        for (JUnitTestRef testRef : testRefs) {
+            graderBuilder.requirePass(testRef);
         }
 
         return Criterion.builder()
@@ -71,13 +76,22 @@ public class P2_RubricProvider implements RubricProvider {
         () -> RotateTest.class.getMethod("testRotateRight", JsonParameterSet.class));
 
     public static final Criterion H2_2_3 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert korrekt, wenn nur die Farbe der Wurzel korrigiert wird", 1,
-        () -> FixColorsTest.class.getMethod("testFixColorsRoot", JsonParameterSet.class));
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> FixColorsTest.class.getMethod("testFixColorsRoot", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> FixColorsTest.class.getMethod("testFixColorsRootOverride", JsonParameterSet.class))
+        ));
 
     public static final Criterion H2_2_4 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert für einfache Fälle korrekt", 1,
-        () -> FixColorsTest.class.getMethod("testFixColorsSimple", JsonParameterSet.class));
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> FixColorsTest.class.getMethod("testFixColorsSimple", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> FixColorsTest.class.getMethod("testFixColorsSimpleOverride", JsonParameterSet.class))
+        ));
 
     public static final Criterion H2_2_5 = createCriterion("Die Methode [[[fixColorsAfterInsertion]]] der Klasse [[[RBTree]]] funktioniert für komplexe Fälle korrekt", 1,
-        () -> FixColorsTest.class.getMethod("testFixColorsComplex", JsonParameterSet.class));
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> FixColorsTest.class.getMethod("testFixColorsComplex", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> FixColorsTest.class.getMethod("testFixColorsComplexOverride", JsonParameterSet.class))
+        ));
 
     public static final Criterion H2_2 = createParentCriterion("2 b)", "RB-Tree FixUp", H2_2_1, H2_2_2, H2_2_3, H2_2_4, H2_2_5);
 
@@ -134,18 +148,36 @@ public class P2_RubricProvider implements RubricProvider {
     public static final Criterion H4_2 = createParentCriterion("4 b)", "Find Black Node", H4_2_1, H4_2_2, H4_2_3);
 
     public static final Criterion H4_3_1 = createCriterion("Die Methode [[[join]]] der Klasse [[[RBTree]]] funktioniert korrekt, wenn beide Bäume die selbe Schwarzhöhe besitzten", 1,
-        () -> JoinTest.class.getMethod("testJoinSameHeight", JsonParameterSet.class));
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinSameHeight", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinSameHeightOverride", JsonParameterSet.class))
+        ));
 
     public static final Criterion H4_3_2 = createCriterion("Die Methode [[[join]]] der Klasse [[[RBTree]]] funktioniert korrekt, wenn der rechte Baum eine größere Schwarzhöhe besitzt", 2,
-        () -> JoinTest.class.getMethod("testJoinRightGreater", JsonParameterSet.class));
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinRightGreater", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinRightGreaterOverride", JsonParameterSet.class))
+        ));
 
     public static final Criterion H4_3_3 = createCriterion("Die Methode [[[join]]] der Klasse [[[RBTree]]] funktioniert korrekt, wenn der linke Baum eine größere Schwarzhöhe besitzt", 2,
-        () -> JoinTest.class.getMethod("testJoinLeftGreater", JsonParameterSet.class));
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinLeftGreater", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinLeftGreaterOverride", JsonParameterSet.class))
+        ));
 
     public static final Criterion H4_3_4 = createCriterion("Die Methode [[[join]]] der Klasse [[[RBTree]]] funktioniert vollständig korrekt", 1,
-        () -> JoinTest.class.getMethod("testJoinSameHeight", JsonParameterSet.class),
-        () -> JoinTest.class.getMethod("testJoinRightGreater", JsonParameterSet.class),
-        () -> JoinTest.class.getMethod("testJoinLeftGreater", JsonParameterSet.class));
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinSameHeight", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinSameHeightOverride", JsonParameterSet.class))
+        ),
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinRightGreater", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinRightGreaterOverride", JsonParameterSet.class))
+        ),
+        JUnitTestRef.or(
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinLeftGreater", JsonParameterSet.class)),
+            JUnitTestRef.ofMethod(() -> JoinTest.class.getMethod("testJoinLeftGreaterOverride", JsonParameterSet.class))
+        ));
 
     public static final Criterion H4_3 = createParentCriterion("4 c)", "Joinen von RB-Trees", H4_3_1, H4_3_2, H4_3_3, H4_3_4);
 

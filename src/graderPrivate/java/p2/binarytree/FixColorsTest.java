@@ -15,24 +15,42 @@ public class FixColorsTest extends P2_TestBase {
     @ParameterizedTest
     @JsonParameterSetTest(value = "FixColors_Root.json", customConverters = "customConverters")
     public void testFixColorsRoot(JsonParameterSet params) {
-        testFixColors(params);
+        testFixColors(params, false);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "FixColors_Root.json", customConverters = "customConverters")
+    public void testFixColorsRootOverride(JsonParameterSet params) {
+        testFixColors(params, true);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "FixColors_Simple.json", customConverters = "customConverters")
     public void testFixColorsSimple(JsonParameterSet params) {
-        testFixColors(params);
+        testFixColors(params, false);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "FixColors_Simple.json", customConverters = "customConverters")
+    public void testFixColorsSimpleOverride(JsonParameterSet params) {
+        testFixColors(params, true);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "FixColors_Complex.json", customConverters = "customConverters")
     public void testFixColorsComplex(JsonParameterSet params) {
-        testFixColors(params);
+        testFixColors(params, false);
     }
 
-    private void testFixColors(JsonParameterSet params) {
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "FixColors_Complex.json", customConverters = "customConverters")
+    public void testFixColorsComplexOverride(JsonParameterSet params) {
+        testFixColors(params, true);
+    }
 
-        RBTree<Integer> tree = params.get("RBTree");
+    private void testFixColors(JsonParameterSet params, boolean override) {
+
+        TutorRBTree<Integer> tree = params.get("RBTree");
         int node = params.getInt("node");
         RBTree<Integer> expectedTree = params.get("expectedRBTree");
 
@@ -41,6 +59,11 @@ public class FixColorsTest extends P2_TestBase {
             .add("initial tree", treeToString(tree))
             .add("node (z)", node)
             .add("expected tree", treeToString(expectedTree));
+
+        if (override) {
+            tree.overrideRotateLeft();
+            tree.overrideRotateRight();
+        }
 
         call(() -> tree.fixColorsAfterInsertion(tree.search(node)), context.build(),
             result -> "fixColorsAfterInsertion should not throw an exception");

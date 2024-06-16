@@ -22,25 +22,43 @@ public class JoinTest extends P2_TestBase {
     @ParameterizedTest
     @JsonParameterSetTest(value = "Join_SameHeight.json", customConverters = "customConverters")
     public void testJoinSameHeight(JsonParameterSet params) {
-        testJoin(params);
+        testJoin(params, false);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "Join_SameHeight.json", customConverters = "customConverters")
+    public void testJoinSameHeightOverride(JsonParameterSet params) {
+        testJoin(params, true);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "Join_LeftGreater.json", customConverters = "customConverters")
     public void testJoinLeftGreater(JsonParameterSet params) {
-        testJoin(params);
+        testJoin(params, false);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "Join_LeftGreater.json", customConverters = "customConverters")
+    public void testJoinLeftGreaterOverride(JsonParameterSet params) {
+        testJoin(params, true);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "Join_RightGreater.json", customConverters = "customConverters")
     public void testJoinRightGreater(JsonParameterSet params) {
-        testJoin(params);
+        testJoin(params, false);
     }
 
-    private void testJoin(JsonParameterSet params) {
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "Join_RightGreater.json", customConverters = "customConverters")
+    public void testJoinRightGreaterOverride(JsonParameterSet params) {
+        testJoin(params, true);
+    }
 
-        RBTree<Integer> leftRBTree = spy(params.<RBTree<Integer>>get("leftRBTree"));
-        RBTree<Integer> rightRBTree = params.get("rightRBTree");
+    private void testJoin(JsonParameterSet params, boolean override) {
+
+        TutorRBTree<Integer> leftRBTree = spy(params.<TutorRBTree<Integer>>get("leftRBTree"));
+        TutorRBTree<Integer> rightRBTree = params.get("rightRBTree");
         Integer joinKey = params.get("joinKey");
         RBTree<Integer> expectedRBTree = params.get("expectedRBTree");
 
@@ -68,6 +86,13 @@ public class JoinTest extends P2_TestBase {
 
             return null;
         }).when(leftRBTree).fixColorsAfterInsertion(any());
+
+        if (override) {
+            leftRBTree.overrideBlackHeight();
+            leftRBTree.overrideFindBlackNodeWithBlackHeight();
+            rightRBTree.overrideBlackHeight();
+            rightRBTree.overrideFindBlackNodeWithBlackHeight();
+        }
 
         try {
             call(() -> leftRBTree.join(rightRBTree, joinKey), context.build(), result -> "join should not throw an exception");

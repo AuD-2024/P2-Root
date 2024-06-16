@@ -14,23 +14,41 @@ public class FindBlackNodeTest extends P2_TestBase {
     @ParameterizedTest
     @JsonParameterSetTest(value = "FindBlackNode_Smallest_Simple.json", customConverters = "customConverters")
     public void testFindSmallestBlackNodeSimple(JsonParameterSet params) {
-        testFindBlackNode(params, true);
+        testFindBlackNode(params, true, false);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "FindBlackNode_Smallest_Simple.json", customConverters = "customConverters")
+    public void testFindSmallestBlackNodeSimpleOverride(JsonParameterSet params) {
+        testFindBlackNode(params, true, true);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "FindBlackNode_Smallest_Complex.json", customConverters = "customConverters")
     public void testFindSmallestBlackNodeComplex(JsonParameterSet params) {
-        testFindBlackNode(params, true);
+        testFindBlackNode(params, true, false);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "FindBlackNode_Smallest_Complex.json", customConverters = "customConverters")
+    public void testFindSmallestBlackNodeComplexOverride(JsonParameterSet params) {
+        testFindBlackNode(params, true, true);
     }
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "FindBlackNode_Greatest.json", customConverters = "customConverters")
     public void testFindGreatestBlackNode(JsonParameterSet params) {
-        testFindBlackNode(params, false);
+        testFindBlackNode(params, false, false);
     }
 
-    private void testFindBlackNode(JsonParameterSet params, boolean findSmallest) {
-        RBTree<Integer> tree = params.get("RBTree");
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "FindBlackNode_Greatest.json", customConverters = "customConverters")
+    public void testFindGreatestBlackNodeOverride(JsonParameterSet params) {
+        testFindBlackNode(params, false, true);
+    }
+
+    private void testFindBlackNode(JsonParameterSet params, boolean findSmallest, boolean override) {
+        TutorRBTree<Integer> tree = params.get("RBTree");
         int totalBlackHeight = params.getInt("totalBlackHeight");
         int targetBlackHeight = params.getInt("targetBlackHeight");
         int expected = params.get("expectedNode");
@@ -42,6 +60,10 @@ public class FindBlackNodeTest extends P2_TestBase {
             .add("total black height", totalBlackHeight)
             .add("find smallest", findSmallest)
             .add("expected node", expected);
+
+        if (override) {
+            tree.overrideBlackHeight();
+        }
 
         RBNode<Integer> actual = callObject(() -> tree.findBlackNodeWithBlackHeight(targetBlackHeight, totalBlackHeight, findSmallest),
             context.build(), result -> "findBlackNodeWithBlackHeight should not throw an exception");
